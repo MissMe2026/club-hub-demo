@@ -111,11 +111,11 @@ button{cursor:pointer;background:none;border:0}
 .tile b{font-size:13px;line-height:17px;color:var(--indigo)}
 .tile span{font-size:12px;line-height:16px}
 .tile .count{display:inline-block;min-width:18px;height:18px;border-radius:9px;background:var(--cranberry);color:#fff;font-size:11px;font-weight:700;text-align:center;line-height:18px;padding:0 5px;margin-left:4px}
-.hscroll{display:flex;gap:10px;overflow-x:auto;padding:0 16px 4px;scroll-snap-type:x mandatory;scrollbar-width:none}
+.hscroll{display:flex;gap:10px;overflow-x:auto;padding:0 16px 4px;scroll-snap-type:x mandatory;scroll-padding-inline:16px;scrollbar-width:none}
 .hscroll::-webkit-scrollbar{display:none}
 .ev-mini{flex:0 0 172px;scroll-snap-align:start;text-align:left}
 .ev-mini .ph{height:150px;border-radius:16px;background:var(--sky) center/cover;position:relative}
-.datechip{position:absolute;top:8px;left:8px;background:var(--taxi);color:var(--indigo);font-weight:700;font-size:12px;padding:3px 10px;border-radius:999px}
+.datechip{position:absolute;top:8px;left:8px;background:var(--taxi);color:var(--indigo);font-weight:700;font-size:12px;padding:3px 10px;border-radius:8px}
 .ev-mini b{display:block;margin-top:8px;color:var(--indigo);font-size:15px;line-height:20px}
 .ev-mini span{font-size:13px}
 .postrow{display:flex;gap:12px;align-items:center;padding:12px 16px;border-bottom:1px solid var(--smoke);width:100%;text-align:left}
@@ -124,7 +124,7 @@ button{cursor:pointer;background:none;border:0}
 .postrow b{display:block;color:var(--indigo);font-size:15px;line-height:20px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 /* events */
 .evhero .ph{height:180px;background:var(--sky) center/cover;position:relative}
-.dateblock{position:absolute;top:12px;left:12px;background:var(--taxi);color:var(--indigo);border-radius:12px;padding:6px 10px;text-align:center;line-height:1}
+.dateblock{position:absolute;top:8px;left:8px;background:var(--taxi);color:var(--indigo);border-radius:8px;padding:6px 10px;text-align:center;line-height:1}
 .dateblock small{display:block;font-size:12px;font-weight:600;margin-bottom:2px}
 .dateblock strong{font-size:24px;font-weight:800}
 .avs{display:flex}.avs i{width:22px;height:22px;border-radius:50%;border:2px solid #fff;margin-left:-6px}.avs i:first-child{margin-left:0}
@@ -246,6 +246,17 @@ input[type=date],input[type=time]{-webkit-appearance:none;appearance:none;min-wi
 .two>*{min-width:0}
 .sheet{padding-left:20px;padding-right:20px}
 .flyer[hidden]{display:none!important}
+/* design round (video 3): concentric radius, masked edges, blurred label swaps */
+.flyer{border-radius:inherit}
+.tpl .flyer{border-radius:11px}.tpl .flyer.frame{box-shadow:inset 0 0 0 6px var(--indigo)}
+.flyer.frame::before{border-radius:4px}
+.hscroll,.chips{--fl:0px;--fr:0px;-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 var(--fl),#000 calc(100% - var(--fr)),transparent 100%);mask-image:linear-gradient(90deg,transparent 0,#000 var(--fl),#000 calc(100% - var(--fr)),transparent 100%)}
+.hscroll.fade-l,.chips.fade-l{--fl:28px}.hscroll.fade-r,.chips.fade-r{--fr:28px}
+@keyframes swapIn{from{opacity:0;filter:blur(4px);transform:scale(.9)}to{opacity:1;filter:none;transform:none}}
+@keyframes swapOut{to{opacity:0;filter:blur(4px);transform:scale(.9)}}
+.swap-in .lbl{display:inline-block;animation:swapIn .22s cubic-bezier(.2,.8,.2,1)}
+.swap-out .lbl{display:inline-block;animation:swapOut .11s ease-in forwards}
+.checkrow[aria-checked="true"] .box::after{display:inline-block;animation:swapIn .22s cubic-bezier(.2,.8,.2,1)}
 @media (max-width:820px){html,body{height:100%;overflow:hidden;overscroll-behavior:none;background:var(--white)}.stage{display:block;min-height:0;height:100%}.phone{position:fixed;left:0;right:0;top:0;height:var(--vvh,100dvh);transform:translate3d(0,var(--vvt,0px),0)}}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
 html,body{overflow-x:hidden;max-width:100%}
@@ -374,7 +385,7 @@ i.po{background:var(--azure)}i.ev{background:var(--taxi)}i.bad{background:var(--
               <button class="btn taxi block" data-go="signin">Get started →</button>
               <button class="btn ghost block" data-go="public">Browse club events first</button>
             </div>
-            <p class="fine">A CUNY SPS AI Club pilot · demo with sample data, no real accounts<br><span style="opacity:.7">Version Nov 18 · 8</span></p>
+            <p class="fine">A CUNY SPS AI Club pilot · demo with sample data, no real accounts<br><span style="opacity:.7">Version Nov 18 · 9</span></p>
           </div>
         </div>
       </section>
@@ -606,6 +617,15 @@ function shake(el){if(!el)return;el.classList.remove('shake');void el.offsetWidt
   const viewH=sc.clientHeight+(open()?window.innerHeight-vv.height:0),end=Math.max(0,Math.min(s0,full-viewH));
   if(end<s0)sc.scrollTo({top:end,behavior:'smooth'});clearTimeout(unpad);unpad=setTimeout(()=>{const b=document.activeElement;if(!(b&&b.matches&&b.matches(TYPING)))ph.classList.remove('kb-pad')},380)},60));
 })();
+/* masked edges: fade a sideways list only on the side that has more to scroll */
+function updFades(){$$('.hscroll,.chips').forEach(el=>{const max=el.scrollWidth-el.clientWidth;el.classList.toggle('fade-l',el.scrollLeft>2);el.classList.toggle('fade-r',max>2&&el.scrollLeft<max-2)})}
+document.addEventListener('scroll',e=>{const t=e.target;if(t&&t.classList&&(t.classList.contains('hscroll')||t.classList.contains('chips')))updFades()},true);
+window.addEventListener('resize',updFades);
+/* blurred swap: the label of a button that just changed blurs in (old one blurs out first when given) */
+let swapSel=null;function swapNext(sel){swapSel=sel}
+function applySwap(){if(!swapSel)return;const sel=swapSel;swapSel=null;$$(sel).forEach(b=>{if(!b.querySelector('.lbl'))b.innerHTML='<span class="lbl">'+b.innerHTML+'</span>';b.classList.remove('swap-in');void b.offsetWidth;b.classList.add('swap-in');setTimeout(()=>b.classList.remove('swap-in'),300)})}
+function swapOut(btn,done){if(!btn||matchMedia('(prefers-reduced-motion: reduce)').matches){done();return}if(!btn.querySelector('.lbl'))btn.innerHTML='<span class="lbl">'+btn.innerHTML+'</span>';btn.classList.add('swap-out');setTimeout(done,110)}
+{let q=0;new MutationObserver(()=>{if(q)return;q=requestAnimationFrame(()=>{q=0;updFades();applySwap()})}).observe($('#screen'),{childList:true,subtree:true})}
 let tt;function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('on');clearTimeout(tt);tt=setTimeout(()=>t.classList.remove('on'),2400)}
 
 /* drawer & sheet */
@@ -678,7 +698,7 @@ function renderSchedule(){$('#sum-title').textContent=$('#post-title').value.tri
 $$('[data-acct]').forEach(sw=>sw.onclick=()=>{const k=sw.dataset.acct;S.acct[k]=!S.acct[k];sw.setAttribute('aria-checked',S.acct[k]);updSched()});
 $$('[data-when]').forEach(b=>b.onclick=()=>{S.when=b.dataset.when;$$('[data-when]').forEach(x=>x.setAttribute('aria-pressed',x===b));$('#when-fields').style.display=S.when==='schedule'?'grid':'none';updSched()});
 $('#chk-review').onclick=e=>{S.reviewed=!S.reviewed;e.currentTarget.setAttribute('aria-checked',S.reviewed);const bx=e.currentTarget.querySelector('.box');bx.classList.remove('squish');void bx.offsetWidth;if(S.reviewed)bx.classList.add('squish');updSched()};
-function updSched(){const any=S.acct.fb||S.acct.ig;const b=$('#btn-schedule');b.setAttribute('aria-disabled',String(!any||!S.reviewed));b.textContent=S.when==='schedule'?'Schedule post':'Publish now';let n=$('#sched-need');if(!n){n=document.createElement('p');n.id='sched-need';n.className='need';b.parentNode.insertBefore(n,b)}n.textContent=!any?'Turn on at least one account above.':!S.reviewed?'Tick “I reviewed this post” above to continue.':'';n.style.display=n.textContent?'block':'none';b.parentNode.style.flexWrap='wrap'}
+function updSched(){const any=S.acct.fb||S.acct.ig;const b=$('#btn-schedule');b.setAttribute('aria-disabled',String(!any||!S.reviewed));const lab=S.when==='schedule'?'Schedule post':'Publish now';if(b.textContent!==lab){const first=!b.textContent;b.innerHTML='<span class="lbl">'+lab+'</span>';if(!first){b.classList.remove('swap-in');void b.offsetWidth;b.classList.add('swap-in')}}let n=$('#sched-need');if(!n){n=document.createElement('p');n.id='sched-need';n.className='need';b.parentNode.insertBefore(n,b)}n.textContent=!any?'Turn on at least one account above.':!S.reviewed?'Tick “I reviewed this post” above to continue.':'';n.style.display=n.textContent?'block':'none';b.parentNode.style.flexWrap='wrap'}
 function fmtWhen(){if(S.when==='now')return 'now';const d=new Date($('#date').value+'T'+$('#time').value);if(isNaN(d))return 'soon';return d.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'})+' · '+d.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'})}
 $('#btn-schedule').onclick=()=>{if($('#btn-schedule').getAttribute('aria-disabled')==='true'){shake(!(S.acct.fb||S.acct.ig)?$('#v-schedule .acct'):$('#chk-review'));shake($('#sched-need'));return}const t=$('#post-title').value.trim()||'Untitled post';const when=fmtWhen();
  const igFail=S.acct.ig&&S.photo&&S.photo.type&&S.photo.type!=='image/jpeg';
@@ -709,10 +729,10 @@ function renderEvents(){setTimeout(squishAtt,0);const list=EVENTS.filter(e=>S.fi
  $('#ev-list').innerHTML='<article class="card evhero"><div class="ph'+(h.img?'':' noimg')+'" style="'+(h.img?'background-image:url('+h.img+')':'')+'">'+(h.img?'':'<span>CUNY SPS<br>Student Life</span>')+'<div class="dateblock"><small>'+h.mon+'</small><strong>'+h.day+'</strong></div></div><div class="pad"><h2 class="h2 mb8">'+h.title+'</h2><p class="cap mb8">'+h.meta+'</p><div class="row mb12" style="justify-content:flex-start;gap:8px"><span class="avs"><i style="background:var(--mint)"></i><i style="background:var(--thistle)"></i><i style="background:var(--sky)"></i>'+(S.attending[h.id]?'<i class="me"></i>':'')+'</span><span class="cap">'+(h.going+(S.attending[h.id]?1:0))+' going · '+h.seats+' seats</span></div>'+
   '<div class="row" style="justify-content:flex-start;gap:8px"><button class="btn '+(S.attending[h.id]?'pri':'sec')+'" data-att="'+h.id+'" aria-pressed="'+!!S.attending[h.id]+'">'+(S.attending[h.id]?'✓ Attending':'Attend')+'</button><button class="btn sec" data-chk="'+h.id+'">'+(S.checked[h.id]?'Checked in':'Check-in')+'</button><button class="btn txt" data-more="'+h.id+'">More</button></div></div></article>'+
   rest.map(e=>'<article class="card"><div class="evrow"><div class="ph'+(e.img?'':' noimg')+'" style="'+(e.img?'background-image:url('+e.img+')':'')+'">'+(e.img?'':'Student Life')+'</div><div style="flex:1;min-width:0"><b>'+e.title+'</b><div class="cap mb8">'+e.meta+'</div><div class="row"><span class="pill">'+e.tag+'</span><button class="chip" data-att="'+e.id+'" aria-pressed="'+!!S.attending[e.id]+'">'+(S.attending[e.id]?'✓ Going':'Attend')+'</button></div></div></div></article>').join('');
- $$('[data-att]').forEach(b=>b.onclick=()=>{const id=b.dataset.att;S.attending[id]=!S.attending[id];S.justAtt=S.attending[id]?id:null;toast(S.attending[id]?'You\'re going. Added to your calendar.':'RSVP removed');renderEvents()});
+ $$('[data-att]').forEach(b=>b.onclick=()=>{const id=b.dataset.att;swapOut(b,()=>{S.attending[id]=!S.attending[id];S.justAtt=S.attending[id]?id:null;swapNext('[data-att="'+id+'"]');toast(S.attending[id]?'You\'re going. Added to your calendar.':'RSVP removed');renderEvents()})});
  $$('[data-chk]').forEach(b=>b.onclick=()=>{const id=b.dataset.chk;const ev=EVENTS.find(e=>e.id===id);
   openSheet('<h2 class="h2 mb8">Check in · officer view</h2><p class="cap mb12">'+ev.title+'</p><div class="card pad mb12" style="text-align:center"><div style="width:150px;height:150px;margin:0 auto 10px;background:repeating-linear-gradient(45deg,var(--indigo) 0 6px,#fff 6px 12px);border-radius:12px" aria-label="Sample check-in code"></div><p class="cap">Attendees scan this code at the door. Sample only.</p></div><button class="btn pri block" id="self-chk">Check myself in</button>');
-  $('#self-chk').onclick=()=>{S.checked[id]=true;closeAll();toast('Checked in. Attendance recorded for officers.');renderEvents()}});
+  $('#self-chk').onclick=()=>{S.checked[id]=true;closeAll();swapNext('[data-chk="'+id+'"]');toast('Checked in. Attendance recorded for officers.');renderEvents()}});
  $$('[data-more]').forEach(b=>b.onclick=()=>openSheet('<h2 class="h2 mb12">More actions</h2>'+['Add to calendar (.ics)','Share event','Create a post about this event','Message attendees','Edit event'].map((t,i)=>'<button class="navitem" '+(i===2?'id="mk-post"':i===0?'data-act="ics"':i===1?'data-act="shareEv"':i===3?'data-go="messaging"':'data-soon="x"')+'>'+t+'</button>').join('')),0);
  const mk=()=>{const m=$('#mk-post');if(m)m.onclick=()=>{resetPost();$('#post-title').value=h.title;$('#rel-event').value=h.id;setPhoto(PHOTOS.find(p=>p.src===h.img)||null);go('create')}};
  document.querySelectorAll('[data-more]').forEach(b=>b.addEventListener('click',()=>setTimeout(mk,0)));}
@@ -720,7 +740,7 @@ function renderEvents(){setTimeout(squishAtt,0);const list=EVENTS.filter(e=>S.fi
 /* init */
 setPhoto(PHOTOS[0]);$('#alt').value='Students talking together outside on a CUNY campus';
 </script>
-<script src="js/screens.js?v=20261118-8"></script>
+<script src="js/screens.js?v=20261118-9"></script>
 <script>go(location.hash.slice(1)||'welcome',false);</script>
 </body>
 </html>
