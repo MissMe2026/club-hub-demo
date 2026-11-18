@@ -187,6 +187,17 @@ button{cursor:pointer;background:none;border:0}
 .stack{display:flex;flex-direction:column;gap:10px}
 .divider{height:1px;background:var(--smoke);margin:14px 0}
 a.inline{color:var(--blue);font-weight:600}
+button,.chip,.pill,.tile,.lrow,.navitem,.persona,.acc-h,.cday,label.btn{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+button:active{transform:scale(.98)}
+input::placeholder,textarea::placeholder{color:#6B6C6F;opacity:1}
+.titleinput::placeholder{color:#6B6C6F}
+.checkrow{display:flex;align-items:center;gap:12px;width:100%;min-height:56px;padding:12px 14px;border:1.5px solid var(--blue);border-radius:14px;text-align:left;font-size:14px;line-height:19px;color:var(--indigo);background:#F6F9FF;margin-top:6px}
+.checkrow .box{width:26px;height:26px;border-radius:7px;border:2px solid var(--blue);flex:none;display:grid;place-items:center;color:#fff;font-weight:800;font-size:15px}
+.checkrow[aria-checked="true"]{background:#EAF7F1;border-color:#2E7D5B}
+.checkrow[aria-checked="true"] .box{background:var(--blue)}
+.checkrow[aria-checked="true"] .box::after{content:"✓"}
+.need{font-size:13px;line-height:18px;color:var(--cranberry);text-align:center;margin-bottom:8px;width:100%}
+.evhero .ph{background-position:center 28%}
 .statgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .stat{background:var(--pearl);border-radius:14px;padding:12px}.stat b{display:block;font-size:22px;line-height:28px;font-weight:800;color:var(--indigo)}.stat span{font-size:12px;line-height:16px}
 .lrow{display:flex;align-items:center;gap:12px;padding:12px 14px;border-bottom:1px solid var(--smoke);width:100%;text-align:left;min-height:56px}
@@ -421,7 +432,7 @@ i.po{background:var(--azure)}i.ev{background:var(--taxi)}i.bad{background:var(--
           <p class="hint mb12">All times America/New_York.</p>
           <h2 class="h2 mb8">Before it goes out</h2>
           <div class="check"><span>Image alt text added</span><span class="st pill mint" id="chk-alt">Done</span></div>
-          <div class="check"><span>Reviewed by a person</span><button class="st pill cream" id="chk-review" aria-pressed="false" style="height:32px;padding:0 12px">Tap to confirm</button></div>
+          <button class="checkrow" id="chk-review" role="checkbox" aria-checked="false"><span class="box" aria-hidden="true"></span><span><b>I reviewed this post</b><br><span class="cap">Required. A person checks every post before it goes out.</span></span></button>
         </div>
         <div class="bottombar"><button class="btn pri block" id="btn-schedule">Schedule post</button></div>
       </section>
@@ -547,9 +558,13 @@ $('#btn-ai').onclick=()=>{const t=$('#post-title').value.trim()||'our next event
  const opts=['Join the AI Club for '+t+'! '+when+'. Bring questions, bring a friend, and help shape how CUNY SPS talks about AI. RSVP in the Hub. #CUNYSPS #AIClub',
   t+' is coming up. '+when+'. Students, faculty and alumni welcome. No experience needed. Save your seat in the Hub.',
   'Curious where AI is headed and who gets a say? '+t+' · '+when+'. Free for all CUNY SPS students. #CUNYSPS'];
- openSheet('<div class="row mb8"><h2 class="h2">✦ AI caption helper</h2><span class="pill cream">Simulated</span></div><p class="cap mb12">Three drafts from your title'+(ev?' and the related event':'')+'. Pick one to edit. Nothing posts without a person reviewing it.</p>'+opts.map((o,i)=>'<button class="aiopt" data-ai="'+i+'">'+esc(o)+'</button>').join('')+'<div class="row" style="justify-content:flex-start;gap:8px"><button class="chip" data-tone>Shorter</button><button class="chip" data-tone>More formal</button><button class="chip" data-tone>Add emoji</button></div>');
+ openSheet('<div class="row mb8"><h2 class="h2">✦ AI caption helper</h2><span class="pill cream">Simulated</span></div><p class="cap mb12">Three drafts from your title'+(ev?' and the related event':'')+'. Pick one to edit. Nothing posts without a person reviewing it.</p><div id="aiopts">'+opts.map((o,i)=>'<button class="aiopt" data-ai="'+i+'">'+esc(o)+'</button>').join('')+'</div><div class="label mb8">Adjust the tone</div><div class="row" style="justify-content:flex-start;gap:8px;flex-wrap:wrap"><button class="chip" data-tone="short">Shorter</button><button class="chip" data-tone="formal">More formal</button><button class="chip" data-tone="emoji">Add emoji</button></div>');
  $$('#sheet [data-ai]').forEach(b=>b.onclick=()=>{copy.value=opts[+b.dataset.ai];copy.oninput();closeAll();toast('AI draft added. Edit it before you post.');copy.focus({preventScroll:true});$('#phone').scrollTop=0});
- $$('#sheet [data-tone]').forEach(b=>b.onclick=()=>toast('Tone controls come in stage 2'))};
+ const tags=s=>(s.match(/#\w+/g)||[]).join(' ');const plain=s=>s.replace(/\s*#\w+/g,'').trim();
+ const TONE={short:s=>{const f=plain(s).split(/(?<=[.!?])\s+/)[0];return (f+' '+tags(s)).trim()},
+  formal:s=>('The CUNY SPS Artificial Intelligence Club invites you to '+t+'. '+when+'. All CUNY SPS students are welcome; please RSVP in the Club Social Hub. '+tags(s)).trim(),
+  emoji:s=>{const p=plain(s);return ('✨ '+p.replace(/\.$/,'')+' 🤖💡 '+tags(s)).trim()}};
+ $$('#sheet [data-tone]').forEach(b=>b.onclick=()=>{for(let i=0;i<opts.length;i++)opts[i]=TONE[b.dataset.tone](opts[i]);$$('#aiopts .aiopt').forEach((x,i)=>x.textContent=opts[i]);toast('Drafts updated: '+b.textContent.toLowerCase())})};
 $('#btn-draft').onclick=()=>{const t=$('#post-title').value.trim()||'Untitled post';S.posts.push({title:t,sub:'Draft · not scheduled',st:'Draft',img:S.photo?S.photo.src:''});toast('Draft saved to Overview');go('overview')};
 $('#btn-next').onclick=()=>{let ok=true;if(!copy.value.trim()){$('#f-copy').classList.add('bad');ok=false}
  if(S.photo&&!$('#alt').value.trim()){$('#f-alt').classList.add('bad');ok=false}
@@ -561,8 +576,8 @@ function renderSchedule(){$('#sum-title').textContent=$('#post-title').value.tri
  updSched()}
 $$('[data-acct]').forEach(sw=>sw.onclick=()=>{const k=sw.dataset.acct;S.acct[k]=!S.acct[k];sw.setAttribute('aria-checked',S.acct[k]);updSched()});
 $$('[data-when]').forEach(b=>b.onclick=()=>{S.when=b.dataset.when;$$('[data-when]').forEach(x=>x.setAttribute('aria-pressed',x===b));$('#when-fields').style.display=S.when==='schedule'?'grid':'none';updSched()});
-$('#chk-review').onclick=e=>{S.reviewed=!S.reviewed;const b=e.currentTarget;b.setAttribute('aria-pressed',S.reviewed);b.textContent=S.reviewed?'Done':'Tap to confirm';b.className='st pill '+(S.reviewed?'mint':'cream');updSched()};
-function updSched(){const any=S.acct.fb||S.acct.ig;const b=$('#btn-schedule');b.disabled=!any||!S.reviewed;b.textContent=!any?'Pick at least one account':!S.reviewed?'Confirm review to continue':S.when==='schedule'?'Schedule post':'Publish now'}
+$('#chk-review').onclick=e=>{S.reviewed=!S.reviewed;e.currentTarget.setAttribute('aria-checked',S.reviewed);updSched()};
+function updSched(){const any=S.acct.fb||S.acct.ig;const b=$('#btn-schedule');b.disabled=!any||!S.reviewed;b.textContent=S.when==='schedule'?'Schedule post':'Publish now';let n=$('#sched-need');if(!n){n=document.createElement('p');n.id='sched-need';n.className='need';b.parentNode.insertBefore(n,b)}n.textContent=!any?'Turn on at least one account above.':!S.reviewed?'Tick “I reviewed this post” above to continue.':'';n.style.display=n.textContent?'block':'none';b.parentNode.style.flexWrap='wrap'}
 function fmtWhen(){if(S.when==='now')return 'now';const d=new Date($('#date').value+'T'+$('#time').value);if(isNaN(d))return 'soon';return d.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'})+' · '+d.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'})}
 $('#btn-schedule').onclick=()=>{const t=$('#post-title').value.trim()||'Untitled post';const when=fmtWhen();
  const igFail=S.acct.ig&&S.photo&&S.photo.type&&S.photo.type!=='image/jpeg';
@@ -579,7 +594,7 @@ $('#btn-schedule').onclick=()=>{const t=$('#post-title').value.trim()||'Untitled
   '<div class="stack"><button class="btn sec block" data-go="overview">Back to Overview</button><button class="btn txt block" id="another">Create another post</button></div>';
  const rm=$('#rm-ig');if(rm)rm.onclick=()=>{S.posts=S.posts.filter(p=>p.st!=='Needs fix');toast('Instagram removed from this post');go('overview')};
  $('#another').onclick=()=>{resetPost();go('create')};
- S.reviewed=false;$('#chk-review').setAttribute('aria-pressed','false');$('#chk-review').textContent='Tap to confirm';$('#chk-review').className='st pill cream';
+ S.reviewed=false;$('#chk-review').setAttribute('aria-checked','false');
  if(!igFail)resetPost(true);go('result')};
 function resetPost(keepView){$('#post-title').value='';copy.value='';copy.oninput();$('#alt').value='';setPhoto(null);$('#rel-event').value=''}
 
@@ -596,7 +611,7 @@ function renderEvents(){const list=EVENTS.filter(e=>S.filter==='all'||e.type===S
  $$('[data-chk]').forEach(b=>b.onclick=()=>{const id=b.dataset.chk;const ev=EVENTS.find(e=>e.id===id);
   openSheet('<h2 class="h2 mb8">Check in · officer view</h2><p class="cap mb12">'+ev.title+'</p><div class="card pad mb12" style="text-align:center"><div style="width:150px;height:150px;margin:0 auto 10px;background:repeating-linear-gradient(45deg,var(--indigo) 0 6px,#fff 6px 12px);border-radius:12px" aria-label="Sample check-in code"></div><p class="cap">Attendees scan this code at the door. Sample only.</p></div><button class="btn pri block" id="self-chk">Check myself in</button>');
   $('#self-chk').onclick=()=>{S.checked[id]=true;closeAll();toast('Checked in. Attendance recorded for officers.');renderEvents()}});
- $$('[data-more]').forEach(b=>b.onclick=()=>openSheet('<h2 class="h2 mb12">More actions</h2>'+['Add to calendar (.ics)','Share event','Create a post about this event','Message attendees','Edit event'].map((t,i)=>'<button class="navitem" '+(i===2?'id="mk-post"':'data-soon="x"')+'>'+t+'</button>').join('')),0);
+ $$('[data-more]').forEach(b=>b.onclick=()=>openSheet('<h2 class="h2 mb12">More actions</h2>'+['Add to calendar (.ics)','Share event','Create a post about this event','Message attendees','Edit event'].map((t,i)=>'<button class="navitem" '+(i===2?'id="mk-post"':i===0?'data-act="ics"':i===1?'data-act="shareEv"':i===3?'data-go="messaging"':'data-soon="x"')+'>'+t+'</button>').join('')),0);
  const mk=()=>{const m=$('#mk-post');if(m)m.onclick=()=>{resetPost();$('#post-title').value=h.title;$('#rel-event').value=h.id;setPhoto(PHOTOS.find(p=>p.src===h.img)||null);go('create')}};
  document.querySelectorAll('[data-more]').forEach(b=>b.addEventListener('click',()=>setTimeout(mk,0)));}
 
