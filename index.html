@@ -8,6 +8,7 @@
 <link rel="apple-touch-icon" href="img/hub-icon-180.png">
 <meta name="apple-mobile-web-app-title" content="Club Hub">
 <meta name="theme-color" content="#0033A1">
+<meta http-equiv="Cache-Control" content="no-cache">
 <link rel="manifest" href="manifest.webmanifest">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
@@ -372,7 +373,7 @@ i.po{background:var(--azure)}i.ev{background:var(--taxi)}i.bad{background:var(--
               <button class="btn taxi block" data-go="signin">Get started →</button>
               <button class="btn ghost block" data-go="public">Browse club events first</button>
             </div>
-            <p class="fine">A CUNY SPS AI Club pilot · demo with sample data, no real accounts</p>
+            <p class="fine">A CUNY SPS AI Club pilot · demo with sample data, no real accounts<br><span style="opacity:.7">Version Nov 18 · 6</span></p>
           </div>
         </div>
       </section>
@@ -627,7 +628,7 @@ $('#btn-ai').onclick=()=>{const t=$('#post-title').value.trim()||'our next event
   t+' is coming up. '+when+'. Students, faculty and alumni welcome. No experience needed. Save your seat in the Hub.',
   'Curious where AI is headed and who gets a say? '+t+' · '+when+'. Free for all CUNY SPS students. #CUNYSPS'];
  openSheet('<div class="row mb8"><h2 class="h2">✦ AI caption helper</h2><span class="pill cream">Simulated</span></div><p class="cap mb12">Three drafts from your title'+(ev?' and the related event':'')+'. Pick one to edit. Nothing posts without a person reviewing it.</p><div id="aiopts">'+opts.map((o,i)=>'<button class="aiopt" data-ai="'+i+'">'+esc(o)+'</button>').join('')+'</div><div class="label mb8">Adjust the tone</div><div class="row" style="justify-content:flex-start;gap:8px;flex-wrap:wrap"><button class="chip" data-tone="short">Shorter</button><button class="chip" data-tone="formal">More formal</button><button class="chip" data-tone="emoji">Add emoji</button></div>');
- $$('#sheet [data-ai]').forEach(b=>b.onclick=()=>{copy.value=opts[+b.dataset.ai];copy.oninput();closeAll();toast('AI draft added. Edit it before you post.');copy.focus({preventScroll:true});$('#phone').scrollTop=0});
+ $$('#sheet [data-ai]').forEach(b=>b.onclick=()=>{copy.value=opts[+b.dataset.ai];copy.oninput();closeAll();toast('AI draft added. Tap the text to edit it.');try{document.activeElement&&document.activeElement.blur()}catch(e){};$('#phone').scrollTop=0;setTimeout(()=>{const sc=$('#screen'),r=copy.getBoundingClientRect(),s=sc.getBoundingClientRect();sc.scrollTo({top:Math.max(0,sc.scrollTop+(r.top-s.top)-90),behavior:'smooth'});const f=$('#f-copy');f.classList.add('squish');setTimeout(()=>f.classList.remove('squish'),400)},260)});
  const base=opts.slice();const T={short:false,formal:false,emoji:false};
  const SHORT=['Join us for '+t+'! '+when+'. RSVP in the Hub.',t+': '+when+'. All welcome, save your seat.','Who gets a say in AI? Find out at '+t+'. '+when+'.'];
  const FORMAL=['The CUNY SPS Artificial Intelligence Club invites you to '+t+'. '+when+'. Please RSVP in the Club Social Hub.','You are cordially invited to '+t+', hosted by the CUNY SPS AI Club. '+when+'. Students, faculty and alumni are welcome.','Join the CUNY SPS community for '+t+', a conversation on the future of AI. '+when+'. Registration is open in the Club Social Hub.'];
@@ -690,7 +691,7 @@ function renderEvents(){setTimeout(squishAtt,0);const list=EVENTS.filter(e=>S.fi
 /* init */
 setPhoto(PHOTOS[0]);$('#alt').value='Students talking together outside on a CUNY campus';
 </script>
-<script src="js/screens.js"></script>
+<script src="js/screens.js?v=20261118-6"></script>
 <script>go(location.hash.slice(1)||'welcome',false);</script>
 </body>
 </html>
