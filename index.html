@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
 <title>Club Social Hub · Mobile demo</title>
 <link rel="icon" href="img/hub-icon-180.png">
 <link rel="apple-touch-icon" href="img/hub-icon-180.png">
@@ -240,6 +240,9 @@ input::placeholder,textarea::placeholder{color:#6B6C6F;opacity:1}
 .tpl .flyer{padding:10px 10px 12px}.tpl .flyer b{font-size:14px;line-height:16px}.tpl .flyer span{font-size:10px}
 .tpl .nm{position:absolute;left:8px;bottom:-26px}
 .tplname{font-size:12px;font-weight:600;color:var(--indigo);margin-top:4px}
+input[type=date],input[type=time]{-webkit-appearance:none;appearance:none;min-width:0;width:100%;display:block;text-align:left}
+.two>*{min-width:0}
+.sheet{padding-left:20px;padding-right:20px}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
 html,body{overflow-x:hidden;max-width:100%}
 .screen{overflow-x:hidden}
@@ -556,7 +559,7 @@ const S={posts:[{title:'Build Night reminder',sub:'Instagram · Thu 9:00 AM',st:
 
 /* routing */
 const VIEWS=['welcome','signin','overview','create','schedule','result','events'];const ADMIN=['console','clubsadmin','requests','leaders','socialadmin','users','audit','reports','platform','notifications'];
-function go(v,push=true){const dyn=typeof D!=='undefined'&&D[v];if(!VIEWS.includes(v)&&!dyn)v='welcome';$('#phone').classList.toggle('blue',v==='welcome');if(S.persona==='admin'&&VIEWS.includes(v)&&v!=='signin'&&v!=='welcome')S.persona='lead';const prev=S.view;S.view=v;$$('.view').forEach(x=>{x.classList.toggle('on',dyn?x.id==='v-dyn':x.id==='v-'+v);x.classList.remove('in-fwd','in-back')});if(prev&&prev!==v){const el=$(dyn?'#v-dyn':'#v-'+v);void el.offsetWidth;el.classList.add(S.dir==='back'?'in-back':'in-fwd')}S.dir='fwd';if(dyn)render();$('#ws').closest('.field').style.display=S.persona==='admin'?'none':'';$('#ws').closest('.field').previousElementSibling.textContent=S.persona==='admin'?'Student Life · all clubs':'Active club workspace';$('#screen').scrollTop=0;$('#phone').scrollTop=0;closeAll();
+function go(v,push=true){const dyn=typeof D!=='undefined'&&D[v];if(!VIEWS.includes(v)&&!dyn)v='welcome';$('#phone').classList.toggle('blue',v==='welcome');if(S.persona==='admin'&&VIEWS.includes(v)&&v!=='signin'&&v!=='welcome')S.persona='lead';const prev=S.view;S.view=v;$$('.view').forEach(x=>{x.classList.toggle('on',dyn?x.id==='v-dyn':x.id==='v-'+v);x.classList.remove('in-fwd','in-back')});if(prev&&prev!==v){const el=$(dyn?'#v-dyn':'#v-'+v);void el.offsetWidth;el.classList.add(S.dir==='back'?'in-back':'in-fwd')}S.dir='fwd';if(dyn)render();$('#ws').closest('.field').style.display=S.persona==='admin'?'none':'';$('#ws').closest('.field').previousElementSibling.textContent=S.persona==='admin'?'Student Life · all clubs':'Active club workspace';$('#screen').scrollTop=0;try{window.scrollTo(0,0);document.documentElement.scrollLeft=0;document.body.scrollLeft=0}catch(e){}$('#phone').scrollTop=0;closeAll();
  if(v==='overview')renderOverview();if(v==='events')renderEvents();if(v==='schedule')renderSchedule();
  if(push&&location.hash!=='#'+v){try{history.replaceState(null,'','#'+v)}catch(e){location.hash=v}}renderNav();
  const h=document.querySelector('#v-'+(dyn?'dyn':v)+' .title, #v-'+(dyn?'dyn':v)+' h1');if(h){h.setAttribute('tabindex','-1');h.focus({preventScroll:true});}}
