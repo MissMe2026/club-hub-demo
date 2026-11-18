@@ -245,7 +245,7 @@ input[type=date],input[type=time]{-webkit-appearance:none;appearance:none;min-wi
 .two>*{min-width:0}
 .sheet{padding-left:20px;padding-right:20px}
 .flyer[hidden]{display:none!important}
-@media (max-width:820px){.phone{height:var(--vvh,100dvh)}}
+@media (max-width:820px){html,body{height:100%;overflow:hidden;overscroll-behavior:none}.stage{display:block;min-height:0;height:100%}.phone{position:fixed;left:0;right:0;top:0;height:var(--vvh,100dvh);transform:translate3d(0,var(--vvt,0px),0)}}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
 html,body{overflow-x:hidden;max-width:100%}
 .screen{overflow-x:hidden}
@@ -373,7 +373,7 @@ i.po{background:var(--azure)}i.ev{background:var(--taxi)}i.bad{background:var(--
               <button class="btn taxi block" data-go="signin">Get started →</button>
               <button class="btn ghost block" data-go="public">Browse club events first</button>
             </div>
-            <p class="fine">A CUNY SPS AI Club pilot · demo with sample data, no real accounts<br><span style="opacity:.7">Version Nov 18 · 6</span></p>
+            <p class="fine">A CUNY SPS AI Club pilot · demo with sample data, no real accounts<br><span style="opacity:.7">Version Nov 18 · 7</span></p>
           </div>
         </div>
       </section>
@@ -575,13 +575,14 @@ document.addEventListener('click',e=>{const bk=e.target.closest('[data-back],[ar
 /* toast */
 function shake(el){if(!el)return;el.classList.remove('shake');void el.offsetWidth;el.classList.add('shake');el.addEventListener('animationend',()=>el.classList.remove('shake'),{once:true});try{navigator.vibrate&&navigator.vibrate(30)}catch(e){}}
 document.addEventListener('focusin',e=>{if(e.target.matches('input:not([type=checkbox]):not([type=file]),textarea')&&matchMedia('(max-width:820px)').matches)$('#phone').classList.add('typing-on')});document.addEventListener('focusout',()=>setTimeout(()=>{if(!document.activeElement||!document.activeElement.matches('input,textarea'))$('#phone').classList.remove('typing-on')},50));
-(function(){const vv=window.visualViewport;if(!vv)return;const fit=()=>{if(!matchMedia('(max-width:820px)').matches)return;document.documentElement.style.setProperty('--vvh',vv.height+'px');window.scrollTo(0,0)};vv.addEventListener('resize',fit);vv.addEventListener('scroll',fit);fit()})();
-document.addEventListener('focusin',e=>{const el=e.target;if(!el.matches||!el.matches('input:not([type=checkbox]):not([type=file]),textarea'))return;if(el.closest('.sheet,.drawer'))return;setTimeout(()=>{const sc=$('#screen'),r=el.getBoundingClientRect(),s=sc.getBoundingClientRect();const target=sc.scrollTop+(r.top-s.top)-Math.max(12,(s.height-r.height)/3);sc.scrollTo({top:Math.max(0,target),behavior:'smooth'})},320)});
+(function(){const vv=window.visualViewport;if(!vv)return;const R=document.documentElement;let raf=0,settle=0;const fit=()=>{raf=0;if(!matchMedia('(max-width:820px)').matches){R.style.removeProperty('--vvh');R.style.removeProperty('--vvt');return}R.style.setProperty('--vvh',Math.round(vv.height)+'px');R.style.setProperty('--vvt',Math.round(Math.max(0,vv.offsetTop))+'px')};const req=()=>{if(!raf)raf=requestAnimationFrame(fit);clearTimeout(settle);settle=setTimeout(()=>{fit();window.keepFieldVisible&&keepFieldVisible()},180)};vv.addEventListener('resize',req);vv.addEventListener('scroll',req);fit()})();
+function keepFieldVisible(){const el=document.activeElement;if(!el||!el.matches||!el.matches('input:not([type=checkbox]):not([type=file]):not([type=date]):not([type=time]),textarea'))return;if(el.closest('.sheet,.drawer'))return;const sc=$('#screen');if(!sc||!sc.contains(el))return;const r=el.getBoundingClientRect(),s=sc.getBoundingClientRect();const room=s.height-64;if(r.top>=s.top+12&&r.bottom<=s.top+room)return;const target=sc.scrollTop+(r.top-s.top)-Math.max(12,Math.min(90,(room-r.height)/3));sc.scrollTo({top:Math.max(0,target),behavior:'smooth'})}
+document.addEventListener('focusin',e=>{const el=e.target;if(!el.matches||!el.matches('input:not([type=checkbox]):not([type=file]),textarea'))return;setTimeout(keepFieldVisible,350)});
 let tt;function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('on');clearTimeout(tt);tt=setTimeout(()=>t.classList.remove('on'),2400)}
 
 /* drawer & sheet */
 function openDrawer(){renderNav();const nv=$('#nav');nv.scrollTop=0;setTimeout(()=>{const c=nv.querySelector('.cur');if(c&&c.offsetTop>nv.clientHeight-60)c.scrollIntoView({block:'center'})},30);$('#drawer').classList.add('on');$('#drawer').setAttribute('aria-hidden','false');$('#scrim').classList.add('on');setTimeout(()=>{$('#drawer-close').focus({preventScroll:true})},50)}
-function openSheet(html){const s=$('#sheet');s.innerHTML='<div class="grab"></div>'+html;s.classList.add('on');s.setAttribute('aria-hidden','false');$('#scrim').classList.add('on');setTimeout(()=>{const f=s.querySelector('button,input');f&&f.focus({preventScroll:true});$('#phone').scrollTop=0},60)}
+function openSheet(html){const ae=document.activeElement;if(ae&&ae.blur&&ae.matches&&ae.matches('input,textarea,select'))ae.blur();const s=$('#sheet');s.innerHTML='<div class="grab"></div>'+html;s.classList.add('on');s.setAttribute('aria-hidden','false');$('#scrim').classList.add('on');setTimeout(()=>{const f=s.querySelector('button');f&&f.focus({preventScroll:true});$('#phone').scrollTop=0},60)}
 function closeAll(){$('#drawer').classList.remove('on');$('#drawer').setAttribute('aria-hidden','true');$('#sheet').classList.remove('on');$('#sheet').setAttribute('aria-hidden','true');$('#scrim').classList.remove('on')}
 $('#scrim').onclick=closeAll;$('#drawer-close').onclick=closeAll;
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeAll()});
@@ -691,7 +692,7 @@ function renderEvents(){setTimeout(squishAtt,0);const list=EVENTS.filter(e=>S.fi
 /* init */
 setPhoto(PHOTOS[0]);$('#alt').value='Students talking together outside on a CUNY campus';
 </script>
-<script src="js/screens.js?v=20261118-6"></script>
+<script src="js/screens.js?v=20261118-7"></script>
 <script>go(location.hash.slice(1)||'welcome',false);</script>
 </body>
 </html>
