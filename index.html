@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Club Social Hub · Mobile demo</title>
 <link rel="icon" href="img/hub-icon-180.png">
 <link rel="apple-touch-icon" href="img/hub-icon-180.png">
@@ -140,7 +140,7 @@ button{cursor:pointer;background:none;border:0}
 .titleinput{font-size:28px;line-height:34px;font-weight:800;color:var(--indigo);border:0;border-bottom:2px dashed var(--dove);width:100%;padding:8px 0;margin:14px 0 10px;background:transparent}
 .titleinput:focus{outline:none;border-bottom-color:var(--blue)}
 .titleinput::placeholder{color:var(--dove)}
-.bottombar{position:sticky;bottom:0;background:var(--white);border-top:1px solid var(--smoke);padding:12px 16px 16px;display:flex;gap:10px;z-index:4}
+.bottombar{position:sticky;bottom:0;background:var(--white);border-top:1px solid var(--smoke);padding:12px 16px max(16px,env(safe-area-inset-bottom));display:flex;gap:10px;z-index:4}
 .bottombar .btn{flex:1}
 .steps{display:flex;gap:6px;padding:0 16px 4px}.steps i{flex:1;height:4px;border-radius:2px;background:var(--dove)}.steps i.on{background:var(--blue)}
 .acct{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--smoke)}
@@ -180,7 +180,7 @@ button{cursor:pointer;background:none;border:0}
 .photopick{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
 .photopick button{aspect-ratio:1;border-radius:12px;background:var(--sky) center/cover;border:3px solid transparent}
 .photopick button[aria-pressed="true"]{border-color:var(--blue)}
-.toast{position:absolute;left:16px;right:16px;bottom:24px;visibility:hidden;background:var(--indigo);color:#fff;border-radius:14px;padding:12px 16px;font-size:14px;z-index:30;transform:translateY(calc(100% + 60px));transition:transform .25s,visibility .25s;display:flex;gap:10px;align-items:center}
+.toast{position:absolute;left:16px;right:16px;top:calc(66px + env(safe-area-inset-top));bottom:auto;visibility:hidden;background:var(--indigo);color:#fff;border-radius:14px;padding:12px 16px;font-size:14px;z-index:30;transform:translateY(calc(-100% - 40px));transition:transform .25s,visibility .25s;display:flex;gap:10px;align-items:center}
 .toast.on{transform:none;visibility:visible}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
 .mb8{margin-bottom:8px}.mb12{margin-bottom:12px}.mb16{margin-bottom:16px}.mt12{margin-top:12px}.mt16{margin-top:16px}
@@ -223,6 +223,23 @@ input::placeholder,textarea::placeholder{color:#6B6C6F;opacity:1}
 @keyframes dots{0%,80%,100%{opacity:.25}40%{opacity:1}}
 .typing span{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--indigo);margin:0 2px;animation:dots 1s infinite}
 .typing span:nth-child(2){animation-delay:.15s}.typing span:nth-child(3){animation-delay:.3s}
+.typing-on .bottombar{display:none}
+.sheet{padding-bottom:calc(48px + env(safe-area-inset-bottom))}
+.chip.on{background:var(--indigo);color:#fff;border-color:var(--indigo)}
+/* flyer templates */
+.flyer{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end;padding:16px 16px 58px;color:#fff;pointer-events:none}
+.flyer b{font-size:24px;line-height:27px;font-weight:800;letter-spacing:-.01em}
+.flyer span{font-size:13px;font-weight:600;margin-top:4px}
+.flyer.blue{background:linear-gradient(180deg,rgba(0,51,161,0) 25%,rgba(0,51,161,.92) 78%)}
+.flyer.taxi{justify-content:flex-start;padding-top:14px}.flyer.taxi b{background:var(--taxi);color:var(--indigo);padding:6px 10px;border-radius:10px;align-self:flex-start;max-width:88%}.flyer.taxi span{background:#fff;color:var(--indigo);padding:4px 10px;border-radius:999px;align-self:flex-start;margin-top:6px}
+.flyer.frame{box-shadow:inset 0 0 0 10px var(--indigo);background:linear-gradient(180deg,transparent 45%,rgba(1,29,73,.85))}
+.flyer.frame::before{content:"CUNY SPS · AI CLUB";position:absolute;top:18px;left:20px;font-size:11px;font-weight:800;letter-spacing:.08em;background:var(--indigo);padding:3px 8px;border-radius:6px}
+.tpls{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.tpl{position:relative;display:block;width:100%;aspect-ratio:4/5;border-radius:14px;overflow:hidden;background:var(--sky) center/cover;border:3px solid transparent}
+.tpl[aria-pressed="true"]{border-color:var(--blue)}
+.tpl .flyer{padding:10px 10px 12px}.tpl .flyer b{font-size:14px;line-height:16px}.tpl .flyer span{font-size:10px}
+.tpl .nm{position:absolute;left:8px;bottom:-26px}
+.tplname{font-size:12px;font-weight:600;color:var(--indigo);margin-top:4px}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
 html,body{overflow-x:hidden;max-width:100%}
 .screen{overflow-x:hidden}
@@ -419,7 +436,7 @@ i.po{background:var(--azure)}i.ev{background:var(--taxi)}i.bad{background:var(--
         <div class="pad">
           <div class="preview" id="preview">
             <div class="empty" id="preview-empty">Add a photo or flyer.<br><span class="cap">Images get more engagement than text-only posts.</span></div>
-            <div class="over"><button class="smallbtn light" id="btn-photo">Change image</button><button class="smallbtn dark" data-soon="x">Flyer templates</button></div>
+            <div class="flyer" id="flyer-layer" hidden></div><div class="over"><button class="smallbtn light" id="btn-photo">Change image</button><button class="smallbtn dark" id="btn-flyer">Flyer templates</button></div>
           </div>
           <label class="sr" for="post-title">Post title</label>
           <input class="titleinput" id="post-title" placeholder="Name your post" value="Spring AI Ethics Panel">
@@ -551,6 +568,7 @@ document.addEventListener('click',e=>{const bk=e.target.closest('[data-back],[ar
 
 /* toast */
 function shake(el){if(!el)return;el.classList.remove('shake');void el.offsetWidth;el.classList.add('shake');el.addEventListener('animationend',()=>el.classList.remove('shake'),{once:true});try{navigator.vibrate&&navigator.vibrate(30)}catch(e){}}
+document.addEventListener('focusin',e=>{if(e.target.matches('input:not([type=checkbox]):not([type=file]),textarea')&&matchMedia('(max-width:820px)').matches)$('#phone').classList.add('typing-on')});document.addEventListener('focusout',()=>setTimeout(()=>{if(!document.activeElement||!document.activeElement.matches('input,textarea'))$('#phone').classList.remove('typing-on')},50));
 let tt;function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('on');clearTimeout(tt);tt=setTimeout(()=>t.classList.remove('on'),2400)}
 
 /* drawer & sheet */
@@ -585,23 +603,32 @@ function esc(s){return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','
 const copy=$('#copy');copy.oninput=()=>{$('#copy-count').textContent=copy.value.length.toLocaleString()+' / 2,200';$('#f-copy').classList.remove('bad')};
 $('#alt').oninput=()=>$('#f-alt').classList.remove('bad');
 $('#rel-event').innerHTML='<option value="">Related event ▾</option>'+EVENTS.map(e=>'<option value="'+e.id+'">'+e.title+'</option>').join('');
-function setPhoto(p){S.photo=p;const pv=$('#preview');pv.style.backgroundImage=p?'url('+p.src+')':'';$('#preview-empty').style.display=p?'none':'grid';
+const TPLS=[['none','No template'],['blue','CUNY Blue'],['taxi','Taxi tag'],['frame','Club frame']];S.flyer='none';
+function flyerTxt(){const t=$('#post-title').value.trim()||'Your event title';const ev=EVENTS.find(e=>e.id===$('#rel-event').value);return {t,w:ev?ev.meta.split(' · ').slice(0,2).join(' · '):'Date · time'}}
+function renderFlyer(){const L=$('#flyer-layer');if(!L)return;if(S.flyer==='none'||!S.photo){L.hidden=true;return}const f=flyerTxt();L.hidden=false;L.className='flyer '+S.flyer;L.innerHTML='<b>'+esc(f.t)+'</b><span>'+esc(f.w)+'</span>'}
+function openFlyers(){if(!S.photo){toast('Add an image first');return}const f=flyerTxt();openSheet('<h2 class="h2 mb8">Flyer templates</h2><p class="cap mb12">Puts your title and event details on the image in CUNY colors. Sample templates.</p><div class="tpls">'+TPLS.map(([k,n])=>'<div><button class="tpl" data-tpl="'+k+'" aria-pressed="'+(S.flyer===k)+'" aria-label="'+n+'" style="background-image:url('+S.photo.src+')">'+(k==='none'?'':'<div class="flyer '+k+'"><b>'+esc(f.t)+'</b><span>'+esc(f.w)+'</span></div>')+'</button><div class="tplname">'+n+'</div></div>').join('')+'</div><p class="hint mt12">Tip: pick a Related event so the date and place fill in.</p>');
+ $$('#sheet [data-tpl]').forEach(b=>b.onclick=()=>{S.flyer=b.dataset.tpl;renderFlyer();closeAll();toast(S.flyer==='none'?'Template removed':'Template applied. Alt text stays required.')})}
+function setPhoto(p){S.photo=p;setTimeout(renderFlyer,0);const pv=$('#preview');pv.style.backgroundImage=p?'url('+p.src+')':'';$('#preview-empty').style.display=p?'none':'grid';
  if(p&&!$('#alt').value)$('#alt').placeholder='Describe the image for screen readers (suggestion: '+p.alt.toLowerCase()+')'}
 $('#btn-photo').onclick=()=>{openSheet('<h2 class="h2 mb8">Choose an image</h2><p class="cap mb12">CUNY Creative Team photos, approved for club use. Or upload your own flyer.</p><div class="photopick mb16">'+PHOTOS.map((p,i)=>'<button data-ph="'+i+'" aria-label="'+p.alt+'" aria-pressed="'+(S.photo===p)+'" style="background-image:url('+p.src+')"></button>').join('')+'</div><label class="btn sec block" for="upl" style="cursor:pointer">Upload from your phone</label><input id="upl" type="file" accept="image/*" class="sr"><button class="btn txt block mt12" id="ph-none">Remove image</button>');
  $$('#sheet [data-ph]').forEach(b=>b.onclick=()=>{setPhoto(PHOTOS[+b.dataset.ph]);closeAll()});
  $('#ph-none').onclick=()=>{setPhoto(null);closeAll()};
  $('#upl').onchange=e=>{const f=e.target.files[0];if(!f)return;const url=URL.createObjectURL(f);setPhoto({src:url,alt:'',type:f.type,name:f.name});closeAll();toast(f.type==='image/jpeg'?'Image added':'Image added. Heads up: Instagram only accepts JPEG in this demo.')}};
+$('#btn-flyer').onclick=openFlyers;$('#post-title').addEventListener('input',renderFlyer);$('#rel-event').addEventListener('change',renderFlyer);
 $('#btn-ai').onclick=()=>{const t=$('#post-title').value.trim()||'our next event';const ev=EVENTS.find(e=>e.id===$('#rel-event').value);const when=ev?ev.meta.split(' · ').slice(0,3).join(' · '):'details coming soon';
  const opts=['Join the AI Club for '+t+'! '+when+'. Bring questions, bring a friend, and help shape how CUNY SPS talks about AI. RSVP in the Hub. #CUNYSPS #AIClub',
   t+' is coming up. '+when+'. Students, faculty and alumni welcome. No experience needed. Save your seat in the Hub.',
   'Curious where AI is headed and who gets a say? '+t+' · '+when+'. Free for all CUNY SPS students. #CUNYSPS'];
  openSheet('<div class="row mb8"><h2 class="h2">✦ AI caption helper</h2><span class="pill cream">Simulated</span></div><p class="cap mb12">Three drafts from your title'+(ev?' and the related event':'')+'. Pick one to edit. Nothing posts without a person reviewing it.</p><div id="aiopts">'+opts.map((o,i)=>'<button class="aiopt" data-ai="'+i+'">'+esc(o)+'</button>').join('')+'</div><div class="label mb8">Adjust the tone</div><div class="row" style="justify-content:flex-start;gap:8px;flex-wrap:wrap"><button class="chip" data-tone="short">Shorter</button><button class="chip" data-tone="formal">More formal</button><button class="chip" data-tone="emoji">Add emoji</button></div>');
  $$('#sheet [data-ai]').forEach(b=>b.onclick=()=>{copy.value=opts[+b.dataset.ai];copy.oninput();closeAll();toast('AI draft added. Edit it before you post.');copy.focus({preventScroll:true});$('#phone').scrollTop=0});
- const tags=s=>(s.match(/#\w+/g)||[]).join(' ');const plain=s=>s.replace(/\s*#\w+/g,'').trim();
- const TONE={short:s=>{const f=plain(s).split(/(?<=[.!?])\s+/)[0];return (f+' '+tags(s)).trim()},
-  formal:s=>('The CUNY SPS Artificial Intelligence Club invites you to '+t+'. '+when+'. All CUNY SPS students are welcome; please RSVP in the Club Social Hub. '+tags(s)).trim(),
-  emoji:s=>{const p=plain(s);return ('✨ '+p.replace(/\.$/,'')+' 🤖💡 '+tags(s)).trim()}};
- $$('#sheet [data-tone]').forEach(b=>b.onclick=()=>{for(let i=0;i<opts.length;i++)opts[i]=TONE[b.dataset.tone](opts[i]);$$('#aiopts .aiopt').forEach((x,i)=>x.textContent=opts[i]);toast('Drafts updated: '+b.textContent.toLowerCase())})};
+ const base=opts.slice();const T={short:false,formal:false,emoji:false};
+ const SHORT=['Join us for '+t+'! '+when+'. RSVP in the Hub.',t+': '+when+'. All welcome, save your seat.','Who gets a say in AI? Find out at '+t+'. '+when+'.'];
+ const FORMAL=['The CUNY SPS Artificial Intelligence Club invites you to '+t+'. '+when+'. Please RSVP in the Club Social Hub.','You are cordially invited to '+t+', hosted by the CUNY SPS AI Club. '+when+'. Students, faculty and alumni are welcome.','Join the CUNY SPS community for '+t+', a conversation on the future of AI. '+when+'. Registration is open in the Club Social Hub.'];
+ const SHORTFORMAL=['The CUNY SPS AI Club invites you to '+t+'. '+when+'.','You are invited: '+t+'. '+when+'.',t+' · '+when+'. Registration is open.'];
+ const EMO=[['🤖','✨'],['📅','🙌'],['💡','🗣️']];
+ const TAGS=['#CUNYSPS #AIClub','','#CUNYSPS'];
+ function build(){for(let i=0;i<3;i++){let s=T.short&&T.formal?SHORTFORMAL[i]:T.short?SHORT[i]:T.formal?FORMAL[i]:base[i].replace(/\s*#\w+/g,'');if(T.emoji)s=EMO[i][0]+' '+s.replace(/\.$/,'')+' '+EMO[i][1];opts[i]=(s+(TAGS[i]?' '+TAGS[i]:'')).trim()}$$('#aiopts .aiopt').forEach((x,i)=>x.textContent=opts[i])}
+ $$('#sheet [data-tone]').forEach(b=>b.onclick=()=>{const k=b.dataset.tone;T[k]=!T[k];b.classList.toggle('on',T[k]);b.setAttribute('aria-pressed',T[k]);build();const on=Object.keys(T).filter(x=>T[x]);toast(on.length?'Drafts updated':'Back to the original drafts')})};
 $('#btn-draft').onclick=()=>{const t=$('#post-title').value.trim()||'Untitled post';S.posts.push({title:t,sub:'Draft · not scheduled',st:'Draft',img:S.photo?S.photo.src:''});toast('Draft saved to Overview');go('overview')};
 $('#btn-next').onclick=()=>{let ok=true;if(!copy.value.trim()){$('#f-copy').classList.add('bad');ok=false}
  if(S.photo&&!$('#alt').value.trim()){$('#f-alt').classList.add('bad');ok=false}
