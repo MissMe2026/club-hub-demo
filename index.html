@@ -116,8 +116,8 @@ button{cursor:pointer;background:none;border:0}
 .ev-mini{flex:0 0 172px;scroll-snap-align:start;text-align:left}
 .ev-mini .ph{height:150px;border-radius:16px;background:var(--sky) center/cover;position:relative}
 .datechip{position:absolute;top:8px;left:8px;background:var(--taxi);color:var(--indigo);font-weight:700;font-size:12px;padding:3px 10px;border-radius:8px}
-.ev-mini b{display:block;margin-top:8px;color:var(--indigo);font-size:15px;line-height:20px}
-.ev-mini span{font-size:13px}
+.ev-mini b{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden;min-height:40px;margin-top:8px;color:var(--indigo);font-size:15px;line-height:20px}
+.ev-mini span{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden;font-size:13px;line-height:18px;min-height:36px}
 .postrow{display:flex;gap:12px;align-items:center;padding:12px 16px;border-bottom:1px solid var(--smoke);width:100%;text-align:left}
 .thumb{width:48px;height:48px;border-radius:10px;background:var(--pearl) center/cover;flex:none}
 .postrow .t{flex:1;min-width:0}
@@ -130,7 +130,7 @@ button{cursor:pointer;background:none;border:0}
 .avs{display:flex}.avs i{width:22px;height:22px;border-radius:50%;border:2px solid #fff;margin-left:-6px}.avs i:first-child{margin-left:0}
 .evrow{display:flex;gap:12px;padding:12px;align-items:center;text-align:left;width:100%}
 .evrow .ph{width:72px;height:72px;border-radius:12px;background:var(--sky) center/cover;flex:none}
-.evrow b{color:var(--indigo);display:block}
+.evrow b{color:var(--indigo);display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden}
 /* create post */
 .preview{height:220px;border-radius:18px;background:var(--sky) center/cover;position:relative;overflow:hidden}
 .preview .over{position:absolute;left:10px;right:10px;bottom:10px;display:flex;justify-content:space-between;gap:8px}
@@ -380,12 +380,12 @@ i.po{background:var(--azure)}i.ev{background:var(--taxi)}i.bad{background:var(--
           <div class="wel-body">
             <div class="wel-brand"><img src="img/hub-icon-180.png" alt="">Club Social Hub · CUNY SPS</div>
             <h1 class="wel-h">Your club, <em>all in one</em> place.</h1>
-            <p class="wel-p">Post to your club's accounts, plan events and keep members in the loop. Made for CUNY SPS student clubs.</p>
+            <p class="wel-p">Post to your club’s accounts, plan events and keep members in the loop. Made for CUNY SPS student clubs.</p>
             <div class="stack">
               <button class="btn taxi block" data-go="signin">Get started →</button>
               <button class="btn ghost block" data-go="public">Browse club events first</button>
             </div>
-            <p class="fine">A CUNY SPS AI Club pilot · demo with sample data, no real accounts<br><span style="opacity:.7">Version Nov 18 · 9</span></p>
+            <p class="fine">A CUNY SPS AI Club pilot · demo with sample data, no real accounts<br><span style="opacity:.7">Version Nov 18 · 10</span></p>
           </div>
         </div>
       </section>
@@ -409,7 +409,7 @@ i.po{background:var(--azure)}i.ev{background:var(--taxi)}i.bad{background:var(--
             </div>
             <button class="btn pri block" type="submit">Enter demo workspace</button>
           </form>
-          <div class="note mt12">Demonstration only. Real sign-in will use CUNY Login. Don't enter passwords or real social account details.</div>
+          <div class="note mt12">Demonstration only. Real sign-in will use CUNY Login. Don’t enter passwords or real social account details.</div>
           <button class="btn txt block mt12" data-go="public">Browse approved club events & request to join</button>
           <div class="label mt16 mb8">Or jump in as a sample person</div>
           <div class="stack">
@@ -640,7 +640,7 @@ function renderNav(){const NAV=S.persona==='admin'?NAV_ADMIN:NAV_LEAD;const curO
   return '<div class="acc"><button class="acc-h" aria-expanded="'+open+'" aria-controls="acc'+i+'" data-acc="'+hd+'"><span>'+hd+'<span class="ct">'+items.length+'</span></span><span class="pm" aria-hidden="true"></span></button><div class="acc-p" id="acc'+i+'"><div class="acc-in"><div>'+items.map(([n,t])=>{const cur=curOf(t);return '<button class="navitem'+(cur?' cur':'')+'" data-go="'+t+'"'+(cur?' aria-current="page"':'')+'><span>'+n+'</span></button>'}).join('')+'</div></div></div></div>'}).join('')+
  '<div class="navfoot">'+(S.persona==='admin'?'<button class="btn sec block mb8" data-go="notifications">Notifications</button>':'')+'<button class="btn txt block" data-go="signin">Switch identity · Sign out</button></div>';S.navSeen=S.view;}
 document.addEventListener('click',e=>{const a=e.target.closest('[data-acc]');if(a){S.navOpen[a.dataset.acc]=a.getAttribute('aria-expanded')!=='true';a.setAttribute('aria-expanded',S.navOpen[a.dataset.acc])}});
-$('#ws').onchange=e=>{toast('Switching clubs isn\'t part of this demo. Staying in AI Club.');e.target.value='Artificial Intelligence Club'};
+$('#ws').onchange=e=>{toast('Switching clubs isn’t part of this demo. Staying in AI Club.');e.target.value='Artificial Intelligence Club'};
 
 /* sign in */
 $('#signin-form').onsubmit=e=>{e.preventDefault();const v=$('#email').value.trim().toLowerCase();const ok=/^[^@\s]+@([a-z0-9-]+\.)*cuny\.edu$/.test(v);$('#f-email').classList.toggle('bad',!ok);if(!ok)shake($('#email'));if(ok){S.persona='lead';go('overview')}else $('#email').focus()};
@@ -729,7 +729,7 @@ function renderEvents(){setTimeout(squishAtt,0);const list=EVENTS.filter(e=>S.fi
  $('#ev-list').innerHTML='<article class="card evhero"><div class="ph'+(h.img?'':' noimg')+'" style="'+(h.img?'background-image:url('+h.img+')':'')+'">'+(h.img?'':'<span>CUNY SPS<br>Student Life</span>')+'<div class="dateblock"><small>'+h.mon+'</small><strong>'+h.day+'</strong></div></div><div class="pad"><h2 class="h2 mb8">'+h.title+'</h2><p class="cap mb8">'+h.meta+'</p><div class="row mb12" style="justify-content:flex-start;gap:8px"><span class="avs"><i style="background:var(--mint)"></i><i style="background:var(--thistle)"></i><i style="background:var(--sky)"></i>'+(S.attending[h.id]?'<i class="me"></i>':'')+'</span><span class="cap">'+(h.going+(S.attending[h.id]?1:0))+' going · '+h.seats+' seats</span></div>'+
   '<div class="row" style="justify-content:flex-start;gap:8px"><button class="btn '+(S.attending[h.id]?'pri':'sec')+'" data-att="'+h.id+'" aria-pressed="'+!!S.attending[h.id]+'">'+(S.attending[h.id]?'✓ Attending':'Attend')+'</button><button class="btn sec" data-chk="'+h.id+'">'+(S.checked[h.id]?'Checked in':'Check-in')+'</button><button class="btn txt" data-more="'+h.id+'">More</button></div></div></article>'+
   rest.map(e=>'<article class="card"><div class="evrow"><div class="ph'+(e.img?'':' noimg')+'" style="'+(e.img?'background-image:url('+e.img+')':'')+'">'+(e.img?'':'Student Life')+'</div><div style="flex:1;min-width:0"><b>'+e.title+'</b><div class="cap mb8">'+e.meta+'</div><div class="row"><span class="pill">'+e.tag+'</span><button class="chip" data-att="'+e.id+'" aria-pressed="'+!!S.attending[e.id]+'">'+(S.attending[e.id]?'✓ Going':'Attend')+'</button></div></div></div></article>').join('');
- $$('[data-att]').forEach(b=>b.onclick=()=>{const id=b.dataset.att;swapOut(b,()=>{S.attending[id]=!S.attending[id];S.justAtt=S.attending[id]?id:null;swapNext('[data-att="'+id+'"]');toast(S.attending[id]?'You\'re going. Added to your calendar.':'RSVP removed');renderEvents()})});
+ $$('[data-att]').forEach(b=>b.onclick=()=>{const id=b.dataset.att;swapOut(b,()=>{S.attending[id]=!S.attending[id];S.justAtt=S.attending[id]?id:null;swapNext('[data-att="'+id+'"]');toast(S.attending[id]?'You’re going. Added to your calendar.':'RSVP removed');renderEvents()})});
  $$('[data-chk]').forEach(b=>b.onclick=()=>{const id=b.dataset.chk;const ev=EVENTS.find(e=>e.id===id);
   openSheet('<h2 class="h2 mb8">Check in · officer view</h2><p class="cap mb12">'+ev.title+'</p><div class="card pad mb12" style="text-align:center"><div style="width:150px;height:150px;margin:0 auto 10px;background:repeating-linear-gradient(45deg,var(--indigo) 0 6px,#fff 6px 12px);border-radius:12px" aria-label="Sample check-in code"></div><p class="cap">Attendees scan this code at the door. Sample only.</p></div><button class="btn pri block" id="self-chk">Check myself in</button>');
   $('#self-chk').onclick=()=>{S.checked[id]=true;closeAll();swapNext('[data-chk="'+id+'"]');toast('Checked in. Attendance recorded for officers.');renderEvents()}});
@@ -740,7 +740,7 @@ function renderEvents(){setTimeout(squishAtt,0);const list=EVENTS.filter(e=>S.fi
 /* init */
 setPhoto(PHOTOS[0]);$('#alt').value='Students talking together outside on a CUNY campus';
 </script>
-<script src="js/screens.js?v=20261118-9"></script>
+<script src="js/screens.js?v=20261118-10"></script>
 <script>go(location.hash.slice(1)||'welcome',false);</script>
 </body>
 </html>
