@@ -209,6 +209,20 @@ input::placeholder,textarea::placeholder{color:#6B6C6F;opacity:1}
 .sheet.on>*{animation:pop .24s cubic-bezier(.2,.8,.2,1) both}
 #v-result.on .pad{animation:pop .3s cubic-bezier(.2,.8,.2,1) both}
 .btn[aria-disabled="true"]{background:var(--dove);color:var(--pewter);box-shadow:none}
+/* round 2: squash, follow-through, secondary action, hit areas */
+@keyframes squish{0%{transform:scale(1)}35%{transform:scale(1.08,.9)}65%{transform:scale(.97,1.03)}100%{transform:scale(1)}}
+.squish{animation:squish .32s cubic-bezier(.2,.8,.2,1)}
+@keyframes draw{to{stroke-dashoffset:0}}
+.result-ic svg path{stroke-dasharray:32;stroke-dashoffset:32;animation:draw .42s .18s cubic-bezier(.2,.8,.2,1) forwards}
+@keyframes avIn{from{transform:scale(0);opacity:0}70%{transform:scale(1.15)}to{transform:none;opacity:1}}
+.avs i.me{background:var(--blue);animation:avIn .34s cubic-bezier(.2,.8,.2,1)}
+.sheet{bottom:-24px;padding-bottom:48px;transition:transform .34s cubic-bezier(.32,1.25,.6,1)}
+.drawer{left:-24px;width:324px;padding-left:24px;transition:transform .34s cubic-bezier(.32,1.2,.6,1)}
+.chip,.smallbtn,.tick,.icon,.btn.txt,.switch{position:relative}
+.chip::before,.smallbtn::before,.tick::before,.btn.txt::before,.switch::before{content:"";position:absolute;inset:-6px -4px}
+@keyframes dots{0%,80%,100%{opacity:.25}40%{opacity:1}}
+.typing span{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--indigo);margin:0 2px;animation:dots 1s infinite}
+.typing span:nth-child(2){animation-delay:.15s}.typing span:nth-child(3){animation-delay:.3s}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
 html,body{overflow-x:hidden;max-width:100%}
 .screen{overflow-x:hidden}
@@ -599,7 +613,7 @@ function renderSchedule(){$('#sum-title').textContent=$('#post-title').value.tri
  updSched()}
 $$('[data-acct]').forEach(sw=>sw.onclick=()=>{const k=sw.dataset.acct;S.acct[k]=!S.acct[k];sw.setAttribute('aria-checked',S.acct[k]);updSched()});
 $$('[data-when]').forEach(b=>b.onclick=()=>{S.when=b.dataset.when;$$('[data-when]').forEach(x=>x.setAttribute('aria-pressed',x===b));$('#when-fields').style.display=S.when==='schedule'?'grid':'none';updSched()});
-$('#chk-review').onclick=e=>{S.reviewed=!S.reviewed;e.currentTarget.setAttribute('aria-checked',S.reviewed);updSched()};
+$('#chk-review').onclick=e=>{S.reviewed=!S.reviewed;e.currentTarget.setAttribute('aria-checked',S.reviewed);const bx=e.currentTarget.querySelector('.box');bx.classList.remove('squish');void bx.offsetWidth;if(S.reviewed)bx.classList.add('squish');updSched()};
 function updSched(){const any=S.acct.fb||S.acct.ig;const b=$('#btn-schedule');b.setAttribute('aria-disabled',String(!any||!S.reviewed));b.textContent=S.when==='schedule'?'Schedule post':'Publish now';let n=$('#sched-need');if(!n){n=document.createElement('p');n.id='sched-need';n.className='need';b.parentNode.insertBefore(n,b)}n.textContent=!any?'Turn on at least one account above.':!S.reviewed?'Tick “I reviewed this post” above to continue.':'';n.style.display=n.textContent?'block':'none';b.parentNode.style.flexWrap='wrap'}
 function fmtWhen(){if(S.when==='now')return 'now';const d=new Date($('#date').value+'T'+$('#time').value);if(isNaN(d))return 'soon';return d.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'})+' · '+d.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'})}
 $('#btn-schedule').onclick=()=>{if($('#btn-schedule').getAttribute('aria-disabled')==='true'){shake(!(S.acct.fb||S.acct.ig)?$('#v-schedule .acct'):$('#chk-review'));shake($('#sched-need'));return}const t=$('#post-title').value.trim()||'Untitled post';const when=fmtWhen();
@@ -623,14 +637,15 @@ function resetPost(keepView){$('#post-title').value='';copy.value='';copy.oninpu
 
 /* events */
 $$('#ev-filter .chip').forEach(c=>c.onclick=()=>{S.filter=c.dataset.f;$$('#ev-filter .chip').forEach(x=>x.setAttribute('aria-pressed',x===c));renderEvents()});
-function renderEvents(){const list=EVENTS.filter(e=>S.filter==='all'||e.type===S.filter);
+function squishAtt(){if(!S.justAtt)return;$$('[data-att="'+S.justAtt+'"]').forEach(b=>{b.classList.add('squish')});S.justAtt=null}
+function renderEvents(){setTimeout(squishAtt,0);const list=EVENTS.filter(e=>S.filter==='all'||e.type===S.filter);
  const going=EVENTS.reduce((n,e)=>n+e.going+(S.attending[e.id]?1:0),0);$('#ev-going').textContent=going+' people going so far';
  if(!list.length){$('#ev-list').innerHTML='<div class="card pad" style="text-align:center"><b style="color:var(--indigo)">No events here yet</b><p class="cap mt12">Try another filter, or post an event for your club.</p></div>';return}
  const [h,...rest]=list;
- $('#ev-list').innerHTML='<article class="card evhero"><div class="ph'+(h.img?'':' noimg')+'" style="'+(h.img?'background-image:url('+h.img+')':'')+'">'+(h.img?'':'<span>CUNY SPS<br>Student Life</span>')+'<div class="dateblock"><small>'+h.mon+'</small><strong>'+h.day+'</strong></div></div><div class="pad"><h2 class="h2 mb8">'+h.title+'</h2><p class="cap mb8">'+h.meta+'</p><div class="row mb12" style="justify-content:flex-start;gap:8px"><span class="avs"><i style="background:var(--mint)"></i><i style="background:var(--thistle)"></i><i style="background:var(--sky)"></i></span><span class="cap">'+(h.going+(S.attending[h.id]?1:0))+' going · '+h.seats+' seats</span></div>'+
+ $('#ev-list').innerHTML='<article class="card evhero"><div class="ph'+(h.img?'':' noimg')+'" style="'+(h.img?'background-image:url('+h.img+')':'')+'">'+(h.img?'':'<span>CUNY SPS<br>Student Life</span>')+'<div class="dateblock"><small>'+h.mon+'</small><strong>'+h.day+'</strong></div></div><div class="pad"><h2 class="h2 mb8">'+h.title+'</h2><p class="cap mb8">'+h.meta+'</p><div class="row mb12" style="justify-content:flex-start;gap:8px"><span class="avs"><i style="background:var(--mint)"></i><i style="background:var(--thistle)"></i><i style="background:var(--sky)"></i>'+(S.attending[h.id]?'<i class="me"></i>':'')+'</span><span class="cap">'+(h.going+(S.attending[h.id]?1:0))+' going · '+h.seats+' seats</span></div>'+
   '<div class="row" style="justify-content:flex-start;gap:8px"><button class="btn '+(S.attending[h.id]?'pri':'sec')+'" data-att="'+h.id+'" aria-pressed="'+!!S.attending[h.id]+'">'+(S.attending[h.id]?'✓ Attending':'Attend')+'</button><button class="btn sec" data-chk="'+h.id+'">'+(S.checked[h.id]?'Checked in':'Check-in')+'</button><button class="btn txt" data-more="'+h.id+'">More</button></div></div></article>'+
   rest.map(e=>'<article class="card"><div class="evrow"><div class="ph'+(e.img?'':' noimg')+'" style="'+(e.img?'background-image:url('+e.img+')':'')+'">'+(e.img?'':'Student Life')+'</div><div style="flex:1;min-width:0"><b>'+e.title+'</b><div class="cap mb8">'+e.meta+'</div><div class="row"><span class="pill">'+e.tag+'</span><button class="chip" data-att="'+e.id+'" aria-pressed="'+!!S.attending[e.id]+'">'+(S.attending[e.id]?'✓ Going':'Attend')+'</button></div></div></div></article>').join('');
- $$('[data-att]').forEach(b=>b.onclick=()=>{const id=b.dataset.att;S.attending[id]=!S.attending[id];toast(S.attending[id]?'You\'re going. Added to your calendar.':'RSVP removed');renderEvents()});
+ $$('[data-att]').forEach(b=>b.onclick=()=>{const id=b.dataset.att;S.attending[id]=!S.attending[id];S.justAtt=S.attending[id]?id:null;toast(S.attending[id]?'You\'re going. Added to your calendar.':'RSVP removed');renderEvents()});
  $$('[data-chk]').forEach(b=>b.onclick=()=>{const id=b.dataset.chk;const ev=EVENTS.find(e=>e.id===id);
   openSheet('<h2 class="h2 mb8">Check in · officer view</h2><p class="cap mb12">'+ev.title+'</p><div class="card pad mb12" style="text-align:center"><div style="width:150px;height:150px;margin:0 auto 10px;background:repeating-linear-gradient(45deg,var(--indigo) 0 6px,#fff 6px 12px);border-radius:12px" aria-label="Sample check-in code"></div><p class="cap">Attendees scan this code at the door. Sample only.</p></div><button class="btn pri block" id="self-chk">Check myself in</button>');
   $('#self-chk').onclick=()=>{S.checked[id]=true;closeAll();toast('Checked in. Attendance recorded for officers.');renderEvents()}});
