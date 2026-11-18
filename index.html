@@ -38,7 +38,7 @@ button{cursor:pointer;background:none;border:0}
 @media (max-width:820px){.side{display:none}.stage{padding:0}.phone{width:100%;height:100dvh;border-radius:0;box-shadow:none}}
 .status{height:44px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 26px;font-weight:600;font-size:15px;color:var(--indigo)}
 @media (max-width:820px){.status{display:none}}
-.screen{flex:1;overflow-y:auto;position:relative;scroll-behavior:smooth}
+.screen{flex:1;overflow-y:auto;position:relative;overscroll-behavior:contain}
 .view{display:none;min-height:100%;padding-bottom:28px}
 .view.on{display:block}
 /* top bar */
@@ -224,7 +224,8 @@ input::placeholder,textarea::placeholder{color:#6B6C6F;opacity:1}
 @keyframes dots{0%,80%,100%{opacity:.25}40%{opacity:1}}
 .typing span{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--indigo);margin:0 2px;animation:dots 1s infinite}
 .typing span:nth-child(2){animation-delay:.15s}.typing span:nth-child(3){animation-delay:.3s}
-.typing-on .bottombar{display:none}
+.typing-on .bottombar:not(:focus-within){display:none}
+.kb-pad .view.on{padding-bottom:60vh}
 .sheet{padding-bottom:calc(48px + env(safe-area-inset-bottom))}
 .chip.on{background:var(--indigo);color:#fff;border-color:var(--indigo)}
 /* flyer templates */
@@ -245,7 +246,7 @@ input[type=date],input[type=time]{-webkit-appearance:none;appearance:none;min-wi
 .two>*{min-width:0}
 .sheet{padding-left:20px;padding-right:20px}
 .flyer[hidden]{display:none!important}
-@media (max-width:820px){html,body{height:100%;overflow:hidden;overscroll-behavior:none}.stage{display:block;min-height:0;height:100%}.phone{position:fixed;left:0;right:0;top:0;height:var(--vvh,100dvh);transform:translate3d(0,var(--vvt,0px),0)}}
+@media (max-width:820px){html,body{height:100%;overflow:hidden;overscroll-behavior:none;background:var(--white)}.stage{display:block;min-height:0;height:100%}.phone{position:fixed;left:0;right:0;top:0;height:var(--vvh,100dvh);transform:translate3d(0,var(--vvt,0px),0)}}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
 html,body{overflow-x:hidden;max-width:100%}
 .screen{overflow-x:hidden}
@@ -373,7 +374,7 @@ i.po{background:var(--azure)}i.ev{background:var(--taxi)}i.bad{background:var(--
               <button class="btn taxi block" data-go="signin">Get started →</button>
               <button class="btn ghost block" data-go="public">Browse club events first</button>
             </div>
-            <p class="fine">A CUNY SPS AI Club pilot · demo with sample data, no real accounts<br><span style="opacity:.7">Version Nov 18 · 7</span></p>
+            <p class="fine">A CUNY SPS AI Club pilot · demo with sample data, no real accounts<br><span style="opacity:.7">Version Nov 18 · 8</span></p>
           </div>
         </div>
       </section>
@@ -445,7 +446,7 @@ i.po{background:var(--azure)}i.ev{background:var(--taxi)}i.bad{background:var(--
             <div class="flyer" id="flyer-layer" hidden></div><div class="over"><button class="smallbtn light" id="btn-photo">Change image</button><button class="smallbtn dark" id="btn-flyer">Flyer templates</button></div>
           </div>
           <label class="sr" for="post-title">Post title</label>
-          <input class="titleinput" id="post-title" placeholder="Name your post" value="Spring AI Ethics Panel">
+          <input class="titleinput" id="post-title" autocomplete="off" placeholder="Name your post" value="Spring AI Ethics Panel">
           <div class="row mb16" style="justify-content:flex-start;gap:8px">
             <button class="chip" id="btn-ai" style="background:var(--indigo);color:#fff;border-color:var(--indigo)">✦ AI caption helper</button>
             <select class="chip" id="rel-event" aria-label="Related event" style="padding-right:10px">
@@ -459,7 +460,7 @@ i.po{background:var(--azure)}i.ev{background:var(--taxi)}i.bad{background:var(--
           </div>
           <div class="field" id="f-alt">
             <label class="label" for="alt">Image alt text (required)</label>
-            <input id="alt" placeholder="Describe the image for screen readers">
+            <input id="alt" autocomplete="off" placeholder="Describe the image for screen readers">
             <span class="err">Alt text is required when a post has an image (CUNY accessibility policy)</span>
           </div>
           <div class="note">AI drafts are never auto-published. A person reviews every post.</div>
@@ -574,10 +575,37 @@ document.addEventListener('click',e=>{const bk=e.target.closest('[data-back],[ar
 
 /* toast */
 function shake(el){if(!el)return;el.classList.remove('shake');void el.offsetWidth;el.classList.add('shake');el.addEventListener('animationend',()=>el.classList.remove('shake'),{once:true});try{navigator.vibrate&&navigator.vibrate(30)}catch(e){}}
-document.addEventListener('focusin',e=>{if(e.target.matches('input:not([type=checkbox]):not([type=file]),textarea')&&matchMedia('(max-width:820px)').matches)$('#phone').classList.add('typing-on')});document.addEventListener('focusout',()=>setTimeout(()=>{if(!document.activeElement||!document.activeElement.matches('input,textarea'))$('#phone').classList.remove('typing-on')},50));
-(function(){const vv=window.visualViewport;if(!vv)return;const R=document.documentElement;let raf=0,settle=0;const fit=()=>{raf=0;if(!matchMedia('(max-width:820px)').matches){R.style.removeProperty('--vvh');R.style.removeProperty('--vvt');return}R.style.setProperty('--vvh',Math.round(vv.height)+'px');R.style.setProperty('--vvt',Math.round(Math.max(0,vv.offsetTop))+'px')};const req=()=>{if(!raf)raf=requestAnimationFrame(fit);clearTimeout(settle);settle=setTimeout(()=>{fit();window.keepFieldVisible&&keepFieldVisible()},180)};vv.addEventListener('resize',req);vv.addEventListener('scroll',req);fit()})();
-function keepFieldVisible(){const el=document.activeElement;if(!el||!el.matches||!el.matches('input:not([type=checkbox]):not([type=file]):not([type=date]):not([type=time]),textarea'))return;if(el.closest('.sheet,.drawer'))return;const sc=$('#screen');if(!sc||!sc.contains(el))return;const r=el.getBoundingClientRect(),s=sc.getBoundingClientRect();const room=s.height-64;if(r.top>=s.top+12&&r.bottom<=s.top+room)return;const target=sc.scrollTop+(r.top-s.top)-Math.max(12,Math.min(90,(room-r.height)/3));sc.scrollTo({top:Math.max(0,target),behavior:'smooth'})}
-document.addEventListener('focusin',e=>{const el=e.target;if(!el.matches||!el.matches('input:not([type=checkbox]):not([type=file]),textarea'))return;setTimeout(keepFieldVisible,350)});
+/* keyboard: keep the app pinned to the visible screen and the field being typed in visible, without fighting iPhone Safari */
+(function(){
+ const vv=window.visualViewport,R=document.documentElement,mq=matchMedia('(max-width:820px)'),ph=$('#phone');
+ const TYPING='input:not([type=checkbox]):not([type=radio]):not([type=file]):not([type=date]):not([type=time]):not([type=range]),textarea';
+ let kb=0,t=0,early=0,unpad=0;
+ const open=()=>vv&&window.innerHeight-vv.height>150;
+ function fit(){if(!vv||!mq.matches){R.style.removeProperty('--vvh');R.style.removeProperty('--vvt');return}
+  R.style.setProperty('--vvh',Math.round(vv.height)+'px');R.style.setProperty('--vvt',Math.round(Math.max(0,vv.offsetTop))+'px');
+  if(open())kb=window.innerHeight-vv.height}
+ function scrollerOf(el){return el.closest('.sheet')||($('#screen').contains(el)?$('#screen'):null)}
+ /* move the field into the part of the screen the keyboard leaves free. Done instantly, before the keyboard opens, so Safari has no reason to shift the page */
+ function place(el){if(!mq.matches||!el||!el.matches||!el.matches(TYPING)||el.closest('.bottombar'))return;const sc=scrollerOf(el);if(!sc)return;
+  const top0=vv?vv.offsetTop:0,h=vv?vv.height:window.innerHeight;
+  const bottom=top0+(open()?h:h-(kb||Math.round(window.innerHeight*.45)))-12;
+  const head=sc.id==='screen'?(el.closest('.view')||sc).querySelector('.top'):null;
+  const top=Math.max(top0,head?head.getBoundingClientRect().bottom:sc.getBoundingClientRect().top)+8;
+  const r=el.getBoundingClientRect(),band=Math.min(r.height,120);
+  if(r.top>=top&&r.top+band<=bottom)return;
+  const lbl=el.id&&document.querySelector('label[for="'+el.id+'"]:not(.sr)');const lift=lbl?Math.max(0,r.top-lbl.getBoundingClientRect().top):0;
+  sc.scrollTop+=r.top-top-Math.min(lift,40)}
+ function selecting(el){try{return el.selectionStart!==el.selectionEnd}catch(e){return false}}
+ if(vv){const on=()=>{clearTimeout(early);fit();clearTimeout(t);t=setTimeout(()=>{const a=document.activeElement;if(a&&!selecting(a))place(a)},160)};vv.addEventListener('resize',on);vv.addEventListener('scroll',on)}
+ window.addEventListener('resize',fit);fit();
+ document.addEventListener('focusin',e=>{const el=e.target;if(!mq.matches||!el.matches||!el.matches(TYPING))return;clearTimeout(unpad);ph.classList.add('typing-on');if(el.closest('.bottombar')){if(vv&&!open()){R.style.setProperty('--vvh',(window.innerHeight-(kb||Math.round(window.innerHeight*.45)))+'px');clearTimeout(early);early=setTimeout(fit,1000)}return}ph.classList.add('kb-pad');place(el)});
+ /* keyboard closing: glide back to where the page will end up, then drop the extra typing space, so nothing snaps */
+ document.addEventListener('focusout',()=>setTimeout(()=>{const a=document.activeElement;if(a&&a.matches&&a.matches(TYPING))return;
+  const sc=$('#screen'),s0=sc.scrollTop,padded=ph.classList.contains('kb-pad');ph.classList.remove('typing-on');if(!padded)return;
+  ph.classList.remove('kb-pad');const full=sc.scrollHeight;ph.classList.add('kb-pad');sc.scrollTop=s0;
+  const viewH=sc.clientHeight+(open()?window.innerHeight-vv.height:0),end=Math.max(0,Math.min(s0,full-viewH));
+  if(end<s0)sc.scrollTo({top:end,behavior:'smooth'});clearTimeout(unpad);unpad=setTimeout(()=>{const b=document.activeElement;if(!(b&&b.matches&&b.matches(TYPING)))ph.classList.remove('kb-pad')},380)},60));
+})();
 let tt;function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('on');clearTimeout(tt);tt=setTimeout(()=>t.classList.remove('on'),2400)}
 
 /* drawer & sheet */
@@ -641,7 +669,7 @@ $('#btn-ai').onclick=()=>{const t=$('#post-title').value.trim()||'our next event
 $('#btn-draft').onclick=()=>{const t=$('#post-title').value.trim()||'Untitled post';S.posts.push({title:t,sub:'Draft · not scheduled',st:'Draft',img:S.photo?S.photo.src:''});toast('Draft saved to Overview');go('overview')};
 $('#btn-next').onclick=()=>{let ok=true;if(!copy.value.trim()){$('#f-copy').classList.add('bad');ok=false}
  if(S.photo&&!$('#alt').value.trim()){$('#f-alt').classList.add('bad');ok=false}
- if(!ok){$$('#v-create .field.bad').forEach(f=>shake(f.querySelector('input,textarea')));toast('Fix the highlighted fields to continue');return}go('schedule')};
+ if(!ok){const bad=$$('#v-create .field.bad');bad.forEach(f=>shake(f.querySelector('input,textarea')));const sc=$('#screen'),r=bad[0].getBoundingClientRect(),hd=$('#v-create .top').getBoundingClientRect();sc.scrollTo({top:Math.max(0,sc.scrollTop+r.top-hd.bottom-16),behavior:'smooth'});toast('Fix the highlighted fields to continue');return}go('schedule')};
 
 /* schedule */
 function renderSchedule(){$('#sum-title').textContent=$('#post-title').value.trim()||'Untitled post';$('#sum-copy').textContent=copy.value;$('#sum-thumb').style.backgroundImage=S.photo?'url('+S.photo.src+')':'';
@@ -692,7 +720,7 @@ function renderEvents(){setTimeout(squishAtt,0);const list=EVENTS.filter(e=>S.fi
 /* init */
 setPhoto(PHOTOS[0]);$('#alt').value='Students talking together outside on a CUNY campus';
 </script>
-<script src="js/screens.js?v=20261118-7"></script>
+<script src="js/screens.js?v=20261118-8"></script>
 <script>go(location.hash.slice(1)||'welcome',false);</script>
 </body>
 </html>
