@@ -198,6 +198,13 @@ input::placeholder,textarea::placeholder{color:#6B6C6F;opacity:1}
 .checkrow[aria-checked="true"] .box::after{content:"✓"}
 .need{font-size:13px;line-height:18px;color:var(--cranberry);text-align:center;margin-bottom:8px;width:100%}
 .evhero .ph{background-position:center 28%}
+html,body{overflow-x:hidden;max-width:100%}
+.screen{overflow-x:hidden}
+.view{max-width:100%}
+.field input,.field textarea,.field select,.chatin,input,textarea,select{font-size:16px}
+#rel-event{max-width:170px;overflow:hidden;text-overflow:ellipsis}
+.noimg{background:linear-gradient(135deg,var(--blue),var(--indigo))!important;display:flex;align-items:flex-end;justify-content:flex-end;padding:12px;color:#fff;font-weight:800;font-size:18px;letter-spacing:.02em}
+.evrow .noimg{font-size:10px;padding:6px;text-align:right}
 .statgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .stat{background:var(--pearl);border-radius:14px;padding:12px}.stat b{display:block;font-size:22px;line-height:28px;font-weight:800;color:var(--indigo)}.stat span{font-size:12px;line-height:16px}
 .lrow{display:flex;align-items:center;gap:12px;padding:12px 14px;border-bottom:1px solid var(--smoke);width:100%;text-align:left;min-height:56px}
@@ -458,7 +465,7 @@ i.po{background:var(--azure)}i.ev{background:var(--taxi)}i.bad{background:var(--
           <button class="icon" data-go="notifications" aria-label="Notifications"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 8a6 6 0 1 1 12 0c0 7 3 8 3 8H3s3-1 3-8"/><path d="M10 20a2 2 0 0 0 4 0"/></svg><span class="dot"></span></button>
         </header>
         <div class="banner">Demo workspace · sample data, no live integrations</div>
-        <div class="row pad" style="padding-bottom:8px"><div><h1 class="h1" id="ev-count">4 events this month</h1><div class="cap" id="ev-going">9 people going so far</div></div><button class="btn pri" data-soon="x">Post event</button></div>
+        <div class="row pad" style="padding-bottom:8px"><div><h1 class="h1" id="ev-count">4 events this month</h1><div class="cap" id="ev-going">9 people going so far</div></div><button class="btn pri" data-act="postEvent">Post event</button></div>
         <div class="chips mb12" role="group" aria-label="Filter events" id="ev-filter">
           <button class="chip" aria-pressed="true" data-f="all">All</button>
           <button class="chip" aria-pressed="false" data-f="club">Club meetings</button>
@@ -517,7 +524,7 @@ document.addEventListener('click',e=>{const g=e.target.closest('[data-go]');if(g
 let tt;function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('on');clearTimeout(tt);tt=setTimeout(()=>t.classList.remove('on'),2400)}
 
 /* drawer & sheet */
-function openDrawer(){$('#drawer').classList.add('on');$('#drawer').setAttribute('aria-hidden','false');$('#scrim').classList.add('on');setTimeout(()=>{$('#drawer-close').focus({preventScroll:true})},50)}
+function openDrawer(){renderNav();const nv=$('#nav');nv.scrollTop=0;setTimeout(()=>{const c=nv.querySelector('.cur');if(c&&c.offsetTop>nv.clientHeight-60)c.scrollIntoView({block:'center'})},30);$('#drawer').classList.add('on');$('#drawer').setAttribute('aria-hidden','false');$('#scrim').classList.add('on');setTimeout(()=>{$('#drawer-close').focus({preventScroll:true})},50)}
 function openSheet(html){const s=$('#sheet');s.innerHTML='<div class="grab"></div>'+html;s.classList.add('on');s.setAttribute('aria-hidden','false');$('#scrim').classList.add('on');setTimeout(()=>{const f=s.querySelector('button,input');f&&f.focus({preventScroll:true});$('#phone').scrollTop=0},60)}
 function closeAll(){$('#drawer').classList.remove('on');$('#drawer').setAttribute('aria-hidden','true');$('#sheet').classList.remove('on');$('#sheet').setAttribute('aria-hidden','true');$('#scrim').classList.remove('on')}
 $('#scrim').onclick=closeAll;$('#drawer-close').onclick=closeAll;
@@ -604,9 +611,9 @@ function renderEvents(){const list=EVENTS.filter(e=>S.filter==='all'||e.type===S
  const going=EVENTS.reduce((n,e)=>n+e.going+(S.attending[e.id]?1:0),0);$('#ev-going').textContent=going+' people going so far';
  if(!list.length){$('#ev-list').innerHTML='<div class="card pad" style="text-align:center"><b style="color:var(--indigo)">No events here yet</b><p class="cap mt12">Try another filter, or post an event for your club.</p></div>';return}
  const [h,...rest]=list;
- $('#ev-list').innerHTML='<article class="card evhero"><div class="ph" style="background-image:url('+(h.img||'')+')"><div class="dateblock"><small>'+h.mon+'</small><strong>'+h.day+'</strong></div></div><div class="pad"><h2 class="h2 mb8">'+h.title+'</h2><p class="cap mb8">'+h.meta+'</p><div class="row mb12" style="justify-content:flex-start;gap:8px"><span class="avs"><i style="background:var(--mint)"></i><i style="background:var(--thistle)"></i><i style="background:var(--sky)"></i></span><span class="cap">'+(h.going+(S.attending[h.id]?1:0))+' going · '+h.seats+' seats</span></div>'+
+ $('#ev-list').innerHTML='<article class="card evhero"><div class="ph'+(h.img?'':' noimg')+'" style="'+(h.img?'background-image:url('+h.img+')':'')+'">'+(h.img?'':'<span>CUNY SPS<br>Student Life</span>')+'<div class="dateblock"><small>'+h.mon+'</small><strong>'+h.day+'</strong></div></div><div class="pad"><h2 class="h2 mb8">'+h.title+'</h2><p class="cap mb8">'+h.meta+'</p><div class="row mb12" style="justify-content:flex-start;gap:8px"><span class="avs"><i style="background:var(--mint)"></i><i style="background:var(--thistle)"></i><i style="background:var(--sky)"></i></span><span class="cap">'+(h.going+(S.attending[h.id]?1:0))+' going · '+h.seats+' seats</span></div>'+
   '<div class="row" style="justify-content:flex-start;gap:8px"><button class="btn '+(S.attending[h.id]?'pri':'sec')+'" data-att="'+h.id+'" aria-pressed="'+!!S.attending[h.id]+'">'+(S.attending[h.id]?'✓ Attending':'Attend')+'</button><button class="btn sec" data-chk="'+h.id+'">'+(S.checked[h.id]?'Checked in':'Check-in')+'</button><button class="btn txt" data-more="'+h.id+'">More</button></div></div></article>'+
-  rest.map(e=>'<article class="card"><div class="evrow"><div class="ph" style="'+(e.img?'background-image:url('+e.img+')':'')+'"></div><div style="flex:1;min-width:0"><b>'+e.title+'</b><div class="cap mb8">'+e.meta+'</div><div class="row"><span class="pill">'+e.tag+'</span><button class="chip" data-att="'+e.id+'" aria-pressed="'+!!S.attending[e.id]+'">'+(S.attending[e.id]?'✓ Going':'Attend')+'</button></div></div></div></article>').join('');
+  rest.map(e=>'<article class="card"><div class="evrow"><div class="ph'+(e.img?'':' noimg')+'" style="'+(e.img?'background-image:url('+e.img+')':'')+'">'+(e.img?'':'Student Life')+'</div><div style="flex:1;min-width:0"><b>'+e.title+'</b><div class="cap mb8">'+e.meta+'</div><div class="row"><span class="pill">'+e.tag+'</span><button class="chip" data-att="'+e.id+'" aria-pressed="'+!!S.attending[e.id]+'">'+(S.attending[e.id]?'✓ Going':'Attend')+'</button></div></div></div></article>').join('');
  $$('[data-att]').forEach(b=>b.onclick=()=>{const id=b.dataset.att;S.attending[id]=!S.attending[id];toast(S.attending[id]?'You\'re going. Added to your calendar.':'RSVP removed');renderEvents()});
  $$('[data-chk]').forEach(b=>b.onclick=()=>{const id=b.dataset.chk;const ev=EVENTS.find(e=>e.id===id);
   openSheet('<h2 class="h2 mb8">Check in · officer view</h2><p class="cap mb12">'+ev.title+'</p><div class="card pad mb12" style="text-align:center"><div style="width:150px;height:150px;margin:0 auto 10px;background:repeating-linear-gradient(45deg,var(--indigo) 0 6px,#fff 6px 12px);border-radius:12px" aria-label="Sample check-in code"></div><p class="cap">Attendees scan this code at the door. Sample only.</p></div><button class="btn pri block" id="self-chk">Check myself in</button>');
