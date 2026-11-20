@@ -101,7 +101,7 @@ const D={
   '<div class="pad" style="padding-top:0">'+stats([[n(8),'Published posts'],['100%','Publish success'],[n(312),'Engagements'],[n(2480),'Reach'],[n(3910),'Impressions'],['+'+n(46),'Follower growth']])+
   '<h2 class="h2 mt16 mb8">Reach by week</h2>'+bars([620,410,880,570].map(v=>Math.round(v*k)),['Oct 15','Oct 22','Oct 29','Nov 5'])+
   '<h2 class="h2 mt16 mb8">Top posts</h2><div class="card">'+[['Fall AI & Civic Tech Build Night',184],['AI Ethics Panel recap',121],['Welcome week recap',77]].map(([t,v])=>lrow({t:t,s:n(v)+' engagements',nochev:true})).join('')+'</div></div>'},
- notifications(){const f=S.f.nt||'all';const it=S.notes.filter(x=>f==='all'||(f==='unread'?x.u:x.k===f));
+ notifications(){const f=S.f.nt||'all';const it=S.notes.filter(x=>noteVis(x)&&(f==='all'||(f==='unread'?x.u:x.k===f)));
   return hdr('Notifications','overview')+'<div class="row pad" style="padding-bottom:8px"><span class="cap">'+S.unread+' unread</span><button class="btn txt" data-act="readAll">Mark all read</button></div>'+chips('nt',[['all','All'],['unread','Unread ('+S.unread+')'],['pub','Publishing'],['req','Requests']],f)+
   '<div class="card" style="margin:0 16px">'+(it.length?it.map(x=>lrow({t:(x.u?'<span class="udot" aria-label="Unread"></span> ':'')+x.t,s:x.s,pill:x.pill,pc:x.pc,act:'data-act="openNote" data-v="'+x.id+'"'})).join(''):'<div class="pad" style="text-align:center"><p class="cap">You’re all caught up.</p></div>')+'</div>'},
  announcements(){const f=S.f.ann||'all';const it=S.ann.filter(x=>f==='all'||x.tags.includes(f));
