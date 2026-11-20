@@ -47,7 +47,7 @@ button{cursor:pointer;background:none;border:0}
 .top .ctx{font-size:13px;line-height:18px;color:var(--blue)}
 .top .title{font-size:18px;line-height:24px;font-weight:700;color:var(--indigo)}
 .icon{width:44px;height:44px;display:grid;place-items:center;border-radius:999px;color:var(--blue);position:relative}
-.icon:hover{background:var(--smoke)}
+@media (hover:hover){.icon:hover{background:var(--smoke)}}
 .icon svg{width:22px;height:22px}
 .dot{position:absolute;top:9px;right:10px;width:9px;height:9px;border-radius:50%;background:var(--cranberry);border:2px solid var(--white)}
 .banner{background:var(--taxi);color:var(--indigo);font-size:13px;font-weight:600;line-height:18px;padding:5px 16px}
@@ -61,9 +61,9 @@ button{cursor:pointer;background:none;border:0}
 /* buttons */
 .btn{min-height:48px;padding:0 20px;border-radius:999px;font-weight:600;display:inline-flex;align-items:center;justify-content:center;gap:8px;white-space:nowrap}
 .btn.pri{background:var(--blue);color:var(--white)}
-.btn.pri:hover{background:#00287f}
+@media (hover:hover){.btn.pri:hover{background:#00287f}}
 .btn.sec{background:var(--white);color:var(--blue);box-shadow:inset 0 0 0 1.5px var(--blue)}
-.btn.sec:hover{background:var(--smoke)}
+@media (hover:hover){.btn.sec:hover{background:var(--smoke)}}
 .btn.txt{color:var(--blue);padding:0 12px}
 .btn.inv{background:var(--white);color:var(--blue)}
 .btn.block{width:100%}
@@ -96,7 +96,7 @@ button{cursor:pointer;background:none;border:0}
 .hero-img{height:210px;background:var(--sky) center/cover no-repeat;position:relative}
 .hero-img .credit{position:absolute;left:10px;bottom:8px;font-size:11px;color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.6)}
 .persona{display:flex;gap:12px;align-items:center;padding:12px;border:1px solid var(--dove);border-radius:14px;width:100%;text-align:left;min-height:64px}
-.persona:hover{border-color:var(--blue);background:#F6F9FF}
+@media (hover:hover){.persona:hover{border-color:var(--blue);background:#F6F9FF}}
 .avatar{width:40px;height:40px;border-radius:50%;background:var(--thistle);display:grid;place-items:center;font-weight:700;color:var(--indigo);flex:none;font-size:14px}
 /* overview */
 .welcome{color:var(--white);padding:18px 16px 20px}
@@ -107,7 +107,7 @@ button{cursor:pointer;background:none;border:0}
 .welcome p{margin-bottom:14px}
 .tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:16px 16px 0}
 .tile{background:var(--pearl);border-radius:14px;padding:12px;text-align:left;min-height:76px;display:flex;flex-direction:column;justify-content:space-between}
-.tile:hover{background:#EFEADB}
+@media (hover:hover){.tile:hover{background:#EFEADB}}
 .tile b{font-size:13px;line-height:17px;color:var(--indigo)}
 .tile span{font-size:12px;line-height:16px}
 .tile .count{display:inline-block;min-width:18px;height:18px;border-radius:9px;background:var(--cranberry);color:#fff;font-size:11px;font-weight:700;text-align:center;line-height:18px;padding:0 5px;margin-left:4px}
@@ -170,14 +170,14 @@ button{cursor:pointer;background:none;border:0}
 .drawer nav{overflow-y:auto;flex:1;padding:6px 0 20px}
 .drawer h4{font-size:12px;font-weight:700;color:var(--indigo);text-transform:uppercase;letter-spacing:.04em;padding:14px 16px 4px}
 .navitem{display:flex;align-items:center;justify-content:space-between;width:100%;min-height:44px;padding:0 16px;text-align:left;font-size:15px}
-.navitem:hover{background:var(--smoke)}
+@media (hover:hover){.navitem:hover{background:var(--smoke)}}
 .navitem.cur{background:#E8F0FF;color:var(--blue);font-weight:600;box-shadow:inset 4px 0 0 var(--blue)}
 .navitem .later{font-size:11px;font-weight:600;color:var(--pewter)}
 .sheet{position:absolute;left:0;right:0;bottom:0;background:var(--white);border-radius:24px 24px 0 0;z-index:21;transform:translateY(105%);transition:transform .22s ease;max-height:85%;overflow-y:auto;padding:10px 16px 24px}
 .sheet.on{transform:none}
 .grab{width:40px;height:5px;border-radius:3px;background:var(--dove);margin:0 auto 12px}
 .aiopt{display:block;width:100%;text-align:left;border:1px solid var(--dove);border-radius:14px;padding:12px;margin-bottom:10px;font-size:14px;line-height:20px}
-.aiopt:hover{border-color:var(--blue);background:#F6F9FF}
+@media (hover:hover){.aiopt:hover{border-color:var(--blue);background:#F6F9FF}}
 .photopick{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
 .photopick button{aspect-ratio:1;border-radius:12px;background:var(--sky) center/cover;border:3px solid transparent}
 .photopick button[aria-pressed="true"]{border-color:var(--blue)}
@@ -276,7 +276,7 @@ html,body{overflow-x:hidden;max-width:100%}
 .statgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .stat{background:var(--pearl);border-radius:14px;padding:12px}.stat b{display:block;font-size:22px;line-height:28px;font-weight:800;color:var(--indigo)}.stat span{font-size:12px;line-height:16px}
 .lrow{display:flex;align-items:center;gap:12px;padding:12px 14px;border-bottom:1px solid var(--smoke);width:100%;text-align:left;min-height:56px}
-.lrow:last-child{border-bottom:0}.card .lrow:hover{background:#FAFBFD}
+.lrow:last-child{border-bottom:0}@media (hover:hover){.card .lrow:hover{background:#FAFBFD}}
 .lrow .t{flex:1;min-width:0}.lrow .t b{display:block;color:var(--indigo);font-size:15px;line-height:20px}
 .chev{color:var(--pewter);display:grid}
 .bars{display:flex;align-items:flex-end;gap:10px;height:150px;padding:10px 4px 0;border-bottom:1px solid var(--dove)}
@@ -288,7 +288,7 @@ html,body{overflow-x:hidden;max-width:100%}
 .calgrid{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;text-align:center}
 .dow{font-size:11px;font-weight:700;color:var(--pewter);padding:4px 0}
 .cday{min-height:44px;border-radius:10px;font-size:14px;font-weight:500;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;color:var(--indigo)}
-.cday:hover{background:var(--smoke)}.cday.today{box-shadow:inset 0 0 0 1.5px var(--blue)}.cday.sel{background:var(--blue);color:#fff}
+@media (hover:hover){.cday:hover{background:var(--smoke)}}.cday.today{box-shadow:inset 0 0 0 1.5px var(--blue)}.cday.sel{background:var(--blue);color:#fff}
 .dots{display:flex;gap:2px;height:6px}.dots i,.legend i{width:6px;height:6px;border-radius:50%;display:inline-block}
 i.po{background:var(--azure)}i.ev{background:var(--taxi)}i.bad{background:var(--cranberry)}.cday.sel i.po{background:#fff}
 .legend{display:flex;gap:14px;font-size:12px;margin-top:8px}.legend span{display:flex;align-items:center;gap:5px}
@@ -300,7 +300,7 @@ i.po{background:var(--azure)}i.ev{background:var(--taxi)}i.bad{background:var(--
 .msg.wa{background:#DCF8C6;max-width:100%}
 .chatin{flex:1;min-width:0;border:1px solid var(--pewter);border-radius:999px;padding:0 14px;min-height:48px}
 .bottombar .chatin+.btn,.bottombar .chatin~.btn{flex:none}
-.inboxitem{text-align:left;width:100%;display:block}.inboxitem:hover{border-color:var(--blue)}
+.inboxitem{text-align:left;width:100%;display:block}@media (hover:hover){.inboxitem:hover{border-color:var(--blue)}}
 .udot{display:inline-block;width:9px;height:9px;border-radius:50%;background:var(--azure);margin-left:auto}
 .steps2{list-style:none;font-size:13px;line-height:18px}.steps2 li{padding:4px 0 4px 22px;position:relative;color:var(--pewter)}
 .steps2 li::before{content:"";position:absolute;left:2px;top:7px;width:12px;height:12px;border-radius:50%;border:2px solid var(--dove)}
@@ -328,14 +328,14 @@ i.po{background:var(--azure)}i.ev{background:var(--taxi)}i.bad{background:var(--
 .wel-h{font-size:44px;line-height:46px;font-weight:800;letter-spacing:-.02em;margin-bottom:12px}
 .wel-h em{font-style:italic;color:var(--taxi)}
 .wel-p{font-size:16px;line-height:23px;opacity:.95;margin-bottom:22px}
-.btn.taxi{background:var(--taxi);color:var(--indigo)}.btn.taxi:hover{background:#ffc23f}
-.btn.ghost{color:#fff;box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.8)}.btn.ghost:hover{background:rgba(255,255,255,.08)}
+.btn.taxi{background:var(--taxi);color:var(--indigo)}@media (hover:hover){.btn.taxi:hover{background:#ffc23f}}
+.btn.ghost{color:#fff;box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.8)}@media (hover:hover){.btn.ghost:hover{background:rgba(255,255,255,.08)}}
 .fine{font-size:12px;line-height:16px;opacity:.85;text-align:center;margin-top:auto;padding-top:16px}
 .phone.blue .status{background:var(--blue);color:#fff}
 /* accordion nav */
 .acc{border-bottom:1px solid var(--dove)}
 .acc-h{display:flex;align-items:center;justify-content:space-between;width:100%;min-height:54px;padding:0 16px;font-size:15px;font-weight:700;color:var(--indigo);text-align:left}
-.acc-h:hover{background:var(--smoke)}
+@media (hover:hover){.acc-h:hover{background:var(--smoke)}}
 .acc-h[aria-expanded="true"]{background:var(--taxi)}
 .acc-h .ct{font-weight:500;font-size:12px;color:var(--charcoal);margin-left:8px}
 .pm{width:26px;height:26px;border-radius:50%;border:1.5px solid var(--indigo);position:relative;flex:none}
@@ -352,6 +352,10 @@ i.po{background:var(--azure)}i.ev{background:var(--taxi)}i.bad{background:var(--
 .seal{width:44px;height:44px;border-radius:50%;flex:none;background:#fff center/cover}
 .hublogo{width:56px;height:56px;border-radius:14px;flex:none}
 
+/* v15 mobile polish */
+html{-webkit-tap-highlight-color:transparent}
+button,a,label,select,summary,[role="button"],[data-go],[data-act],input[type="checkbox"]{touch-action:manipulation}
+.sheet,.drawer nav{overscroll-behavior:contain}
 /* v12 Create post */
 #f-title .titleinput{border:0;border-bottom:2px dashed var(--dove);border-radius:0;min-height:0;padding:8px 0;background:transparent;box-shadow:none;color:var(--indigo)}
 #f-title .titleinput:focus{border-bottom-color:var(--blue);box-shadow:none}
@@ -479,7 +483,7 @@ button.postrow{background:none;color:inherit;font:inherit}
               <button class="btn taxi block" data-go="signin">Get started →</button>
               <button class="btn ghost block" data-go="public">Browse club events first</button>
             </div>
-            <p class="fine">A CUNY SPS AI Club pilot · demo with sample data, no real accounts<br><span style="opacity:.7">Version Nov 20 · 14</span></p>
+            <p class="fine">A CUNY SPS AI Club pilot · demo with sample data, no real accounts<br><span style="opacity:.7">Version Nov 20 · 15</span></p>
           </div>
         </div>
       </section>
@@ -790,14 +794,14 @@ $('#btn-mic').onclick=()=>{const m=$('#btn-mic');if(m.classList.contains('rec'))
 const CTAS=['RSVP','Join the club','Learn more'];S.cta='RSVP';S.ctaOther='';
 function renderCta(){const all=CTAS.concat(S.ctaOther?[S.ctaOther]:[]);$('#cta-row').innerHTML=CTAS.map(c=>'<button class="chip cta" type="button" data-cta="'+esc(c)+'" aria-pressed="'+(S.cta===c)+'">'+esc(c)+'</button>').join('')+(S.ctaOther?'<span class="ctapair'+(S.cta===S.ctaOther?' on':'')+'"><button class="chip cta" type="button" data-cta="'+esc(S.ctaOther)+'" aria-pressed="'+(S.cta===S.ctaOther)+'">'+esc(S.ctaOther)+'</button><button class="ctaedit" type="button" id="cta-other" aria-label="Edit your own button">✎</button></span>':'<button class="chip cta" type="button" id="cta-other">+ Other</button>');
  $$('#cta-row [data-cta]').forEach(b=>b.onclick=()=>{S.cta=S.cta===b.dataset.cta?'':b.dataset.cta;renderCta();autosave()});
- $('#cta-other').onclick=()=>{openSheet('<h2 class="h2 mb12">Your own button</h2><div class="field"><label class="label" for="cta-in">Button label</label><input id="cta-in" autocomplete="off" maxlength="24" placeholder="e.g. Get tickets" value="'+esc(S.ctaOther)+'"></div><button class="btn pri block" id="cta-save">Use this button</button>');
-  $('#cta-save').onclick=()=>{const v=$('#cta-in').value.trim();if(!v){shake($('#cta-in'));return}S.ctaOther=v;S.cta=v;closeAll();renderCta();autosave()}}}
+ $('#cta-other').onclick=()=>{openSheet('<h2 class="h2 mb12">Your own button</h2><div class="field"><label class="label" for="cta-in">Button label</label><input id="cta-in" autocomplete="off" enterkeyhint="done" maxlength="24" placeholder="e.g. Get tickets" value="'+esc(S.ctaOther)+'"></div><button class="btn pri block" id="cta-save">Use this button</button>');
+  $('#cta-save').onclick=()=>{const v=$('#cta-in').value.trim();if(!v){shake($('#cta-in'));return}S.ctaOther=v;S.cta=v;closeAll();renderCta();autosave()};$('#cta-in').onkeydown=e=>{if(e.key==='Enter'){e.preventDefault();$('#cta-save').click()}}}}
 /* hashtags */
 const TAGS0=['#CunySps','#AiEthics','#AIClub'];S.tags=TAGS0.slice();
 function niceTag(v){const w=v.replace(/#/g,' ').trim().split(/[^A-Za-z0-9_]+/).filter(Boolean);return w.length?'#'+w.map(x=>x[0].toUpperCase()+x.slice(1)).join(''):''}
 function renderTags(){$('#tag-row').innerHTML=S.tags.map((t,i)=>'<span class="tagchip">'+esc(t)+'<button class="tagx" type="button" data-untag="'+i+'" aria-label="Remove '+esc(t)+'">×</button></span>').join('')+'<button class="tagchip add" type="button" id="tag-add">+ Add</button>';
  $$('#tag-row [data-untag]').forEach(b=>b.onclick=()=>{S.tags.splice(+b.dataset.untag,1);renderTags();autosave()});
- $('#tag-add').onclick=()=>{openSheet('<h2 class="h2 mb12">Add a hashtag</h2><div class="field"><label class="label" for="tag-in">Hashtag</label><input id="tag-in" autocomplete="off" autocapitalize="words" placeholder="#StudentLife"></div><button class="btn pri block" id="tag-save">Add</button>');
+ $('#tag-add').onclick=()=>{openSheet('<h2 class="h2 mb12">Add a hashtag</h2><div class="field"><label class="label" for="tag-in">Hashtag</label><input id="tag-in" autocomplete="off" autocapitalize="words" enterkeyhint="done" placeholder="#StudentLife"></div><button class="btn pri block" id="tag-save">Add</button>');
   const add=()=>{const t=niceTag($('#tag-in').value);if(!t){shake($('#tag-in'));return}if(S.tags.some(x=>x.toLowerCase()===t.toLowerCase())){closeAll();toast(t+' is already added');return}S.tags.push(t);closeAll();renderTags();autosave()};
   $('#tag-save').onclick=add;$('#tag-in').onkeydown=e=>{if(e.key==='Enter'){e.preventDefault();add()}}}}
 renderCta();renderTags();
@@ -818,7 +822,7 @@ function renderFlyer(){const L=$('#flyer-layer');if(!L)return;if(S.flyer==='none
 function openFlyers(){if(!S.photo){toast('Add an image first');return}let pick=S.flyerSet?S.flyer:(S.flyer==='none'?'blue':S.flyer),lay=S.layout||'Workshop';
  openSheet('<h2 class="h2 mb12">Flyer templates</h2><div class="label mb8" id="lay-l">Layout</div><div class="chiprow mb16" role="group" aria-labelledby="lay-l">'+LAYS.map(l=>'<button class="chip cta" type="button" data-lay="'+l+'" aria-pressed="'+(l===lay)+'">'+l+'</button>').join('')+'</div>'+
   '<div class="label mb8">Style</div><div class="tpls" id="tpls"></div>'+
-  '<div class="field mt12"><label class="label" for="fly-det">Event details <span class="opt">(optional)</span></label><input id="fly-det" autocomplete="off" maxlength="60" placeholder="Virtual + Room 402 · Open to all" value="'+esc(S.flyDet)+'"></div>'+
+  '<div class="field mt12"><label class="label" for="fly-det">Event details <span class="opt">(optional)</span></label><input id="fly-det" autocomplete="off" enterkeyhint="done" maxlength="60" placeholder="Virtual + Room 402 · Open to all" value="'+esc(S.flyDet)+'"></div>'+
   '<button class="btn pri block" id="fly-apply">Apply template</button>');
  const draw=()=>{const f=flyerTxt(lay,$('#fly-det').value.trim());$('#tpls').innerHTML=TPLS.map(([k,n])=>'<div><button class="tpl" type="button" data-tpl="'+k+'" aria-pressed="'+(pick===k)+'" aria-label="'+n+'" style="background-image:url('+S.photo.src+')">'+flyerHTML(k,f,true)+'</button><div class="tplname">'+n+'</div></div>').join('');
   $$('#tpls [data-tpl]').forEach(b=>b.onclick=()=>{pick=b.dataset.tpl;$$('#tpls [data-tpl]').forEach(x=>x.setAttribute('aria-pressed',x===b))})};
@@ -991,7 +995,7 @@ function renderEvents(){setTimeout(squishAtt,0);const list=EVENTS.filter(e=>S.fi
 /* init */
 setPhoto(PHOTOS[0]);$('#alt').value='Students talking together outside on a CUNY campus';
 </script>
-<script src="js/screens.js?v=20261120-14"></script>
+<script src="js/screens.js?v=20261120-15"></script>
 <script>go(location.hash.slice(1)||'welcome',false);</script>
 </body>
 </html>

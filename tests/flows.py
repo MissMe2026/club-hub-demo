@@ -460,11 +460,43 @@ async def flow10(b):
     check(await pg.evaluate("!!document.querySelector('.cday.today[data-v=\"'+TODAY+'\"]')"), 'F10 calendar today is the real date')
     check(not pg.errs, f'F10 errors {pg.errs}'); await pg.context.close()
 
+async def flow11(b):
+    print('F11 v15 mobile polish: tap flash, double-tap zoom, hover, sheet scroll, keyboards, return keys')
+    pg = await new_page(b)
+    await tap(pg, 'text=Get started'); await tap(pg, 'text=Enter demo workspace', 600)
+    g = await pg.evaluate("[getComputedStyle(document.querySelector('#v-overview .btn')).webkitTapHighlightColor, getComputedStyle(document.querySelector('#v-overview .btn')).touchAction, getComputedStyle(document.querySelector('.tile')).touchAction]")
+    check(g[0] in ('rgba(0, 0, 0, 0)', 'transparent') and g[1] == 'manipulation' and g[2] == 'manipulation', f'F11 no tap flash / no double-tap zoom on buttons {g}')
+    hv = await pg.evaluate("[...document.styleSheets].flatMap(s=>{try{return [...s.cssRules]}catch(e){return []}}).filter(r=>r.selectorText&&r.selectorText.includes(':hover')).length")
+    check(hv == 0, f'F11 no hover rules outside the hover-only block ({hv})')
+    await tap(pg, '#v-overview >> text=Create post', 600)
+    check(await pg.evaluate("getComputedStyle(document.querySelector('#sheet')).overscrollBehaviorY") == 'contain', 'F11 sheet scroll stays in the sheet')
+    await tap(pg, '#studio-go', 500)
+    await tap(pg, '#tag-add', 500); check(await pg.get_attribute('#tag-in', 'enterkeyhint') == 'done', 'F11 hashtag return key says Done')
+    await pg.evaluate("closeAll()"); await pg.wait_for_timeout(300)
+    await tap(pg, '#cta-other', 500); await pg.fill('#cta-in', 'Get tickets'); await pg.press('#cta-in', 'Enter'); await pg.wait_for_timeout(400)
+    check(await pg.evaluate("S.cta") == 'Get tickets', 'F11 Enter saves your own button')
+    await pg.evaluate("go('assistant')"); await pg.wait_for_timeout(400)
+    check(await pg.get_attribute('#chatin', 'enterkeyhint') == 'send', 'F11 assistant return key says Send')
+    await pg.evaluate("go('members')"); await pg.wait_for_timeout(400)
+    check(await pg.get_attribute('#msearch', 'enterkeyhint') == 'search', 'F11 member search return key says Search')
+    await pg.fill('#msearch', 'a'); await pg.press('#msearch', 'Enter'); await pg.wait_for_timeout(300)
+    check(await pg.evaluate("document.activeElement.id") != 'msearch', 'F11 Search key closes the keyboard')
+    im = await pg.evaluate("(()=>{go('team');const i=document.querySelector('#imail');return i?[i.inputMode,i.autocapitalize,i.type]:null})()")
+    await pg.wait_for_timeout(300)
+    if im is None:
+        await pg.evaluate("go('requests')"); await pg.wait_for_timeout(300)
+        im = await pg.evaluate("(()=>{const i=document.querySelector('#imail');return i?[i.inputMode,i.autocapitalize,i.type]:null})()")
+    check(im is not None and im[0] == 'email' and im[1] in ('off','none') and im[2] == 'text', f'F11 invite email keyboard {im}')
+    if im:
+        await pg.fill('#iname', 'Priya'); await pg.fill('#imail', 'nope'); await pg.evaluate("document.querySelector('#inviteform').requestSubmit()"); await pg.wait_for_timeout(300)
+        check('bad' in (await pg.get_attribute('#f-imail', 'class') or ''), 'F11 invite form still shows its own email message')
+    check(not pg.errs, f'F11 errors {pg.errs}'); await pg.context.close()
+
 async def main():
     import os; os.makedirs(OUT, exist_ok=True)
     async with async_playwright() as p:
         b = await p.chromium.launch(executable_path='/usr/bin/google-chrome')
-        for f in [flow1, flow2, flow3, flow4, flow5, flow6, flow7, flow8, flow9, flow10]:
+        for f in [flow1, flow2, flow3, flow4, flow5, flow6, flow7, flow8, flow9, flow10, flow11]:
             try: await f(b)
             except Exception as e: FAILS.append(f'{f.__name__} crashed: {e}'); print('  CRASH', f.__name__, str(e)[:300])
         await b.close()
