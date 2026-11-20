@@ -351,6 +351,65 @@ i.po{background:var(--azure)}i.ev{background:var(--taxi)}i.bad{background:var(--
 .navfoot{padding:12px 16px 20px}
 .seal{width:44px;height:44px;border-radius:50%;flex:none;background:#fff center/cover}
 .hublogo{width:56px;height:56px;border-radius:14px;flex:none}
+
+/* v12 Create post */
+.kb-pad .sheet.on{padding-bottom:60vh}
+.saved{display:inline-flex;align-items:center;gap:4px;font-size:12px;font-weight:600;color:var(--pewter);padding:0 12px;white-space:nowrap}
+.saved[hidden]{display:none}
+.mic{position:relative;display:inline-flex;align-items:center;gap:4px;font-size:12px;font-weight:600;color:var(--blue);min-height:32px;padding:0 10px;border-radius:999px;box-shadow:inset 0 0 0 1px var(--dove);-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+.mic::after{content:"";position:absolute;inset:-8px -2px}
+.mic.ai{color:var(--indigo)}
+.mic.rec{background:var(--blue);color:#fff;box-shadow:none}
+.copymeta{display:flex;gap:8px;align-items:center}
+#copy-count.over{color:var(--cranberry);font-weight:700}
+.chiprow{display:flex;flex-wrap:wrap;gap:6px}
+.chip.cta{position:relative;min-height:28px;padding:0 11px;font-size:12px}
+.chip.cta::after{content:"";position:absolute;inset:-10px -3px}
+.chip.cta[aria-pressed="true"]{background:var(--indigo);color:#fff;border-color:var(--indigo)}
+.tagchip{display:inline-flex;align-items:center;gap:2px;height:26px;padding:0 3px 0 10px;border-radius:999px;background:var(--pearl);color:var(--indigo);font-size:12px;font-weight:600}
+.tagx{position:relative;width:20px;height:20px;border-radius:50%;display:grid;place-items:center;color:var(--indigo);font-size:15px;line-height:1}
+.tagx::after{content:"";position:absolute;inset:-11px -4px}
+.tagchip.add{position:relative;padding:0 10px;background:#fff;box-shadow:inset 0 0 0 1px var(--dove);color:var(--pewter)}
+.tagchip.add::after{content:"";position:absolute;inset:-11px -3px}
+.flyer i{font-style:normal;font-size:9px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;margin-bottom:3px}
+.opt{font-weight:400;color:var(--pewter)}
+/* where are you posting */
+.socrow{display:flex;justify-content:space-between;margin-bottom:18px}
+.soc{display:flex;flex-direction:column;align-items:center;gap:6px;width:72px;min-height:48px}
+.soc .ic{position:relative;width:60px;height:60px;border-radius:18px;display:grid;place-items:center;color:#fff;font-weight:800;font-size:18px}
+.soc[aria-pressed="true"] .ic{box-shadow:0 0 0 3px #fff,0 0 0 5px var(--blue)}
+.soc[aria-pressed="true"] .ic::after{content:"✓";position:absolute;top:-7px;right:-7px;width:22px;height:22px;border-radius:50%;background:var(--blue);border:2px solid #fff;font-size:12px;display:grid;place-items:center}
+.soc[aria-disabled="true"] .ic{opacity:.9}
+.soc .nm{font-size:12px;font-weight:600;color:var(--indigo)}
+.pill.soon{height:18px;font-size:10px;padding:0 6px;background:var(--smoke);color:var(--charcoal)}
+.dgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px}
+.dtile{display:flex;align-items:center;gap:8px;padding:10px 8px;border:1px solid var(--dove);border-radius:14px;text-align:left;width:100%;min-height:60px}
+.dtile[aria-pressed="true"]{border-color:var(--blue);box-shadow:inset 0 0 0 1px var(--blue);background:#F2F6FD}
+.dtile .di{width:40px;height:40px;border-radius:10px;display:grid;place-items:center;font-weight:800;font-size:13px;flex:none;object-fit:cover}
+.dtile b{color:var(--indigo);font-size:14px;display:block}
+.dtile .hint{white-space:nowrap}
+/* platform preview */
+.fbpost{border:1px solid var(--dove);border-radius:14px;overflow:hidden;background:#fff}
+.fbh{display:flex;gap:10px;align-items:center;padding:10px 12px}
+.fbh img{width:36px;height:36px;border-radius:50%;object-fit:cover}
+.fbtxt{padding:0 12px 10px;font-size:14px;line-height:20px;overflow-wrap:anywhere}
+.fbimg{position:relative;height:190px;background:var(--pearl) center/cover}
+.fbimg.sq{height:300px}
+.fbimg .flyer{border-radius:0;padding:12px 14px 14px}
+.fbcta{display:flex;justify-content:space-between;align-items:center;gap:10px;background:var(--smoke);padding:6px 12px;font-size:12px;line-height:16px}
+.fbcta .smallbtn{min-height:28px;padding:0 12px;font-size:12px;background:#fff;box-shadow:inset 0 0 0 1px var(--dove);display:inline-flex;align-items:center;flex:none}
+.fbbar{display:flex;justify-content:space-around;padding:5px;font-size:12px;color:var(--pewter);border-top:1px solid var(--smoke)}
+.pvnav{display:flex;align-items:center;justify-content:space-between;margin-top:6px}
+.pvnav span{font-size:13px;font-weight:600;color:var(--indigo)}
+.pvnav span i{font-style:normal;font-weight:400;color:var(--pewter)}
+.pvarr{position:relative;width:32px;height:32px;border-radius:50%;display:grid;place-items:center;background:var(--blue);color:#fff}
+.pvarr::after{content:"";position:absolute;inset:-8px}
+.pvarr[aria-disabled="true"]{background:var(--smoke);color:var(--dove)}
+/* review queue */
+.rvcard{margin:16px 16px 0;padding:12px}
+.rvitem{display:flex;gap:10px;align-items:flex-start}
+.rvitem+.rvitem{margin-top:12px;padding-top:12px;border-top:1px solid var(--smoke)}
+.pill.taxi{background:var(--taxi);color:var(--indigo)}
 </style>
 </head>
 <body>
@@ -392,7 +451,7 @@ i.po{background:var(--azure)}i.ev{background:var(--taxi)}i.bad{background:var(--
               <button class="btn taxi block" data-go="signin">Get started →</button>
               <button class="btn ghost block" data-go="public">Browse club events first</button>
             </div>
-            <p class="fine">A CUNY SPS AI Club pilot · demo with sample data, no real accounts<br><span style="opacity:.7">Version Nov 18 · 11</span></p>
+            <p class="fine">A CUNY SPS AI Club pilot · demo with sample data, no real accounts<br><span style="opacity:.7">Version Nov 20 · 12</span></p>
           </div>
         </div>
       </section>
@@ -421,6 +480,7 @@ i.po{background:var(--azure)}i.ev{background:var(--taxi)}i.bad{background:var(--
           <div class="label mt16 mb8">Or jump in as a sample person</div>
           <div class="stack">
             <button class="persona" data-persona="lead" data-go="overview"><span class="avatar">AR</span><span><b style="color:var(--indigo)">Aisha Rahman</b><br><span class="cap">Club Lead · Artificial Intelligence Club</span></span></button>
+            <button class="persona" data-persona="contrib" data-go="overview"><span class="avatar" style="background:var(--thistle)">SP</span><span><b style="color:var(--indigo)">Sofia Patel</b><br><span class="cap">Contributor · drafts posts for review</span></span></button>
             <button class="persona" data-persona="admin" data-go="console"><span class="avatar" style="background:var(--mint)">EV</span><span><b style="color:var(--indigo)">Dr. Elena Vance</b><br><span class="cap">Student Life admin · approves accounts, sees audit logs</span></span></button>
           </div>
         </div>
@@ -436,7 +496,7 @@ i.po{background:var(--azure)}i.ev{background:var(--taxi)}i.bad{background:var(--
         </header>
         <div class="banner">Demo workspace · sample data, no live integrations</div>
         <div class="welcome">
-          <div class="who"><img class="seal" src="img/ai-club-seal.jpg" alt="CUNY SPS AI Club seal"><div><h2 id="greet">Good evening, Aisha</h2><div class="sub">Club Lead · Fall 2026</div></div></div>
+          <div class="who"><img class="seal" src="img/ai-club-seal.jpg" alt="CUNY SPS AI Club seal"><div><h2 id="greet">Good evening, Aisha</h2><div class="sub" id="ov-role">Club Lead · Fall 2026</div></div></div>
           <p id="ov-summary">2 posts scheduled this week, 1 draft waiting for review.</p>
           <button class="btn inv block" data-go="create">Create post</button>
         </div>
@@ -445,6 +505,7 @@ i.po{background:var(--azure)}i.ev{background:var(--taxi)}i.bad{background:var(--
           <button class="tile" data-go="accounts"><b>My accounts</b><span>2 connected</span></button>
           <button class="tile" data-go="inbox"><b>Inbox<span class="count">2</span></b><span>2 new</span></button>
         </div>
+        <div id="ov-review"></div>
         <div class="sechead"><h2 class="h2">Next up</h2><button class="chip" data-go="events">View all</button></div>
         <div class="hscroll" id="ov-events"></div>
         <div class="sechead"><h2 class="h2">Scheduled posts</h2><button class="chip" data-go="calendar">Calendar</button></div>
@@ -455,7 +516,8 @@ i.po{background:var(--azure)}i.ev{background:var(--taxi)}i.bad{background:var(--
       <section class="view" id="v-create" aria-label="New post, step 1">
         <header class="top">
           <button class="icon" data-back="overview" aria-label="Back to Overview"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></button>
-          <div class="ttl"><div class="ctx">Step 1 of 2 · Content</div><div class="title">New post</div></div>
+          <div class="ttl"><div class="title">New post</div></div>
+          <span class="saved" id="saved" role="status" hidden><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>Saved</span>
         </header>
         <div class="steps" style="padding-top:10px"><i class="on"></i><i></i></div>
         <div class="pad">
@@ -472,45 +534,46 @@ i.po{background:var(--azure)}i.ev{background:var(--taxi)}i.bad{background:var(--
             </select>
           </div>
           <div class="field" id="f-copy">
-            <div class="row"><label class="label" for="copy">Post copy</label><span class="hint" id="copy-count">0 / 2,200</span></div>
-            <textarea id="copy" maxlength="2200" placeholder="Write your announcement, or try the AI caption helper"></textarea>
-            <span class="err">Write something, or pick an AI draft and edit it</span>
+            <div class="row"><label class="label" for="copy">Post copy</label><span class="copymeta"><button class="mic" id="btn-mic" type="button" aria-label="Dictate post copy"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg><span class="mtxt">Dictate</span></button><span class="hint" id="copy-count">0 / 500 words</span></span></div>
+            <textarea id="copy" maxlength="6000" placeholder="Write your announcement, or try the AI caption helper"></textarea>
+            <span class="err" id="copy-err">Write something, or pick an AI draft and edit it</span>
+          </div>
+          <div class="field" id="f-cta">
+            <span class="label" id="cta-l">Call to action <span class="opt">(optional)</span></span>
+            <div class="chiprow" id="cta-row" role="group" aria-labelledby="cta-l"></div>
+          </div>
+          <div class="field" id="f-tags">
+            <span class="label" id="tags-l">Hashtags</span>
+            <div class="chiprow" id="tag-row" role="group" aria-labelledby="tags-l"></div>
           </div>
           <div class="field" id="f-alt">
-            <label class="label" for="alt">Image alt text (required)</label>
+            <div class="row"><label class="label" for="alt">Image alt text (required)</label><button class="mic ai" id="btn-altai" type="button">✦ AI Suggest</button></div>
             <input id="alt" autocomplete="off" placeholder="Describe the image for screen readers">
             <span class="err">Alt text is required when a post has an image (CUNY accessibility policy)</span>
           </div>
           <div class="note">AI drafts are never auto-published. A person reviews every post.</div>
         </div>
-        <div class="bottombar"><button class="btn sec" id="btn-draft">Save draft</button><button class="btn pri" id="btn-next">Next: accounts</button></div>
+        <div class="bottombar"><button class="btn pri block" id="btn-next">Preview →</button></div>
       </section>
 
       <!-- M03 ACCOUNTS & SCHEDULE step 2 -->
       <section class="view" id="v-schedule" aria-label="New post, step 2">
         <header class="top">
           <button class="icon" data-back="create" aria-label="Back to step 1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></button>
-          <div class="ttl"><div class="ctx">Step 2 of 2 · Accounts & schedule</div><div class="title">New post</div></div>
+          <div class="ttl"><div class="title">Preview</div></div>
         </header>
         <div class="steps" style="padding-top:10px"><i class="on"></i><i class="on"></i></div>
         <div class="pad">
-          <div class="card row mb16" style="padding:10px;justify-content:flex-start;gap:12px">
-            <div class="thumb" id="sum-thumb"></div>
-            <div style="min-width:0"><b style="color:var(--indigo)" id="sum-title">Spring AI Ethics Panel</b><div class="cap" id="sum-copy" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:260px"></div></div>
-          </div>
-          <h2 class="h2 mb8">Post to</h2>
-          <div class="acct"><div class="ic" style="background:#1877F2">f</div><div class="t"><b style="color:var(--indigo)">Facebook Page</b><div class="cap">@cunyspsaiclub · simulation</div></div><button class="switch" role="switch" aria-checked="true" aria-label="Post to Facebook Page" data-acct="fb"></button></div>
-          <div class="acct"><div class="ic" style="background:linear-gradient(135deg,#F58529,#DD2A7B,#8134AF)">IG</div><div class="t"><b style="color:var(--indigo)">Instagram</b><div class="cap">@cunysps.ai · simulation</div></div><button class="switch" role="switch" aria-checked="true" aria-label="Post to Instagram" data-acct="ig"></button></div>
-          <h2 class="h2 mt16 mb8">When</h2>
+          <div class="mb16" id="pv" aria-live="polite"></div>
+          <h2 class="h2 mb8">When</h2>
           <div class="seg mb12" role="group" aria-label="When to publish"><button aria-pressed="true" data-when="schedule">Schedule</button><button aria-pressed="false" data-when="now">Publish now</button></div>
-          <div class="two" id="when-fields">
+          <div class="two mb12" id="when-fields">
             <div class="field"><label class="label" for="date">Date</label><input id="date" type="date" value="2026-11-19"></div>
-            <div class="field"><label class="label" for="time">Time</label><input id="time" type="time" value="09:00"></div>
+            <div class="field"><label class="label" for="time">Time (ET)</label><input id="time" type="time" value="09:00"></div>
           </div>
-          <p class="hint mb12">All times America/New_York.</p>
           <h2 class="h2 mb8">Before it goes out</h2>
           <div class="check"><span>Image alt text added</span><span class="st pill mint" id="chk-alt">Done</span></div>
-          <button class="checkrow" id="chk-review" role="checkbox" aria-checked="false"><span class="box" aria-hidden="true"></span><span><b>I reviewed this post</b><br><span class="cap">Required. A person checks every post before it goes out.</span></span></button>
+          <button class="checkrow" id="chk-review" role="checkbox" aria-checked="false"><span class="box" aria-hidden="true"></span><span><b>I reviewed this post</b></span></button>
         </div>
         <div class="bottombar"><button class="btn pri block" id="btn-schedule">Schedule post</button></div>
       </section>
@@ -586,7 +649,7 @@ function go(v,push=true){const dyn=typeof D!=='undefined'&&D[v];if(!VIEWS.includ
  if(push&&location.hash!=='#'+v){try{history.replaceState(null,'','#'+v)}catch(e){location.hash=v}}renderNav();
  const h=document.querySelector('#v-'+(dyn?'dyn':v)+' .title, #v-'+(dyn?'dyn':v)+' h1');if(h){h.setAttribute('tabindex','-1');h.focus({preventScroll:true});}}
 window.addEventListener('hashchange',()=>go(location.hash.slice(1),false));
-document.addEventListener('click',e=>{const bk=e.target.closest('[data-back],[aria-label^="Back"],[aria-label="Close"]');S.dir=bk?'back':'fwd';const g=e.target.closest('[data-go]');if(g){if(g.dataset.persona)S.persona=g.dataset.persona;go(g.dataset.go);return}
+document.addEventListener('click',e=>{const bk=e.target.closest('[data-back],[aria-label^="Back"],[aria-label="Close"]');S.dir=bk?'back':'fwd';const g=e.target.closest('[data-go]');if(g){if(g.dataset.persona)S.persona=g.dataset.persona;if(g.dataset.go==='create'&&!['create','schedule','result'].includes(S.view)){closeAll();openStudio();return}go(g.dataset.go);return}
  const b=e.target.closest('[data-back]');if(b){go(b.dataset.back);return}
  const s=e.target.closest('[data-soon]');if(s){toast('Not part of this demo yet');return}
  if(e.target.closest('[data-menu]'))openDrawer();});
@@ -654,7 +717,7 @@ $('#signin-form').onsubmit=e=>{e.preventDefault();const v=$('#email').value.trim
 
 /* overview */
 function greeting(){const h=new Date().getHours();return h<12?'Good morning':h<18?'Good afternoon':'Good evening'}
-function renderOverview(){$('#greet').textContent=greeting()+', Aisha';
+function renderOverview(){const ct=S.persona==='contrib';$('#greet').textContent=greeting()+', '+(ct?'Sofia':'Aisha');$('#ov-role').textContent=(ct?'Contributor':'Club Lead')+' · Fall 2026';renderReview();
  const sch=S.posts.filter(p=>p.st==='Scheduled').length, rev=S.posts.filter(p=>p.st==='In review'||p.st==='Draft').length;
  $('#ov-summary').textContent=sch+' post'+(sch===1?'':'s')+' scheduled this week, '+rev+' draft'+(rev===1?'':'s')+' waiting for review.';
  $('#tile-cal').textContent=(sch+2)+' this week';
@@ -664,16 +727,54 @@ function renderOverview(){$('#greet').textContent=greeting()+', Aisha';
 function esc(s){return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
 
 /* create post */
-const copy=$('#copy');copy.oninput=()=>{$('#copy-count').textContent=copy.value.length.toLocaleString()+' / 2,200';$('#f-copy').classList.remove('bad')};
-$('#alt').oninput=()=>$('#f-alt').classList.remove('bad');
+const copy=$('#copy');
+function words(){const v=copy.value.trim();return v?v.split(/\s+/).length:0}
+copy.oninput=()=>{const w=words(),c=$('#copy-count');c.textContent=w.toLocaleString()+' / 500 words';c.classList.toggle('over',w>500);if(w<=500)$('#f-copy').classList.remove('bad');autosave()};
+$('#alt').oninput=()=>{$('#f-alt').classList.remove('bad');autosave()};
+$('#post-title').addEventListener('input',autosave);
+/* autosave: like Gmail. A draft row appears in Overview; "Saved" shows in the header; one toast the first time */
+let asT;function autosave(){if(S.view!=='create')return;clearTimeout(asT);asT=setTimeout(()=>{if(S.view!=='create')return;const tt=$('#post-title').value.trim();if(!tt&&!copy.value.trim())return;
+ let d=S.draft;if(!d||!S.posts.includes(d)){d=S.draft={title:'',sub:'Draft · saved automatically',st:'Draft',img:''};S.posts.push(d)}d.title=tt||'Untitled post';d.img=S.photo?S.photo.src:'';
+ $('#saved').hidden=false;if(!S.savedOnce){S.savedOnce=true;toast('Draft saved. Find it anytime in Drafts.')}},700)}
+function dropDraft(){clearTimeout(asT);if(S.draft)S.posts=S.posts.filter(p=>p!==S.draft);S.draft=null;$('#saved').hidden=true}
+/* dictate (sample text stands in for speech) */
+$('#btn-mic').onclick=()=>{const m=$('#btn-mic');if(m.classList.contains('rec'))return;m.classList.add('rec');m.querySelector('.mtxt').textContent='Listening…';
+ setTimeout(()=>{m.classList.remove('rec');m.querySelector('.mtxt').textContent='Dictate';copy.value=(copy.value.trim()?copy.value.trim()+' ':'')+'Bring a friend and bring your questions.';copy.oninput();toast('Added from dictation. Tap the text to edit it.')},1400)};
+/* call to action */
+const CTAS=['RSVP','Join the club','Learn more'];S.cta='RSVP';S.ctaOther='';
+function renderCta(){const all=CTAS.concat(S.ctaOther?[S.ctaOther]:[]);$('#cta-row').innerHTML=all.map(c=>'<button class="chip cta" type="button" data-cta="'+esc(c)+'" aria-pressed="'+(S.cta===c)+'">'+esc(c)+'</button>').join('')+'<button class="chip cta" type="button" id="cta-other">+ Other</button>';
+ $$('#cta-row [data-cta]').forEach(b=>b.onclick=()=>{S.cta=S.cta===b.dataset.cta?'':b.dataset.cta;renderCta();autosave()});
+ $('#cta-other').onclick=()=>{openSheet('<h2 class="h2 mb12">Your own button</h2><div class="field"><label class="label" for="cta-in">Button label</label><input id="cta-in" autocomplete="off" maxlength="24" placeholder="e.g. Get tickets" value="'+esc(S.ctaOther)+'"></div><button class="btn pri block" id="cta-save">Use this button</button>');
+  $('#cta-save').onclick=()=>{const v=$('#cta-in').value.trim();if(!v){shake($('#cta-in'));return}S.ctaOther=v;S.cta=v;closeAll();renderCta();autosave()}}}
+/* hashtags */
+const TAGS0=['#CunySps','#AiEthics','#AIClub'];S.tags=TAGS0.slice();
+function niceTag(v){const w=v.replace(/#/g,' ').trim().split(/[^A-Za-z0-9_]+/).filter(Boolean);return w.length?'#'+w.map(x=>x[0].toUpperCase()+x.slice(1)).join(''):''}
+function renderTags(){$('#tag-row').innerHTML=S.tags.map((t,i)=>'<span class="tagchip">'+esc(t)+'<button class="tagx" type="button" data-untag="'+i+'" aria-label="Remove '+esc(t)+'">×</button></span>').join('')+'<button class="tagchip add" type="button" id="tag-add">+ Add</button>';
+ $$('#tag-row [data-untag]').forEach(b=>b.onclick=()=>{S.tags.splice(+b.dataset.untag,1);renderTags();autosave()});
+ $('#tag-add').onclick=()=>{openSheet('<h2 class="h2 mb12">Add a hashtag</h2><div class="field"><label class="label" for="tag-in">Hashtag</label><input id="tag-in" autocomplete="off" autocapitalize="words" placeholder="#StudentLife"></div><button class="btn pri block" id="tag-save">Add</button>');
+  const add=()=>{const t=niceTag($('#tag-in').value);if(!t){shake($('#tag-in'));return}if(!S.tags.some(x=>x.toLowerCase()===t.toLowerCase()))S.tags.push(t);closeAll();renderTags();autosave()};
+  $('#tag-save').onclick=add;$('#tag-in').onkeydown=e=>{if(e.key==='Enter'){e.preventDefault();add()}}}}
+renderCta();renderTags();
+/* AI alt text */
+$('#btn-altai').onclick=()=>{if(!S.photo){toast('Add an image first');return}$('#alt').value=S.photo.alt?S.photo.alt:'Flyer for '+($('#post-title').value.trim()||'our club event');$('#f-alt').classList.remove('bad');autosave();toast('Alt text added. Edit it if it doesn’t match.')};
 $('#rel-event').innerHTML='<option value="">Related event ▾</option>'+EVENTS.map(e=>'<option value="'+e.id+'">'+e.title+'</option>').join('');
 const TPLS=[['none','Photo only'],['blue','CUNY Blue'],['taxi','Taxi tag'],['frame','Club frame']];S.flyer='none';
-function flyerTxt(){const t=$('#post-title').value.trim()||'Your event title';const ev=EVENTS.find(e=>e.id===$('#rel-event').value);return {t,w:ev?ev.meta.split(' · ').slice(0,2).join(' · '):'Date · time'}}
-function renderFlyer(){const L=$('#flyer-layer');if(!L)return;if(S.flyer==='none'||!S.photo){L.hidden=true;return}const f=flyerTxt();L.hidden=false;L.className='flyer '+S.flyer;L.innerHTML='<b>'+esc(f.t)+'</b><span>'+esc(f.w)+'</span>'}
-function openFlyers(){if(!S.photo){toast('Add an image first');return}const f=flyerTxt();openSheet('<h2 class="h2 mb8">Flyer templates</h2><p class="cap mb12">Puts your title and event details on the image in CUNY colors. Sample templates.</p><div class="tpls">'+TPLS.map(([k,n])=>'<div><button class="tpl" data-tpl="'+k+'" aria-pressed="'+(S.flyer===k)+'" aria-label="'+n+'" style="background-image:url('+S.photo.src+')">'+(k==='none'?'':'<div class="flyer '+k+'"><b>'+esc(f.t)+'</b><span>'+esc(f.w)+'</span></div>')+'</button><div class="tplname">'+n+'</div></div>').join('')+'</div><p class="hint mt12">Tip: pick a Related event so the date and place fill in.</p>');
- $$('#sheet [data-tpl]').forEach(b=>b.onclick=()=>{S.flyer=b.dataset.tpl;renderFlyer();closeAll();toast(S.flyer==='none'?'Template removed. Photo only.':'Template applied. Alt text stays required.')})}
+const LAYS=['Workshop','Panel','General meeting','Showcase'];S.layout='';S.flyDet='';
+function flyerTxt(lay,det){if(lay===undefined)lay=S.layout;if(det===undefined)det=S.flyDet;const t=$('#post-title').value.trim()||'Your event title';const ev=EVENTS.find(e=>e.id===$('#rel-event').value);return {t,l:lay,w:det||(ev?ev.meta.split(' · ').slice(0,2).join(' · '):'Date · time')}}
+function flyerHTML(k,f){return k==='none'?'':'<div class="flyer '+k+'">'+(f.l?'<i>'+esc(f.l)+'</i>':'')+'<b>'+esc(f.t)+'</b><span>'+esc(f.w)+'</span></div>'}
+function renderFlyer(){const L=$('#flyer-layer');if(!L)return;if(S.flyer==='none'||!S.photo){L.hidden=true;return}const f=flyerTxt();L.hidden=false;L.className='flyer '+S.flyer;L.innerHTML=(f.l?'<i>'+esc(f.l)+'</i>':'')+'<b>'+esc(f.t)+'</b><span>'+esc(f.w)+'</span>'}
+function openFlyers(){if(!S.photo){toast('Add an image first');return}let pick=S.flyer==='none'?'blue':S.flyer,lay=S.layout||'Workshop';
+ openSheet('<h2 class="h2 mb12">Flyer templates</h2><div class="label mb8" id="lay-l">Layout</div><div class="chiprow mb16" role="group" aria-labelledby="lay-l">'+LAYS.map(l=>'<button class="chip cta" type="button" data-lay="'+l+'" aria-pressed="'+(l===lay)+'">'+l+'</button>').join('')+'</div>'+
+  '<div class="label mb8">Style</div><div class="tpls" id="tpls"></div>'+
+  '<div class="field mt12"><label class="label" for="fly-det">Event details <span class="opt">(optional)</span></label><input id="fly-det" autocomplete="off" placeholder="Virtual + Room 402 · Open to all" value="'+esc(S.flyDet)+'"></div>'+
+  '<button class="btn pri block" id="fly-apply">Apply template</button>');
+ const draw=()=>{const f=flyerTxt(lay,$('#fly-det').value.trim());$('#tpls').innerHTML=TPLS.map(([k,n])=>'<div><button class="tpl" type="button" data-tpl="'+k+'" aria-pressed="'+(pick===k)+'" aria-label="'+n+'" style="background-image:url('+S.photo.src+')">'+flyerHTML(k,f)+'</button><div class="tplname">'+n+'</div></div>').join('');
+  $$('#tpls [data-tpl]').forEach(b=>b.onclick=()=>{pick=b.dataset.tpl;$$('#tpls [data-tpl]').forEach(x=>x.setAttribute('aria-pressed',x===b))})};
+ draw();$('#fly-det').oninput=draw;
+ $$('#sheet [data-lay]').forEach(b=>b.onclick=()=>{lay=b.dataset.lay;$$('#sheet [data-lay]').forEach(x=>x.setAttribute('aria-pressed',x===b));draw()});
+ $('#fly-apply').onclick=()=>{S.flyer=pick;S.layout=pick==='none'?'':lay;S.flyDet=$('#fly-det').value.trim();renderFlyer();closeAll();toast(pick==='none'?'Template removed. Photo only.':'Template applied. Alt text stays required.');autosave()}}
 function setPhoto(p){S.photo=p;setTimeout(renderFlyer,0);const pv=$('#preview');pv.style.backgroundImage=p?'url('+p.src+')':'';$('#preview-empty').style.display=p?'none':'grid';
- if(p&&!$('#alt').value)$('#alt').placeholder='Describe the image for screen readers (suggestion: '+p.alt.toLowerCase()+')'}
+ autosave()}
 $('#btn-photo').onclick=()=>{openSheet('<h2 class="h2 mb8">Choose an image</h2><p class="cap mb12">CUNY Creative Team photos, approved for club use. Or upload your own flyer.</p><div class="photopick mb16">'+PHOTOS.map((p,i)=>'<button data-ph="'+i+'" aria-label="'+p.alt+'" aria-pressed="'+(S.photo===p)+'" style="background-image:url('+p.src+')"></button>').join('')+'</div><label class="btn sec block" for="upl" style="cursor:pointer">Upload from your phone</label><input id="upl" type="file" accept="image/*" class="sr"><button class="btn txt block mt12" id="ph-none">Remove image</button>');
  $$('#sheet [data-ph]').forEach(b=>b.onclick=()=>{setPhoto(PHOTOS[+b.dataset.ph]);closeAll()});
  $('#ph-none').onclick=()=>{setPhoto(null);closeAll()};
@@ -693,24 +794,54 @@ $('#btn-ai').onclick=()=>{const t=$('#post-title').value.trim()||'our next event
  const TAGS=['#CUNYSPS #AIClub','','#CUNYSPS'];
  function build(){for(let i=0;i<3;i++){let s=T.short&&T.formal?SHORTFORMAL[i]:T.short?SHORT[i]:T.formal?FORMAL[i]:base[i].replace(/\s*#\w+/g,'');if(T.emoji)s=EMO[i][0]+' '+s.replace(/\.$/,'')+' '+EMO[i][1];opts[i]=(s+(TAGS[i]?' '+TAGS[i]:'')).trim()}$$('#aiopts .aiopt').forEach((x,i)=>x.textContent=opts[i])}
  $$('#sheet [data-tone]').forEach(b=>b.onclick=()=>{const k=b.dataset.tone;T[k]=!T[k];b.classList.toggle('on',T[k]);b.setAttribute('aria-pressed',T[k]);build();const on=Object.keys(T).filter(x=>T[x]);toast(on.length?'Drafts updated':'Back to the original drafts')})};
-$('#btn-draft').onclick=()=>{const t=$('#post-title').value.trim()||'Untitled post';S.posts.push({title:t,sub:'Draft · not scheduled',st:'Draft',img:S.photo?S.photo.src:''});toast('Draft saved to Overview');go('overview')};
-$('#btn-next').onclick=()=>{let ok=true;if(!copy.value.trim()){$('#f-copy').classList.add('bad');ok=false}
+$('#btn-next').onclick=()=>{let ok=true;if(!copy.value.trim()||words()>500){$('#copy-err').textContent=copy.value.trim()?'Keep it to 500 words or fewer':'Write something, or pick an AI draft and edit it';$('#f-copy').classList.add('bad');ok=false}
  if(S.photo&&!$('#alt').value.trim()){$('#f-alt').classList.add('bad');ok=false}
  if(!ok){const bad=$$('#v-create .field.bad');bad.forEach(f=>shake(f.querySelector('input,textarea')));const sc=$('#screen'),r=bad[0].getBoundingClientRect(),hd=$('#v-create .top').getBoundingClientRect();sc.scrollTo({top:Math.max(0,sc.scrollTop+r.top-hd.bottom-16),behavior:'smooth'});toast('Fix the highlighted fields to continue');return}go('schedule')};
 
 /* schedule */
-function renderSchedule(){$('#sum-title').textContent=$('#post-title').value.trim()||'Untitled post';$('#sum-copy').textContent=copy.value;$('#sum-thumb').style.backgroundImage=S.photo?'url('+S.photo.src+')':'';
- const a=$('#chk-alt');if(S.photo){a.textContent='Done';a.className='st pill mint'}else{a.textContent='No image';a.className='st pill'}
- updSched()}
-$$('[data-acct]').forEach(sw=>sw.onclick=()=>{const k=sw.dataset.acct;S.acct[k]=!S.acct[k];sw.setAttribute('aria-checked',S.acct[k]);updSched()});
+function plats(){return ['fb','ig'].filter(k=>S.acct[k])}
+function renderSchedule(){S.pvi=0;const a=$('#chk-alt');if(S.photo){a.textContent='Done';a.className='st pill mint'}else{a.textContent='No image';a.className='st pill'}updSched()}
+function renderPreview(){const P=plats(),el=$('#pv');if(!el)return;if(!P.length){el.innerHTML='';return}if(S.pvi>=P.length)S.pvi=P.length-1;if(S.pvi<0)S.pvi=0;const k=P[S.pvi];
+ const t=$('#post-title').value.trim()||'Untitled post',c=copy.value.trim()||'Your post copy shows here.',long=c.length>150,short=long?c.slice(0,150).replace(/\s+\S*$/,'')+'…':c,tags=S.tags.join(' ');
+ const when=S.when==='now'?'Just now':'Scheduled · '+fmtWhen().replace(' · ',' at '),img=S.photo?S.photo.src:'',fly=S.photo?flyerHTML(S.flyer,flyerTxt()):'';
+ const fb='<div class="fbpost"><div class="fbh"><img src="img/ai-club-seal.jpg" alt=""><div><b style="color:var(--indigo);font-size:14px">Artificial Intelligence Club</b><div class="hint">'+esc(when)+'</div></div></div>'+
+  '<div class="fbtxt">'+esc(short)+(long?' <b style="color:var(--blue)">See more</b>':'')+(tags?'<div style="color:var(--blue)">'+esc(tags)+'</div>':'')+'</div>'+
+  (img?'<div class="fbimg" style="background-image:url('+img+')">'+fly+'</div>':'')+
+  (S.cta?'<div class="fbcta"><span style="min-width:0"><span class="hint">STUDENT LIFE PORTAL</span><br><b>'+esc(t)+'</b></span><span class="smallbtn">'+esc(S.cta)+'</span></div>':'')+
+  '<div class="fbbar"><span>Like</span><span>Comment</span><span>Share</span></div></div>';
+ const ig='<div class="fbpost"><div class="fbh"><img src="img/ai-club-seal.jpg" alt=""><b style="color:var(--indigo);font-size:14px">cunysps.ai</b></div>'+(img?'<div class="fbimg sq" style="background-image:url('+img+')">'+fly+'</div>':'')+
+  '<div class="fbtxt" style="padding-top:10px"><b>cunysps.ai</b> '+esc(short)+(long?' <span style="color:var(--pewter)">more</span>':'')+(tags?' <span style="color:var(--blue)">'+esc(tags)+'</span>':'')+'</div></div>';
+ const arr=(d,on)=>'<button class="pvarr" type="button" data-pv="'+d+'" aria-label="'+(d<0?'Previous':'Next')+' platform" aria-disabled="'+!on+'"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="'+(d<0?'M15 5l-7 7 7 7':'M9 5l7 7-7 7')+'"/></svg></button>';
+ el.innerHTML=(k==='fb'?fb:ig)+'<div class="pvnav">'+arr(-1,S.pvi>0)+'<span>'+(k==='fb'?'Facebook':'Instagram')+' <i>· '+(S.pvi+1)+' of '+P.length+'</i></span>'+arr(1,S.pvi<P.length-1)+'</div>';
+ $$('#pv [data-pv]').forEach(b=>b.onclick=()=>{if(b.getAttribute('aria-disabled')==='true')return;S.pvi+=+b.dataset.pv;renderPreview();const n=$('#pv [data-pv="'+b.dataset.pv+'"]');if(n&&n.getAttribute('aria-disabled')!=='true')n.focus({preventScroll:true});else{const o=$('#pv [aria-disabled="false"]');o&&o.focus({preventScroll:true})}})}
+$('#date').addEventListener('change',renderPreview);$('#time').addEventListener('change',renderPreview);
 $$('[data-when]').forEach(b=>b.onclick=()=>{S.when=b.dataset.when;$$('[data-when]').forEach(x=>x.setAttribute('aria-pressed',x===b));$('#when-fields').style.display=S.when==='schedule'?'grid':'none';updSched()});
 $('#chk-review').onclick=e=>{S.reviewed=!S.reviewed;e.currentTarget.setAttribute('aria-checked',S.reviewed);const bx=e.currentTarget.querySelector('.box');bx.classList.remove('squish');void bx.offsetWidth;if(S.reviewed)bx.classList.add('squish');updSched()};
-function updSched(){const any=S.acct.fb||S.acct.ig;const b=$('#btn-schedule');b.setAttribute('aria-disabled',String(!any||!S.reviewed));const lab=S.when==='schedule'?'Schedule post':'Publish now';if(b.textContent!==lab){const first=!b.textContent;b.innerHTML='<span class="lbl">'+lab+'</span>';if(!first){b.classList.remove('swap-in');void b.offsetWidth;b.classList.add('swap-in')}}let n=$('#sched-need');if(!n){n=document.createElement('p');n.id='sched-need';n.className='need';b.parentNode.insertBefore(n,b)}n.textContent=!any?'Turn on at least one account above.':!S.reviewed?'Tick “I reviewed this post” above to continue.':'';n.style.display=n.textContent?'block':'none';b.parentNode.style.flexWrap='wrap'}
+function updSched(){renderPreview();const any=S.acct.fb||S.acct.ig;const b=$('#btn-schedule');b.setAttribute('aria-disabled',String(!any||!S.reviewed));const lab=S.persona==='contrib'?'Submit →':S.when==='schedule'?'Schedule post':'Publish now';if(b.textContent!==lab){const first=!b.textContent;b.innerHTML='<span class="lbl">'+lab+'</span>';if(!first){b.classList.remove('swap-in');void b.offsetWidth;b.classList.add('swap-in')}}let n=$('#sched-need');if(!n){n=document.createElement('p');n.id='sched-need';n.className='need';b.parentNode.insertBefore(n,b)}n.textContent=!any?'Choose where you’re posting first.':!S.reviewed?'Tick “I reviewed this post” above to continue.':'';n.style.display=n.textContent?'block':'none';b.parentNode.style.flexWrap='wrap'}
 function fmtWhen(){if(S.when==='now')return 'now';const d=new Date($('#date').value+'T'+$('#time').value);if(isNaN(d))return 'soon';return d.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'})+' · '+d.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'})}
-$('#btn-schedule').onclick=()=>{if($('#btn-schedule').getAttribute('aria-disabled')==='true'){shake(!(S.acct.fb||S.acct.ig)?$('#v-schedule .acct'):$('#chk-review'));shake($('#sched-need'));return}const t=$('#post-title').value.trim()||'Untitled post';const when=fmtWhen();
+$('#btn-schedule').onclick=()=>{if($('#btn-schedule').getAttribute('aria-disabled')==='true'){shake($('#chk-review'));shake($('#sched-need'));return}if(S.persona==='contrib'){openSubmit();return}if(S.when==='now'){openPublishNow();return}doPublish()};
+function openPublishNow(){openSheet('<h2 class="h2 mb8">Publish now?</h2><p class="cap mb16">You’re a Club Lead, so this goes out right away.</p><button class="btn pri block mb8" id="pn-go">Publish now</button><button class="btn sec block" id="pn-no">Cancel</button>');
+ $('#pn-go').onclick=()=>{closeAll();doPublish()};$('#pn-no').onclick=closeAll}
+const REVIEWERS=['Aisha Rahman · Club Lead','Devon Brooks · Editor'];
+function openSubmit(){openSheet('<h2 class="h2 mb8">Submit for review?</h2><p class="cap mb16">A Club Lead will review your post before it goes live.</p>'+
+ '<div class="field"><label class="label" for="rv-who">Reviewer</label><select id="rv-who">'+REVIEWERS.map(r=>'<option>'+r+'</option>').join('')+'</select></div>'+
+ '<div class="field"><label class="label" for="rv-note">Note for the reviewer <span class="opt">(optional)</span></label><textarea id="rv-note" style="min-height:64px" placeholder="Anything they should check?"></textarea></div>'+
+ '<button class="btn pri block mb8" id="rv-send">Submit</button><button class="btn sec block" id="rv-no">Cancel</button>');
+ $('#rv-no').onclick=closeAll;$('#rv-send').onclick=()=>{const who=$('#rv-who').value,note=$('#rv-note').value.trim();closeAll();submitForReview(who,note)}}
+function submitForReview(who,note){dropDraft();const t=$('#post-title').value.trim()||'Untitled post',when=fmtWhen(),nets=plats().map(k=>k==='fb'?'Facebook':'Instagram').join(' + '),first=who.split(' · ')[0];
+ const post={title:t,sub:'With '+first+' for review',st:'In review',img:S.photo?S.photo.src:''};S.posts.unshift(post);
+ S.queue.unshift({id:'q'+Date.now(),title:t,img:post.img,from:'Sofia Patel',ago:'Just now',note,sub:nets+' · '+(S.when==='now'?'Publish when approved':when),post});
+ $('#result-body').innerHTML=(S.photo?'<div class="wash" aria-hidden="true"><i style="background-image:url('+S.photo.src+')"></i></div>':'')+'<div class="result-ic" aria-hidden="true"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7"/></svg></div>'+
+  '<h1 class="h1 mb8" style="text-align:center">Sent for review</h1><p class="cap mb16" style="text-align:center">'+esc(t)+'</p>'+
+  '<div class="card mb16" style="padding:12px 14px"><div class="row"><div><b style="color:var(--indigo)">'+esc(first)+'</b><div class="cap">'+esc(who.split(' · ')[1]||'')+' · '+esc(nets)+'</div></div><span class="pill cream">In review</span></div>'+(note?'<p class="cap mt12" style="font-style:italic">“'+esc(note)+'”</p>':'')+'</div>'+
+  '<div class="stack"><button class="btn sec block" data-go="overview">Back to Overview</button><button class="btn txt block" id="another">Create another post</button></div>';
+ $('#another').onclick=()=>{resetPost();go('create')};
+ S.reviewed=false;$('#chk-review').setAttribute('aria-checked','false');resetPost(true);go('result')}
+function doPublish(){dropDraft();const t=$('#post-title').value.trim()||'Untitled post';const when=fmtWhen();
  const igFail=S.acct.ig&&S.photo&&S.photo.type&&S.photo.type!=='image/jpeg';
  const rows=[];if(S.acct.fb)rows.push(['Facebook Page','@cunyspsaiclub',S.when==='now'?'Published':'Scheduled',true]);
  if(S.acct.ig)rows.push(['Instagram','@cunysps.ai',igFail?'Failed':(S.when==='now'?'Published':'Scheduled'),!igFail]);
+ DEST.filter(([k])=>S.dest[k]).forEach(([k,n,sub])=>rows.push([n,sub,'Shared',true]));
  const okNames=rows.filter(r=>r[3]).map(r=>r[0]==='Facebook Page'?'Facebook':r[0]);
  if(okNames.length)S.posts.unshift({day:dayOf(),title:t,sub:okNames.join(' + ')+' · '+(S.when==='now'?'Just now':when),st:S.when==='now'?'Published':'Scheduled',img:S.photo?S.photo.src:''});
  if(igFail)S.posts.unshift({title:t,sub:'Instagram · image must be JPEG',st:'Needs fix',img:S.photo.src});
@@ -724,7 +855,35 @@ $('#btn-schedule').onclick=()=>{if($('#btn-schedule').getAttribute('aria-disable
  $('#another').onclick=()=>{resetPost();go('create')};
  S.reviewed=false;$('#chk-review').setAttribute('aria-checked','false');
  if(!igFail)resetPost(true);go('result')};
-function resetPost(keepView){$('#post-title').value='';copy.value='';copy.oninput();$('#alt').value='';setPhoto(null);$('#rel-event').value=''}
+function resetPost(keepView){$('#post-title').value='';copy.value='';copy.oninput();$('#alt').value='';setPhoto(null);$('#rel-event').value='';S.draft=null;$('#saved').hidden=true;S.tags=TAGS0.slice();S.cta='RSVP';S.ctaOther='';S.flyer='none';S.layout='';S.flyDet='';renderCta();renderTags();renderFlyer()}
+
+/* Content Creation Studio: where are you posting? (asked once, before step 1) */
+const DEST=[['blog','AI Club Blog','Club page'],['members','Members','Hub update'],['wa','WhatsApp','Group alert'],['sl','Student Life','Campus calendar']];S.dest={};
+function openStudio(){const sel={fb:!!S.acct.fb,ig:!!S.acct.ig},dest=Object.assign({},S.dest);
+ const SOC=[['fb','f','#1877F2','Facebook'],['ig','IG','linear-gradient(135deg,#F58529,#DD2A7B,#8134AF)','Instagram'],['yt','▶','#FF0000','YouTube',1],['li','in','#0A66C2','LinkedIn',1]];
+ const DI={blog:'<img class="di" src="img/ai-club-seal.jpg" alt="">',members:'<img class="di" src="img/ai-club-seal.jpg" alt="">',wa:'<span class="di" style="background:#25D366;color:#fff">WA</span>',sl:'<span class="di" style="background:var(--pearl);color:var(--indigo);border:1.5px dashed var(--dove)">SL</span>'};
+ openSheet('<div class="cap" style="color:var(--blue)">Content Creation Studio</div><h2 class="h2 mb12">Where are you posting?</h2>'+
+  '<div class="row mb8"><span class="label" id="soc-l">Social media</span><span class="hint" id="soc-n"></span></div>'+
+  '<div class="socrow" role="group" aria-labelledby="soc-l">'+SOC.map(([k,ic,bg,n,soon])=>'<button class="soc" type="button" '+(soon?'data-later="'+n+'" aria-disabled="true" aria-label="'+n+', coming soon"':'data-soc="'+k+'" aria-pressed="'+sel[k]+'"')+'><span class="ic" style="background:'+bg+'" aria-hidden="true">'+ic+'</span><span class="nm">'+n+'</span>'+(soon?'<span class="pill soon">Soon</span>':'')+'</button>').join('')+'</div>'+
+  '<div class="label mb8" id="dst-l">Club and CUNY SPS</div><div class="dgrid" role="group" aria-labelledby="dst-l">'+DEST.map(([k,n,sub])=>'<button class="dtile" type="button" data-dst="'+k+'" aria-pressed="'+!!dest[k]+'">'+DI[k]+'<span style="min-width:0"><b>'+n+'</b><span class="hint">'+sub+'</span></span></button>').join('')+'</div>'+
+  '<button class="btn pri block" id="studio-go">Create post →</button>');
+ const cnt=()=>{const n=Object.values(sel).filter(Boolean).length;$('#soc-n').textContent=n?n+' selected':''};cnt();
+ $$('#sheet [data-soc]').forEach(b=>b.onclick=()=>{const k=b.dataset.soc;sel[k]=!sel[k];b.setAttribute('aria-pressed',sel[k]);cnt()});
+ $$('#sheet [data-later]').forEach(b=>b.onclick=()=>toast(b.dataset.later+' is coming in a later phase'));
+ $$('#sheet [data-dst]').forEach(b=>b.onclick=()=>{const k=b.dataset.dst;dest[k]=!dest[k];b.setAttribute('aria-pressed',dest[k])});
+ $('#studio-go').onclick=()=>{if(!sel.fb&&!sel.ig){shake($('#sheet .socrow'));toast('Pick Facebook or Instagram to continue');return}S.acct=sel;S.dest=dest;closeAll();go('create')}}
+
+/* review queue: Club Leads approve what Contributors submit */
+S.queue=[{id:'q1',title:'Spring AI Ethics Panel',img:PHOTOS[0].src,from:'Sofia Patel',ago:'5 min ago',note:'Can you check the date and room?',sub:'Facebook + Instagram · Thu, Nov 19 · 9:00 AM'}];
+function renderReview(){const el=$('#ov-review');if(!el)return;if(S.persona!=='lead'||!S.queue.length){el.innerHTML='';return}
+ el.innerHTML='<div class="card rvcard"><div class="row mb8"><b style="color:var(--indigo)">Waiting for your review</b><span class="pill taxi">'+S.queue.length+'</span></div>'+
+  S.queue.map(q=>'<div class="rvitem"><div class="thumb" style="'+(q.img?'background-image:url('+q.img+')':'')+'"></div><div style="flex:1;min-width:0"><b style="color:var(--indigo);font-size:14px">'+esc(q.title)+'</b><div class="hint">From '+esc(q.from)+' · Contributor · '+esc(q.ago)+'</div>'+(q.note?'<div class="hint" style="font-style:italic">“'+esc(q.note)+'”</div>':'')+
+   '<div class="row mt12" style="gap:8px"><button class="btn sec" style="flex:1" data-rv-chg="'+q.id+'">Ask for changes</button><button class="btn pri" style="flex:1" data-rv-ok="'+q.id+'">Approve</button></div></div></div>').join('')+'</div>';
+ const take=id=>{const q=S.queue.find(x=>x.id===id);S.queue=S.queue.filter(x=>x!==q);return q};
+ $$('[data-rv-ok]').forEach(b=>b.onclick=()=>{const q=take(b.dataset.rvOk);if(q.post){q.post.st='Scheduled';q.post.sub=q.sub}else S.posts.unshift({title:q.title,sub:q.sub,st:'Scheduled',img:q.img});toast('Approved. '+q.title+' is scheduled.');renderOverview()});
+ $$('[data-rv-chg]').forEach(b=>b.onclick=()=>{const id=b.dataset.rvChg,q=S.queue.find(x=>x.id===id),first=q.from.split(' ')[0];
+  openSheet('<h2 class="h2 mb12">Ask for changes</h2><div class="field"><label class="label" for="chg-note">Note for '+esc(first)+'</label><textarea id="chg-note" style="min-height:72px" placeholder="What should '+esc(first)+' change?"></textarea></div><button class="btn pri block mb8" id="chg-send">Send back</button><button class="btn sec block" id="chg-no">Cancel</button>');
+  $('#chg-no').onclick=closeAll;$('#chg-send').onclick=()=>{if(!$('#chg-note').value.trim()){shake($('#chg-note'));return}take(id);if(q.post){q.post.st='Changes asked';q.post.sub='Back with '+first}else S.posts.push({title:q.title,sub:'Back with '+first,st:'Changes asked',img:q.img});closeAll();toast('Sent back to '+first+' with your note');renderOverview()}})}
 
 /* events */
 $$('#ev-filter .chip').forEach(c=>c.onclick=()=>{S.filter=c.dataset.f;$$('#ev-filter .chip').forEach(x=>x.setAttribute('aria-pressed',x===c));renderEvents()});
@@ -747,7 +906,7 @@ function renderEvents(){setTimeout(squishAtt,0);const list=EVENTS.filter(e=>S.fi
 /* init */
 setPhoto(PHOTOS[0]);$('#alt').value='Students talking together outside on a CUNY campus';
 </script>
-<script src="js/screens.js?v=20261118-11"></script>
+<script src="js/screens.js?v=20261120-12"></script>
 <script>go(location.hash.slice(1)||'welcome',false);</script>
 </body>
 </html>

@@ -5,7 +5,7 @@ URL = 'http://localhost:8765/'
 TY = "input:not([type=checkbox]):not([type=radio]):not([type=file]):not([type=date]):not([type=time]):not([type=range]),textarea"
 
 ACTIONS = ['title', 'copy', 'alt', 'blur', 'type', 'selectall', 'ai', 'ai_tone', 'ai_pick', 'tpl', 'photo', 'photo_none',
-           'rel', 'next', 'back', 'draft', 'review', 'schedule', 'when_now', 'when_sched', 'arrow_next', 'create', 'close_sheet']
+           'rel', 'next', 'back', 'mic', 'altai', 'cta', 'tag_rm', 'tag_add', 'pv', 'studio', 'persona', 'confirm', 'review', 'schedule', 'when_now', 'when_sched', 'arrow_next', 'create', 'close_sheet']
 
 async def run(seed, steps=160):
     rnd = random.Random(seed); bad = []
@@ -39,7 +39,9 @@ async def run(seed, steps=160):
                 elif a == 'ai_tone': did = await tap(f'#sheet [data-tone="{rnd.choice(["short","formal","emoji"])}"]')
                 elif a == 'ai_pick': did = await tap(f'#aiopts .aiopt:nth-child({rnd.randint(1,3)})')
                 elif a == 'tpl':
-                    if await tap('#btn-flyer'): await pg.wait_for_timeout(300); did = await tap(f'#sheet [data-tpl="{rnd.choice(["none","blue","taxi","frame"])}"]')
+                    if await tap('#btn-flyer'):
+                        await pg.wait_for_timeout(300); await tap(f'#sheet [data-lay="{rnd.choice(["Workshop","Panel","Showcase"])}"]')
+                        await tap(f'#sheet [data-tpl="{rnd.choice(["none","blue","taxi","frame"])}"]'); did = await tap('#fly-apply')
                 elif a == 'photo':
                     if await tap('#btn-photo'): await pg.wait_for_timeout(300); did = await tap(f'#sheet [data-ph="{rnd.randint(0,2)}"]')
                 elif a == 'photo_none':
@@ -48,7 +50,20 @@ async def run(seed, steps=160):
                     if await vis('#rel-event'): await pg.select_option('#rel-event', rnd.choice(['', 'e1', 'e2', 'e3', 'e4'])); did = True
                 elif a == 'next': did = await tap('#btn-next')
                 elif a == 'back': did = await tap('.view.on [data-back]')
-                elif a == 'draft': did = await tap('#btn-draft')
+                elif a == 'mic': did = await tap('#btn-mic'); await pg.wait_for_timeout(rnd.choice([100, 1600]))
+                elif a == 'altai': did = await tap('#btn-altai')
+                elif a == 'cta': did = await tap(f'#cta-row [data-cta]:nth-child({rnd.randint(1,3)})')
+                elif a == 'tag_rm': did = await tap('#tag-row .tagx')
+                elif a == 'tag_add':
+                    if await tap('#tag-add'):
+                        await pg.wait_for_timeout(300); await pg.locator('#tag-in').fill(rnd.choice(['student life', '#ai', 'cuny sps']))
+                        did = await tap('#tag-save')
+                elif a == 'pv': did = await tap(f'#pv [data-pv="{rnd.choice(["1","-1"])}"]')
+                elif a == 'studio':
+                    await pg.evaluate("closeAll();go('overview')"); await pg.wait_for_timeout(300)
+                    if await tap('#v-overview .welcome [data-go="create"]'): await pg.wait_for_timeout(400); did = await tap('#studio-go')
+                elif a == 'persona': await pg.evaluate("S.persona=S.persona==='contrib'?'lead':'contrib';if(S.view==='schedule')updSched()"); did = True
+                elif a == 'confirm': did = (await tap('#pn-go')) or (await tap('#rv-send'))
                 elif a == 'review': did = await tap('#chk-review')
                 elif a == 'schedule': did = await tap('#btn-schedule')
                 elif a == 'when_now': did = await tap('#v-schedule [data-when="now"]')
