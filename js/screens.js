@@ -18,7 +18,8 @@ function bars(vals,labels){const m=Math.max(...vals,1);return '<div class="bars"
 function ok(t){return '<span class="pill mint">'+t+'</span>'}
 const now=()=>new Date().toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'});
 function audit(actor,action,target){S.audit.unshift({t:'Nov 18 · '+now(),actor,action,target})}
-function dayOf(){const v=($('#date')||{}).value||'';const m=v.match(/^2026-11-(\d\d)$/);return S.when==='now'?18:(m?+m[1]:null)}
+const TODAY=(()=>{const x=new Date();return x.getFullYear()===2026&&x.getMonth()===10?x.getDate():18})();
+function dayOf(){const v=($('#date')||{}).value||'';const m=v.match(/^2026-11-(\d\d)$/);return S.when==='now'?TODAY:(m?+m[1]:null)}
 
 /* ---------- data ---------- */
 S.notes=[{id:1,k:'pub',t:'Publishing failed: Finals Week Study Jam',s:'Instagram · image must be JPEG · fix and retry',u:true,pill:'Failed',pc:'coral',go:'calendar'},
@@ -63,14 +64,14 @@ S.f={};
 /* ---------- calendar ---------- */
 function calendar(items,sel,key){const first=0,days=30;let h='<div class="cal"><div class="row mb8"><b class="h2">November 2026</b><span class="hint">America/New_York</span></div><div class="calgrid" role="grid" aria-label="November 2026">'+['S','M','T','W','T','F','S'].map(x=>'<span class="dow" aria-hidden="true">'+x+'</span>').join('');
  for(let i=0;i<first;i++)h+='<span></span>';
- for(let d=1;d<=days;d++){const it=items.filter(x=>x.d===d);h+='<button class="cday'+(d===sel?' sel':'')+(d===18?' today':'')+'" data-day="'+key+'" data-v="'+d+'" aria-label="November '+d+(it.length?', '+it.length+' items':'')+'">'+d+'<span class="dots">'+it.slice(0,3).map(x=>'<i class="'+(x.k==='event'?'ev':x.st==='Failed'?'bad':'po')+'"></i>').join('')+'</span></button>'}
+ for(let d=1;d<=days;d++){const it=items.filter(x=>x.d===d);h+='<button class="cday'+(d===sel?' sel':'')+(d===TODAY?' today':'')+'" data-day="'+key+'" data-v="'+d+'" aria-label="November '+d+(it.length?', '+it.length+' items':'')+'">'+d+'<span class="dots">'+it.slice(0,3).map(x=>'<i class="'+(x.k==='event'?'ev':x.st==='Failed'?'bad':'po')+'"></i>').join('')+'</span></button>'}
  return h+'</div><div class="legend"><span><i class="po"></i>Post</span><span><i class="ev"></i>Event</span><span><i class="bad"></i>Needs fix</span></div></div>'}
 function dayList(items,d){const it=items.filter(x=>x.d===d);return '<h2 class="h2 mb8 mt16">'+new Date(2026,10,d).toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'})+'</h2>'+(it.length?'<div class="card">'+it.map(x=>lrow({t:x.t,s:(x.k==='event'?'Event · ':'')+x.s,pill:x.k==='event'?'Event':x.st,pc:x.k==='event'?'cream':x.st==='Failed'?'coral':x.st==='Published'?'mint':x.st==='Scheduled'?'solid':'',nochev:true})).join('')+'</div>':'<div class="card pad" style="text-align:center"><p class="cap">Nothing on this day.</p><button class="btn sec mt12" data-go="create">Plan a post</button></div>')}
 function allCal(){return S.cal.concat(S.posts.filter(p=>p.day).map(p=>({d:p.day,k:'post',t:p.title,s:p.sub,st:p.st})))}
 
 /* ---------- views ---------- */
 const D={
- calendar(){const f=S.f.cal||'all',sel=S.f.calDay||19,mode=S.f.calMode||'month';let it=allCal().filter(x=>f==='all'||(f==='posts'?x.k==='post':x.k==='event'));
+ calendar(){const f=S.f.cal||'all',sel=S.f.calDay||TODAY,mode=S.f.calMode||'month';let it=allCal().filter(x=>f==='all'||(f==='posts'?x.k==='post':x.k==='event'));
   return hdr('Content calendar')+intro('Content calendar','Scheduled posts alongside planned club events','<button class="btn pri" data-go="create">New post</button>')+
   '<div class="pad" style="padding-top:0"><div class="seg mb12" role="group" aria-label="View"><button aria-pressed="'+(mode==='month')+'" data-chip="calMode" data-v="month">Month</button><button aria-pressed="'+(mode==='list')+'" data-chip="calMode" data-v="list">List</button></div></div>'+
   chips('cal',[['all','All'],['posts','Posts'],['events','Events']],f)+'<div class="pad" style="padding-top:0">'+
