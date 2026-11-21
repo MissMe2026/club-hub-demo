@@ -569,11 +569,104 @@ async def flow12(b):
     check((await state(pg))['view'] == 'v-welcome', 'F12 Sign out')
     check(not pg.errs, f'F12 errors {pg.errs}'); await pg.context.close()
 
+async def flow13(b):
+    print('F13 v17: Safari history is the source of truth (sign-in, sheets, menu, forward, finished posts)')
+    pg = await new_page(b)
+    H = "({v:S.view,hi:S.hi,st:history.state,ovl:S.ovl,sheet:document.querySelector('#sheet').classList.contains('on'),drawer:document.querySelector('#drawer').classList.contains('on')})"
+    async def h(): return await pg.evaluate(H)
+    async def back(w=700): await pg.go_back(); await pg.wait_for_timeout(w)
+    async def fwd(w=700): await pg.go_forward(); await pg.wait_for_timeout(w)
+    await tap(pg, 'text=Get started'); await tap(pg, 'text=Enter demo workspace', 900)
+    x = await h(); check(x['v'] == 'overview' and x['hi'] == 0 and x['st']['i'] == 0, f'F13 signing in leaves nothing to swipe back into {x}')
+    # stale forward entry (old sign-in screen) is ignored
+    await fwd(); x = await h(); check(x['v'] == 'overview', f'F13 swipe forward after sign-in stays on Overview {x}')
+    # sheet + swipe back closes the sheet only
+    await tap(pg, '#v-overview >> text=Create post', 600); x = await h()
+    check(x['sheet'] and x['hi'] == 1 and x['st'].get('ov') == 1, f'F13 sheet gets its own history step {x}')
+    await back(); x = await h(); check(not x['sheet'] and x['v'] == 'overview' and x['hi'] == 0, f'F13 swipe back with a sheet open closes the sheet {x}')
+    await fwd(); x = await h(); check(not x['sheet'] and x['v'] == 'overview' and x['hi'] == 0, f'F13 swipe forward does not reopen a closed sheet {x}')
+    # closing a sheet by tapping outside removes its history step
+    await tap(pg, '#v-overview >> text=Create post', 600); await pg.evaluate("closeAll()"); await pg.wait_for_timeout(500)
+    x = await h(); check(x['hi'] == 0 and not x['st'].get('ov'), f'F13 closing a sheet removes its step {x}')
+    # menu + swipe back closes the menu
+    await pg.evaluate("openDrawer()"); await pg.wait_for_timeout(400); await back(); x = await h()
+    check(not x['drawer'] and x['v'] == 'overview', f'F13 swipe back closes the menu {x}')
+    # studio -> create -> preview, back twice, forward
+    await tap(pg, '#v-overview >> text=Create post', 600); await tap(pg, '#studio-go', 600)
+    x = await h(); check(x['v'] == 'create' and x['hi'] == 1, f'F13 Create post replaces the sheet step {x}')
+    await pg.fill('#copy', 'Hello'); await blur(pg); await tap(pg, '#btn-next', 600)
+    await back(); x = await h(); check(x['v'] == 'create', f'F13 swipe back from Preview goes to the editor {x}')
+    check(await pg.input_value('#copy') == 'Hello', 'F13 editor keeps your text')
+    await fwd(); x = await h(); check(x['v'] == 'schedule', f'F13 swipe forward returns to Preview {x}')
+    await back(); await back(); x = await h(); check(x['v'] == 'overview' and not x['sheet'], f'F13 back again goes to Overview, no sheet {x}')
+    # finish a post: back skips the steps
+    await fwd(); await fwd(); x = await h(); check(x['v'] == 'schedule', f'F13 forward twice back to Preview {x}')
+    # (after a history step Playwright's visible=true filter can hang; plain locators are used here)
+    await pg.locator('#chk-review').tap(); await pg.wait_for_timeout(300); await pg.locator('#btn-schedule').tap(); await pg.wait_for_timeout(1000)
+    x = await h(); check(x['v'] == 'result' and x['hi'] == 1, f'F13 Post scheduled sits right after Overview {x}')
+    await back(); x = await h(); check(x['v'] == 'overview', f'F13 swipe back after Post scheduled goes to Overview {x}')
+    await fwd(); x = await h(); check(x['v'] in ('result', 'overview'), f'F13 forward never reopens the editor {x}')
+    if x['v'] == 'result':
+        await tap(pg, '#v-result [data-go="overview"] >> nth=0', 900); x = await h()
+        check(x['v'] == 'overview' and x['hi'] == 0, f'F13 Close on Post scheduled goes back to Overview {x}')
+    # create another post from result
+    await tap(pg, '#v-overview >> text=Create post', 600); await tap(pg, '#studio-go', 600)
+    await pg.fill('#post-title', 'Second post'); await pg.fill('#copy', 'Second'); await blur(pg); await tap(pg, '#btn-next', 600)
+    await tap(pg, '#chk-review'); await tap(pg, '#btn-schedule', 1000)
+    await tap(pg, '#another', 700); x = await h(); check(x['v'] == 'create', f'F13 Create another post {x}')
+    await back(); x = await h(); check(x['v'] == 'overview', f'F13 back from the new post skips Post scheduled {x}')
+    # menu navigation replaces the menu step
+    await pg.evaluate("openDrawer()"); await pg.wait_for_timeout(400)
+    await pg.evaluate("document.querySelector('#nav [data-go=\"events\"]')?document.querySelector('#nav [data-go=\"events\"]').click():go('events')"); await pg.wait_for_timeout(700)
+    x = await h(); check(x['v'] == 'events' and not x['drawer'] and not x['st'].get('ov'), f'F13 menu pick replaces the menu step {x}')
+    await back(); x = await h(); check(x['v'] == 'overview' and not x['drawer'], f'F13 back from a menu screen goes to Overview, menu closed {x}')
+    # sign out
+    await pg.evaluate("go('events')"); await pg.wait_for_timeout(400)
+    await pg.evaluate("openDrawer()"); await pg.wait_for_timeout(400); await tap(pg, '#nav [data-act="signOut"]', 900)
+    x = await h(); check(x['v'] == 'welcome' and x['hi'] == 0, f'F13 signing out leaves nothing to swipe back into {x}')
+    await fwd(); x = await h(); check(x['v'] == 'welcome', f'F13 forward after sign-out stays on Welcome {x}')
+    check(not pg.errs, f'F13 errors {pg.errs}'); await pg.context.close()
+
+async def flow14(b):
+    print('F14 v17: sheet button while typing, toast, caption helper height, keyboard move')
+    pg = await new_page(b); await to_create(pg)
+    await tap(pg, '#btn-flyer', 600)
+    await focus_field(pg, '#fly-det', 'F14 event details in the flyer sheet')
+    await pg.keyboard.type('Room 402')
+    await pg.locator('#fly-apply').tap(); await pg.wait_for_timeout(50)
+    mid = await pg.evaluate("({defer:S.kbDefer||0})")
+    check(mid['defer'] == 1, f'F14 Apply template closes the keyboard first, sheet still up {mid}')
+    await pg.wait_for_timeout(700)
+    x = await pg.evaluate("({sheet:document.querySelector('#sheet').classList.contains('on'),det:S.flyDet,typing:document.querySelector('#phone').classList.contains('typing-on'),toast:document.querySelector('#toast').textContent})")
+    check(not x['sheet'] and x['det'] == 'Room 402' and not x['typing'], f'F14 then applies the template {x}')
+    # toast fades in place under the header
+    t = await pg.evaluate("(()=>{const t=document.querySelector('#toast'),h=document.querySelector('.view.on .top');return {tt:t.getBoundingClientRect().top,hb:h.getBoundingClientRect().bottom,op:getComputedStyle(t).opacity}})()")
+    check(t['tt'] >= t['hb'] - 2, f'F14 toast sits under the header {t}')
+    await pg.wait_for_timeout(2700)
+    t2 = await pg.evaluate("(()=>{const t=document.querySelector('#toast'),h=document.querySelector('.view.on .top');return {tt:t.getBoundingClientRect().top,hb:h.getBoundingClientRect().bottom,op:getComputedStyle(t).opacity}})()")
+    check(t2['op'] == '0' and t2['tt'] >= t['hb'] - 12, f'F14 toast fades out without crossing the header {t2}')
+    # caption helper keeps its height when a tone changes
+    await tap(pg, '#v-create [data-act="ai"], #v-create #btn-ai, #v-create >> text=AI caption helper', 600)
+    h0 = await pg.evaluate("document.querySelector('#sheet').offsetHeight")
+    for tone in ['emoji', 'short', 'formal']:
+        if await pg.locator(f'#sheet [data-tone="{tone}"]').count():
+            await pg.locator(f'#sheet [data-tone="{tone}"]').tap(); await pg.wait_for_timeout(250)
+            h1 = await pg.evaluate("document.querySelector('#sheet').offsetHeight")
+            check(h1 >= h0, f'F14 caption helper does not shrink on {tone} ({h0} -> {h1})'); h0 = h1
+    await pg.evaluate('closeAll()'); await pg.wait_for_timeout(300)
+    # the app's keyboard move eases while the keyboard opens
+    await pg.evaluate("document.querySelector('#copy').focus()"); await pg.wait_for_timeout(60)
+    check(await pg.evaluate("document.querySelector('#phone').classList.contains('kb-move')"), 'F14 keyboard move eases in step with Safari')
+    await blur(pg)
+    check(not pg.errs, f'F14 errors {pg.errs}'); await pg.context.close()
+
 async def main():
     import os; os.makedirs(OUT, exist_ok=True)
     async with async_playwright() as p:
         b = await p.chromium.launch(executable_path='/usr/bin/google-chrome')
-        for f in [flow1, flow2, flow3, flow4, flow5, flow6, flow7, flow8, flow9, flow10, flow11, flow12]:
+        ALL=[flow1, flow2, flow3, flow4, flow5, flow6, flow7, flow8, flow9, flow10, flow11, flow12, flow13, flow14]
+        only=os.environ.get('ONLY')
+        for f in ([g for g in ALL if g.__name__ in only.split(',')] if only else ALL):
             try: await f(b)
             except Exception as e: FAILS.append(f'{f.__name__} crashed: {e}'); print('  CRASH', f.__name__, str(e)[:300])
         await b.close()
