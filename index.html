@@ -352,6 +352,21 @@ i.po{background:var(--azure)}i.ev{background:var(--taxi)}i.bad{background:var(--
 .seal{width:44px;height:44px;border-radius:50%;flex:none;background:#fff center/cover}
 .hublogo{width:56px;height:56px;border-radius:14px;flex:none}
 
+/* v16 back navigation + fixes */
+.ctx .backlink{position:relative;display:inline-flex;align-items:center;gap:2px;color:var(--blue);font-size:13px;font-weight:600;line-height:16px;padding:0;background:none;max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ctx .backlink svg{flex:none;margin-left:-3px}
+.ctx .backlink::after{content:"";position:absolute;inset:-14px -10px -10px -10px}
+#edgeback{position:absolute;left:-64px;top:50%;width:40px;height:40px;margin-top:-20px;border-radius:50%;background:var(--smoke);color:var(--indigo);display:grid;place-items:center;z-index:40;pointer-events:none;box-shadow:0 2px 10px rgba(1,29,73,.18);transition:background .12s,color .12s}
+#edgeback.go{background:var(--blue);color:#fff}
+.ev-mini .ph .datechip{display:inline-block;min-height:0;-webkit-line-clamp:unset;overflow:visible;top:8px;left:8px;padding:3px 8px;border-radius:7px;font-size:11px;line-height:15px;background:rgba(255,183,27,.88);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+textarea.titleinput{display:block;width:100%;resize:none;overflow:hidden;font:inherit;font-size:28px;line-height:34px;font-weight:800;color:var(--indigo)}
+.dircard{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+.evpast{opacity:.72}
+.navfoot .two{gap:8px}
+.steplist{list-style:none;padding:0;margin:0 0 14px}
+.steplist li{display:flex;gap:10px;align-items:center;padding:10px 0;border-bottom:1px solid var(--smoke);font-size:14px;color:var(--indigo)}
+.steplist li i{width:22px;height:22px;border-radius:50%;flex:none;display:grid;place-items:center;font-style:normal;font-size:12px;font-weight:800;border:2px solid var(--dove);color:var(--pewter)}
+.steplist li.done i{background:var(--mint);border-color:var(--mint);color:var(--indigo)}
 /* v15 mobile polish */
 html{-webkit-tap-highlight-color:transparent}
 button,a,label,select,summary,[role="button"],[data-go],[data-act],input[type="checkbox"]{touch-action:manipulation}
@@ -483,7 +498,7 @@ button.postrow{background:none;color:inherit;font:inherit}
               <button class="btn taxi block" data-go="signin">Get started →</button>
               <button class="btn ghost block" data-go="public">Browse club events first</button>
             </div>
-            <p class="fine">A CUNY SPS AI Club pilot · demo with sample data, no real accounts<br><span style="opacity:.7">Version Nov 20 · 15</span></p>
+            <p class="fine">A CUNY SPS AI Club pilot · demo with sample data, no real accounts<br><span style="opacity:.7">Version Nov 21 · 16</span></p>
           </div>
         </div>
       </section>
@@ -558,7 +573,7 @@ button.postrow{background:none;color:inherit;font:inherit}
             <div class="flyer" id="flyer-layer" hidden></div><div class="over"><button class="smallbtn light" id="btn-photo">Change image</button><button class="smallbtn dark" id="btn-flyer">Flyer templates</button></div>
           </div>
           <div class="field" id="f-title"><label class="sr" for="post-title">Post title</label>
-          <input class="titleinput" id="post-title" autocomplete="off" maxlength="80" placeholder="Name your post" value="Spring AI Ethics Panel">
+          <textarea class="titleinput" id="post-title" rows="1" autocomplete="off" maxlength="80" enterkeyhint="done" placeholder="Name your post">Spring AI Ethics Panel</textarea>
           <span class="err">Name your post to continue</span></div>
           <div class="row mb16" style="justify-content:flex-start;gap:8px">
             <button class="chip" id="btn-ai" style="background:var(--indigo);color:#fff;border-color:var(--indigo)">✦ AI caption helper</button>
@@ -616,7 +631,7 @@ button.postrow{background:none;color:inherit;font:inherit}
       <section class="view" id="v-result" aria-label="Publishing result">
         <header class="top">
           <div class="ttl" style="padding-left:10px"><div class="ctx">Artificial Intelligence Club</div><div class="title">Create post</div></div>
-          <button class="icon" data-back="overview" aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+          <button class="icon" data-go="overview" aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
         </header>
         <div class="banner">Demo workspace · sample data, no live integrations</div>
         <div class="pad" id="result-body"></div>
@@ -633,7 +648,7 @@ button.postrow{background:none;color:inherit;font:inherit}
           <button class="icon" data-go="notifications" aria-label="Notifications"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 8a6 6 0 1 1 12 0c0 7 3 8 3 8H3s3-1 3-8"/><path d="M10 20a2 2 0 0 0 4 0"/></svg><span class="dot"></span></button>
         </header>
         <div class="banner">Demo workspace · sample data, no live integrations</div>
-        <div class="row pad" style="padding-bottom:8px"><div><h1 class="h1" id="ev-count">4 events this month</h1><div class="cap" id="ev-going">9 people going so far</div></div><button class="btn pri" data-act="postEvent">Post event</button></div>
+        <div class="row pad" style="padding-bottom:8px"><div><h1 class="h1" id="ev-count">Upcoming events</h1><div class="cap" id="ev-going">9 people going so far</div></div><button class="btn pri" data-act="postEvent">Post event</button></div>
         <div class="chips mb12" role="group" aria-label="Filter events" id="ev-filter">
           <button class="chip" aria-pressed="true" data-f="all">All</button>
           <button class="chip" aria-pressed="false" data-f="club">Club meetings</button>
@@ -670,9 +685,13 @@ const EVENTS=[
  {id:'e1',type:'workshop',mon:'NOV',day:'19',when:'Thu 6:30 PM',title:'Fall AI & Civic Tech Build Night',meta:'Thu Nov 19 · 6:30 PM · Room 402 + Zoom · Co-hosted with WSTEM',going:3,seats:35,img:PHOTOS[0].src,tag:'Workshop'},
  {id:'e2',type:'club',mon:'NOV',day:'18',when:'Wed 5:30 PM',title:'MSA Tea & Study Circle',meta:'Wed Nov 18 · 5:30 PM · Zoom',going:2,seats:20,img:PHOTOS[2].src,tag:'Club meeting'},
  {id:'e3',type:'club',mon:'NOV',day:'23',when:'Mon 10 PM',title:'Pre-Submission Office Hours',meta:'Mon Nov 23 · 10:00 PM · Zoom',going:2,seats:15,img:PHOTOS[1].src,tag:'Club meeting'},
- {id:'e4',type:'campus',mon:'DEC',day:'3',when:'Thu Dec 3',title:'Student Life Town Hall',meta:'Thu Dec 3 · 12:00 PM · 119 W 31st St + Zoom',going:2,seats:80,img:'',tag:'Campus event'}];
+ {id:'e4',type:'campus',mon:'DEC',day:'3',when:'Thu Dec 3',title:'Student Life Town Hall',meta:'Thu Dec 3 · 12:00 PM · 119 W 31st St + Zoom',going:2,seats:80,img:'',tag:'Campus event'},
+ {id:'e5',type:'club',mon:'NOV',day:'30',when:'Mon 7 PM',title:'AI Ethics Reading Group',meta:'Mon Nov 30 · 7:00 PM · Zoom',going:4,seats:25,img:PHOTOS[0].src,tag:'Club meeting'}];
 const NAV_LEAD=[['Workspace',[['Overview','overview'],['Club Announcements','announcements'],['Notifications','notifications']]],['Social Publishing',[['Create Post','create'],['Content Calendar','calendar'],['My Social Accounts','accounts'],['AI Assistant','assistant'],['Inbox','inbox'],['Analytics','analytics']]],['Club Community',[['Upcoming Events','events'],['Club Event Calendar','eventcal'],['Event Analytics','eventstats'],['Email Reminders','reminders'],['Club Forums','forums'],['Messaging Center','messaging'],['WhatsApp Group','whatsapp'],['Club Blog','blog'],['Project Tasks','tasks']]],['Administration',[['Club Dashboard','dashboard'],['Member Directory','members'],['Team Management','team'],['Account Requests','requests'],['Club Resources','resources'],['Campus Directory','directory'],['Settings','settings']]],['Account',[['Switch identity · Sign out','signin']]]];
-const EVAT={e1:'2026-11-19T18:30',e2:'2026-11-18T17:30',e3:'2026-11-23T22:00',e4:'2026-12-03T12:00'};
+const EVAT={e1:'2026-11-19T18:30',e2:'2026-11-18T17:30',e3:'2026-11-23T22:00',e4:'2026-12-03T12:00',e5:'2026-11-30T19:00'};
+function evAt(e){return new Date(e.at||EVAT[e.id])}
+function evPast(e){const d=evAt(e);return !isNaN(d)&&d.getTime()+2*36e5<Date.now()}
+function upcomingEvents(){return EVENTS.filter(e=>!evPast(e)).sort((a,b)=>evAt(a)-evAt(b))}
 const NAV_ADMIN=[['Student Life console',[['Console home','console'],['Clubs & Membership','clubsadmin'],['Account Requests','requests'],['Club Leaders','leaders'],['Social Accounts','socialadmin'],['Users & Access Control','users'],['Audit Logs','audit'],['Governance Reports','reports'],['Platform Settings','platform']]],['Account',[['Notifications','notifications'],['Switch identity · Sign out','signin']]]];
 const CONTRIB_NO=['accounts','analytics','eventstats','reminders','inbox','message','dashboard','members','team','requests','resources','directory','settings'];
 const NAV_CONTRIB=NAV_LEAD.filter(([h])=>h!=='Administration').map(([h,it])=>[h,it.filter(([,t])=>!CONTRIB_NO.includes(t))]);
@@ -683,12 +702,12 @@ const S={posts:[{title:'Build Night reminder',sub:'Instagram · Thu 9:00 AM',st:
 /* routing */
 const VIEWS=['welcome','signin','overview','create','schedule','result','events'];const ADMIN=['console','clubsadmin','requests','leaders','socialadmin','users','audit','reports','platform','notifications'];
 function go(v,push=true){if(S.persona==='contrib'&&CONTRIB_NO.includes(v)){toast('That’s for Club Leads and Editors.');v='overview'}const dyn=typeof D!=='undefined'&&D[v];if(!VIEWS.includes(v)&&!dyn)v='welcome';$('#phone').classList.toggle('blue',v==='welcome');if(S.persona==='admin'&&VIEWS.includes(v)&&v!=='signin'&&v!=='welcome')S.persona='lead';const prev=S.view;S.view=v;$$('.view').forEach(x=>{x.classList.toggle('on',dyn?x.id==='v-dyn':x.id==='v-'+v);x.classList.remove('in-fwd','in-back')});if(prev&&prev!==v){const el=$(dyn?'#v-dyn':'#v-'+v);void el.offsetWidth;el.classList.add(S.dir==='back'?'in-back':'in-fwd')}S.dir='fwd';if(dyn)render();$('#ws').closest('.field').style.display=S.persona==='admin'?'none':'';$('#ws').closest('.field').previousElementSibling.textContent=S.persona==='admin'?'Student Life · all clubs':'Active club workspace';$('#screen').scrollTop=0;try{window.scrollTo(0,0);document.documentElement.scrollLeft=0;document.body.scrollLeft=0}catch(e){}$('#phone').scrollTop=0;closeAll();
- if(v==='overview')renderOverview();if(v==='events')renderEvents();if(v==='schedule')renderSchedule();
+ if(v==='overview')renderOverview();if(v==='create')setTimeout(fitTitle,0);if(v==='events'){renderEvents();const f=$('#ev-filter');if(f)f.scrollLeft=0}if(v==='schedule')renderSchedule();
  if(push&&location.hash!=='#'+v){try{history.replaceState(null,'','#'+v)}catch(e){location.hash=v}}renderNav();
  const h=document.querySelector('#v-'+(dyn?'dyn':v)+' .title, #v-'+(dyn?'dyn':v)+' h1');if(h){h.setAttribute('tabindex','-1');h.focus({preventScroll:true});}}
 window.addEventListener('hashchange',()=>go(location.hash.slice(1),false));
 document.addEventListener('click',e=>{const bk=e.target.closest('[data-back],[aria-label^="Back"],[aria-label="Close"]');S.dir=bk?'back':'fwd';const g=e.target.closest('[data-go]');if(g){if(g.dataset.persona){if(g.dataset.persona!==S.persona){S.persona=g.dataset.persona;resetPost()}recountUnread()}if(g.dataset.go==='create'&&!['create','schedule','result'].includes(S.view)){closeAll();openStudio();return}go(g.dataset.go);return}
- const b=e.target.closest('[data-back]');if(b){go(b.dataset.back);return}
+ const b=e.target.closest('[data-back]');if(b){goBack(b.dataset.back);return}
  const s=e.target.closest('[data-soon]');if(s){toast('Not part of this demo yet');return}
  if(e.target.closest('[data-menu]'))openDrawer();});
 
@@ -737,7 +756,7 @@ function swapOut(btn,done){if(!btn||matchMedia('(prefers-reduced-motion: reduce)
 let tt;function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('on');clearTimeout(tt);tt=setTimeout(()=>t.classList.remove('on'),2400)}
 
 /* drawer & sheet */
-function openDrawer(){renderNav();const nv=$('#nav');nv.scrollTop=0;setTimeout(()=>{const c=nv.querySelector('.cur');if(c&&c.offsetTop>nv.clientHeight-60)c.scrollIntoView({block:'center'})},30);$('#drawer').classList.add('on');$('#drawer').setAttribute('aria-hidden','false');$('#scrim').classList.add('on');setTimeout(()=>{$('#drawer-close').focus({preventScroll:true})},50)}
+function openDrawer(){S.navOpen={};renderNav();const nv=$('#nav');nv.scrollTop=0;setTimeout(()=>{const c=nv.querySelector('.cur');if(c&&c.offsetTop>nv.clientHeight-60)c.scrollIntoView({block:'center'})},30);$('#drawer').classList.add('on');$('#drawer').setAttribute('aria-hidden','false');$('#scrim').classList.add('on');setTimeout(()=>{$('#drawer-close').focus({preventScroll:true})},50)}
 function openSheet(html){const ae=document.activeElement;if(ae&&ae.blur&&ae.matches&&ae.matches('input,textarea,select'))ae.blur();const s=$('#sheet');s.innerHTML='<div class="grab"></div>'+html;s.classList.add('on');s.setAttribute('aria-hidden','false');$('#scrim').classList.add('on');setTimeout(()=>{const f=s.querySelector('button');f&&f.focus({preventScroll:true});$('#phone').scrollTop=0},60)}
 function closeAll(){$('#drawer').classList.remove('on');$('#drawer').setAttribute('aria-hidden','true');$('#sheet').classList.remove('on');$('#sheet').setAttribute('aria-hidden','true');$('#scrim').classList.remove('on')}
 $('#scrim').onclick=closeAll;$('#drawer-close').onclick=closeAll;
@@ -746,7 +765,7 @@ function renderNav(){const NAV=S.persona==='admin'?NAV_ADMIN:S.persona==='contri
  S.navOpen=S.navOpen||{};const secs=NAV.filter(([h])=>h!=='Account');
  $('#nav').innerHTML=secs.map(([hd,items],i)=>{const hasCur=items.some(([,t])=>curOf(t));if(S.navOpen[hd]===undefined||(hasCur&&S.navSeen!==S.view))S.navOpen[hd]=hasCur||!!S.navOpen[hd];const open=!!S.navOpen[hd];
   return '<div class="acc"><button class="acc-h" aria-expanded="'+open+'" aria-controls="acc'+i+'" data-acc="'+hd+'"><span>'+hd+'<span class="ct">'+items.length+'</span></span><span class="pm" aria-hidden="true"></span></button><div class="acc-p" id="acc'+i+'"><div class="acc-in"><div>'+items.map(([n,t])=>{const cur=curOf(t);return '<button class="navitem'+(cur?' cur':'')+'" data-go="'+t+'"'+(cur?' aria-current="page"':'')+'><span>'+n+'</span></button>'}).join('')+'</div></div></div></div>'}).join('')+
- '<div class="navfoot">'+(S.persona==='admin'?'<button class="btn sec block mb8" data-go="notifications">Notifications</button>':'')+'<button class="btn txt block" data-go="signin">Switch identity · Sign out</button></div>';S.navSeen=S.view;}
+ '<div class="navfoot">'+(S.persona==='admin'?'<button class="btn sec block mb8" data-go="notifications">Notifications</button>':'')+'<div class="two"><button class="btn sec" data-act="switchWho">Switch person</button><button class="btn txt" data-act="signOut">Sign out</button></div></div>';S.navSeen=S.view;}
 document.addEventListener('click',e=>{const a=e.target.closest('[data-acc]');if(a){S.navOpen[a.dataset.acc]=a.getAttribute('aria-expanded')!=='true';a.setAttribute('aria-expanded',S.navOpen[a.dataset.acc])}});
 $('#ws').onchange=e=>{toast('Switching clubs isn’t part of this demo. Staying in AI Club.');e.target.value='Artificial Intelligence Club'};
 
@@ -757,11 +776,11 @@ $('#signin-form').onsubmit=e=>{e.preventDefault();const v=$('#email').value.trim
 function greeting(){const h=new Date().getHours();return h<12?'Good morning':h<18?'Good afternoon':'Good evening'}
 function renderOverview(){const ct=S.persona==='contrib';$('#greet').textContent=greeting()+', '+(ct?'Sofia':'Aisha');$('#ov-role').textContent=(ct?'Contributor':'Club Lead')+' · Fall 2026';renderReview();
  const sch=S.posts.filter(p=>p.st==='Scheduled').length,mine=S.queue.filter(q=>q.to===LEAD).length,inrev=S.posts.filter(p=>p.st==='In review').length,chg=S.posts.filter(p=>p.st==='Changes asked').length,dr=S.posts.filter(p=>p.st==='Draft').length,pl=(n,w)=>n+' '+w+(n===1?'':'s');
- $('#ov-summary').textContent=ct?(inrev?pl(inrev,'post')+' in review':'Nothing in review')+(chg?', '+chg+' need'+(chg===1?'s':'')+' your changes.':'.'):pl(sch,'post')+' scheduled this week, '+mine+' waiting for your review'+(dr?', '+pl(dr,'draft'):'')+'.';
- $('#tile-cal').textContent=(sch+2)+' this week';
- $('#ov-events').innerHTML=EVENTS.slice(0,3).map(ev=>'<button class="ev-mini" data-go="events"><div class="ph" style="background-image:url('+ev.img+')"><span class="datechip">'+ev.when+'</span></div><b>'+ev.title+'</b><span>'+ev.meta.split(' · ').slice(2).join(' · ')+'</span></button>').join('');
- $('#ov-tiles').innerHTML=ct?'<button class="tile" data-go="calendar"><b>Content calendar</b><span id="tile-cal">'+(sch+2)+' this week</span></button><button class="tile" data-go="assistant"><b>AI Assistant</b><span>Draft ideas</span></button><button class="tile" data-go="notifications"><b>Notifications'+(S.unread?'<span class="count">'+S.unread+'</span>':'')+'</b><span>'+(S.unread?S.unread+' new':'All caught up')+'</span></button>'
-  :'<button class="tile" data-go="calendar"><b>Content calendar</b><span id="tile-cal">'+(sch+2)+' this week</span></button><button class="tile" data-go="accounts"><b>My accounts</b><span>2 connected</span></button><button class="tile" data-go="inbox"><b>Inbox<span class="count">2</span></b><span>2 new</span></button>';
+ $('#ov-summary').textContent=ct?(inrev?pl(inrev,'post')+' in review':'Nothing in review')+(chg?', '+chg+' need'+(chg===1?'s':'')+' your changes.':'.'):pl(sch,'post')+' scheduled, '+mine+' waiting for your review'+(dr?', '+pl(dr,'draft'):'')+'.';
+ const wk=weekCount();$('#tile-cal').textContent=wk+' this week';
+ const UP=upcomingEvents();$('#ov-events').innerHTML=UP.length?UP.slice(0,3).map(ev=>'<button class="ev-mini" data-go="events"><div class="ph" style="background-image:url('+ev.img+')"><span class="datechip">'+ev.when+'</span></div><b>'+ev.title+'</b><span>'+ev.meta.split(' · ').slice(2).join(' · ')+'</span></button>').join(''):'<div class="card pad" style="flex:1;text-align:center"><b style="color:var(--indigo)">No upcoming events</b><p class="cap mt8">Post one so members can RSVP.</p></div>';
+ $('#ov-tiles').innerHTML=ct?'<button class="tile" data-go="calendar"><b>Content calendar</b><span id="tile-cal">'+wk+' this week</span></button><button class="tile" data-go="assistant"><b>AI Assistant</b><span>Draft ideas</span></button><button class="tile" data-go="notifications"><b>Notifications'+(S.unread?'<span class="count">'+S.unread+'</span>':'')+'</b><span>'+(S.unread?S.unread+' new':'All caught up')+'</span></button>'
+  :'<button class="tile" data-go="calendar"><b>Content calendar</b><span id="tile-cal">'+wk+' this week</span></button><button class="tile" data-go="accounts"><b>My accounts</b><span>2 connected</span></button><button class="tile" data-go="inbox"><b>Inbox<span class="count">2</span></b><span>2 new</span></button>';
  $('#ov-posts-h').textContent=ct?'Your posts':'Scheduled posts';
  const list=ct?S.posts.filter(p=>p.mine):S.posts;S.ovList=list;
  $('#ov-posts').innerHTML=list.length?list.map((p,i)=>'<button class="postrow" type="button" data-post="'+i+'"><div class="thumb" style="'+(p.img?'background-image:url('+p.img+')':'')+'"></div><div class="t"><b>'+esc(p.title)+'</b><span class="cap">'+esc(p.sub)+'</span></div><span class="pill '+pillCls(p.st)+'">'+p.st+'</span></button>').join(''):'<p class="cap pad">No posts yet. Tap Create post to start one.</p>';
@@ -779,7 +798,9 @@ const copy=$('#copy');
 function words(){const v=copy.value.trim();return v?v.split(/\s+/).length:0}
 copy.oninput=()=>{const w=words(),c=$('#copy-count');c.textContent=w.toLocaleString()+' / 500 words';c.classList.toggle('over',w>500);if(w<=500)$('#f-copy').classList.remove('bad');autosave()};
 $('#alt').oninput=()=>{$('#f-alt').classList.remove('bad');autosave()};
-$('#post-title').addEventListener('input',()=>{$('#f-title').classList.remove('bad');autosave()});
+function fitTitle(){const t=$('#post-title');t.style.height='auto';t.style.height=(t.scrollHeight+t.offsetHeight-t.clientHeight)+'px'}
+$('#post-title').addEventListener('input',()=>{$('#f-title').classList.remove('bad');fitTitle();autosave()});
+$('#post-title').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();e.target.blur()}});
 /* autosave: like Gmail. A draft row appears in Overview; "Saved" shows in the header; one toast the first time */
 let asT;function autosave(){if(S.view!=='create')return;clearTimeout(asT);asT=setTimeout(()=>{if(S.view!=='create')return;const tt=$('#post-title').value.trim();if(!tt&&!copy.value.trim())return;
  let d=S.draft;if(!d||!S.posts.includes(d)){d=S.draft={title:'',sub:'Draft · saved automatically',st:'Draft',img:'',mine:S.persona==='contrib'};S.posts.push(d)}d.title=tt||'Untitled post';d.img=S.photo?S.photo.src:'';
@@ -907,7 +928,7 @@ function doPublish(){const data=snap();dropDraft();S.editing=null;const t=$('#po
  const igFail=S.acct.ig&&S.photo&&S.photo.type&&S.photo.type!=='image/jpeg';
  const rows=[];if(S.acct.fb)rows.push(['Facebook Page','@cunyspsaiclub',S.when==='now'?'Published':'Scheduled',true]);
  if(S.acct.ig)rows.push(['Instagram','@cunysps.ai',igFail?'Failed':(S.when==='now'?'Published':'Scheduled'),!igFail]);
- DEST.filter(([k])=>S.dest[k]).forEach(([k,n,sub])=>rows.push([n,sub,'Shared',true]));
+ DEST.filter(([k])=>S.dest[k]).forEach(([k,n,sub])=>rows.push([n,sub,S.when==='now'?'Shared':'Scheduled',true]));
  const okNames=rows.filter(r=>r[3]).map(r=>r[0]==='Facebook Page'?'Facebook':r[0]);
  if(okNames.length)S.posts.unshift({day:dayOf(),data,title:t,sub:okNames.join(' + ')+' · '+(S.when==='now'?'Just now':when),st:S.when==='now'?'Published':'Scheduled',img:S.photo?S.photo.src:''});
  if(igFail)S.posts.unshift({title:t,sub:'Instagram · image must be JPEG',st:'Needs fix',img:S.photo.src});
@@ -977,25 +998,57 @@ function renderReview(){const el=$('#ov-review');if(!el)return;
 /* events */
 $$('#ev-filter .chip').forEach(c=>c.onclick=()=>{S.filter=c.dataset.f;$$('#ev-filter .chip').forEach(x=>x.setAttribute('aria-pressed',x===c));renderEvents()});
 function squishAtt(){if(!S.justAtt)return;$$('[data-att="'+S.justAtt+'"]').forEach(b=>{b.classList.add('squish')});S.justAtt=null}
-function renderEvents(){setTimeout(squishAtt,0);const list=EVENTS.filter(e=>S.filter==='all'||e.type===S.filter);
+function renderEvents(){setTimeout(squishAtt,0);const all=EVENTS.filter(e=>S.filter==='all'||e.type===S.filter),list=all.filter(e=>!evPast(e)).sort((a,b)=>evAt(a)-evAt(b)),past=all.filter(evPast).sort((a,b)=>evAt(b)-evAt(a));
+ const nUp=upcomingEvents().length;$('#ev-count').textContent=nUp+' upcoming event'+(nUp===1?'':'s');
+ const PAST=past.length?'<h2 class="h2 mt16 mb8">Past events</h2>'+past.map(e=>'<article class="card evpast"><div class="evrow"><div class="ph'+(e.img?'':' noimg')+'" style="'+(e.img?'background-image:url('+e.img+')':'')+'">'+(e.img?'':'Student Life')+'</div><div style="flex:1;min-width:0"><b>'+e.title+'</b><div class="cap mb8">'+e.meta+'</div><div class="row"><span class="pill">'+e.tag+'</span><span class="pill cream">'+(S.checked[e.id]?'You checked in':'Ended')+'</span></div></div></div></article>').join(''):'';
+ if(!list.length&&past.length){$('#ev-list').innerHTML='<div class="card pad" style="text-align:center"><b style="color:var(--indigo)">No upcoming events</b><p class="cap mt8">Post an event so members can RSVP.</p></div>'+PAST;return}
  const going=EVENTS.reduce((n,e)=>n+e.going+(S.attending[e.id]?1:0),0);$('#ev-going').textContent=going+' people going so far';
  if(!list.length){$('#ev-list').innerHTML='<div class="card pad" style="text-align:center"><b style="color:var(--indigo)">No events here yet</b><p class="cap mt12">Try another filter, or post an event for your club.</p></div>';return}
  const [h,...rest]=list;
  $('#ev-list').innerHTML='<article class="card evhero"><div class="ph'+(h.img?'':' noimg')+'" style="'+(h.img?'background-image:url('+h.img+')':'')+'">'+(h.img?'':'<span>CUNY SPS<br>Student Life</span>')+'<div class="dateblock"><small>'+h.mon+'</small><strong>'+h.day+'</strong></div></div><div class="pad"><h2 class="h2 mb8">'+h.title+'</h2><p class="cap mb8">'+h.meta+'</p><div class="row mb12" style="justify-content:flex-start;gap:8px"><span class="avs"><i style="background:var(--mint)"></i><i style="background:var(--thistle)"></i><i style="background:var(--sky)"></i>'+(S.attending[h.id]?'<i class="me"></i>':'')+'</span><span class="cap">'+(h.going+(S.attending[h.id]?1:0))+' going · '+h.seats+' seats</span></div>'+
   '<div class="row" style="justify-content:flex-start;gap:8px"><button class="btn '+(S.attending[h.id]?'pri':'sec')+'" data-att="'+h.id+'" aria-pressed="'+!!S.attending[h.id]+'">'+(S.attending[h.id]?'✓ Attending':'Attend')+'</button><button class="btn sec" data-chk="'+h.id+'">'+(S.checked[h.id]?'Checked in':'Check-in')+'</button><button class="btn txt" data-more="'+h.id+'">More</button></div></div></article>'+
-  rest.map(e=>'<article class="card"><div class="evrow"><div class="ph'+(e.img?'':' noimg')+'" style="'+(e.img?'background-image:url('+e.img+')':'')+'">'+(e.img?'':'Student Life')+'</div><div style="flex:1;min-width:0"><b>'+e.title+'</b><div class="cap mb8">'+e.meta+'</div><div class="row"><span class="pill">'+e.tag+'</span><button class="chip" data-att="'+e.id+'" aria-pressed="'+!!S.attending[e.id]+'">'+(S.attending[e.id]?'✓ Going':'Attend')+'</button></div></div></div></article>').join('');
+  rest.map(e=>'<article class="card"><div class="evrow"><div class="ph'+(e.img?'':' noimg')+'" style="'+(e.img?'background-image:url('+e.img+')':'')+'">'+(e.img?'':'Student Life')+'</div><div style="flex:1;min-width:0"><b>'+e.title+'</b><div class="cap mb8">'+e.meta+'</div><div class="row"><span class="pill">'+e.tag+'</span><button class="chip" data-att="'+e.id+'" aria-pressed="'+!!S.attending[e.id]+'">'+(S.attending[e.id]?'✓ Going':'Attend')+'</button></div></div></div></article>').join('')+PAST;
  $$('[data-att]').forEach(b=>b.onclick=()=>{const id=b.dataset.att;swapOut(b,()=>{S.attending[id]=!S.attending[id];S.justAtt=S.attending[id]?id:null;swapNext('[data-att="'+id+'"]');toast(S.attending[id]?'You’re going. Added to your calendar.':'RSVP removed');renderEvents()})});
  $$('[data-chk]').forEach(b=>b.onclick=()=>{const id=b.dataset.chk;const ev=EVENTS.find(e=>e.id===id);
   openSheet('<h2 class="h2 mb8">Check in · officer view</h2><p class="cap mb12">'+ev.title+'</p><div class="card pad mb12" style="text-align:center"><div style="width:150px;height:150px;margin:0 auto 10px;background:repeating-linear-gradient(45deg,var(--indigo) 0 6px,#fff 6px 12px);border-radius:12px" aria-label="Sample check-in code"></div><p class="cap">Attendees scan this code at the door. Sample only.</p></div><button class="btn pri block" id="self-chk">Check myself in</button>');
-  $('#self-chk').onclick=()=>{S.checked[id]=true;closeAll();swapNext('[data-chk="'+id+'"]');toast('Checked in. Attendance recorded for officers.');renderEvents()}});
- $$('[data-more]').forEach(b=>b.onclick=()=>openSheet('<h2 class="h2 mb12">More actions</h2>'+['Add to calendar (.ics)','Share event','Create a post about this event','Message attendees','Edit event'].map((t,i)=>'<button class="navitem" '+(i===2?'id="mk-post"':i===0?'data-act="ics"':i===1?'data-act="shareEv"':i===3?'data-go="messaging"':'data-soon="x"')+'>'+t+'</button>').join('')),0);
+  $('#self-chk').onclick=()=>{S.checked[id]=true;S.attending[id]=true;closeAll();swapNext('[data-chk="'+id+'"]');toast('Checked in. Attendance recorded for officers.');renderEvents()}});
+ $$('[data-more]').forEach(b=>b.onclick=()=>{const id=b.dataset.more;openSheet('<h2 class="h2 mb12">More actions</h2>'+[['Add to calendar','data-act="evIcs" data-v="'+id+'"'],['Share event','data-act="shareEv"'],['Create a post about this event','id="mk-post"'],['Message attendees','data-act="evMsg" data-v="'+id+'"'],['Edit event','data-act="evEdit" data-v="'+id+'"']].map(([t,a])=>'<button class="navitem" '+a+'>'+t+'</button>').join(''))},0);
  const mk=()=>{const m=$('#mk-post');if(m)m.onclick=()=>{resetPost();$('#post-title').value=h.title;$('#rel-event').value=h.id;setPhoto(PHOTOS.find(p=>p.src===h.img)||null);go('create')}};
  document.querySelectorAll('[data-more]').forEach(b=>b.addEventListener('click',()=>setTimeout(mk,0)));}
+
+/* ---------- back navigation (v16): back link under the header, Safari swipe, home-screen app edge swipe ---------- */
+S.stack=[];
+const AUTHV=['welcome','signin'];
+function resolveV(v){if(S.persona==='contrib'&&CONTRIB_NO.includes(v))return 'overview';const dyn=typeof D!=='undefined'&&D[v];return (!VIEWS.includes(v)&&!dyn)?'welcome':v}
+const _go=go;
+go=function(v,mode){const to=resolveV(v),from=S.view;
+ if(mode!=='back'&&mode!==false&&from&&from!==to){
+  if(AUTHV.includes(to)||AUTHV.includes(from))S.stack=[];
+  else if(from!=='result'){const t=(($('#'+(VIEWS.includes(from)?'v-'+from:'v-dyn')+' .top .title')||{}).textContent||'').trim();S.stack.push({v:from,t,y:$('#screen').scrollTop,f:Object.assign({},S.f)})}
+  if(to==='result')S.stack=S.stack.filter(e=>e.v!=='create'&&e.v!=='schedule');
+  try{history.pushState({hub:1},'','#'+to)}catch(e){}}
+ _go(v,mode);
+ if(mode==='back'&&S.backY){const y=S.backY;S.backY=0;requestAnimationFrame(()=>{$('#screen').scrollTop=y})}
+ updateBack()};
+function popBack(){const e=S.stack.pop();if(!e)return;if(e.f)S.f=e.f;S.dir='back';S.backY=e.y;go(e.v,'back')}
+window.addEventListener('popstate',()=>{if(S.pendingBack){S.pendingBack=false;popBack();return}if(S.stack.length)popBack()});
+function goBack(fb){if(S.stack.length){S.pendingBack=true;try{history.back()}catch(e){}setTimeout(()=>{if(S.pendingBack){S.pendingBack=false;popBack()}},400)}else if(fb){S.dir='back';go(fb,'back')}}
+const CHEV='<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>';
+function updateBack(){const top=$('#'+(VIEWS.includes(S.view)?'v-'+S.view:'v-dyn')+' .top');if(!top||!top.querySelector('[data-menu]'))return;const ctx=top.querySelector('.ctx');if(!ctx)return;
+ if(ctx.dataset.orig===undefined)ctx.dataset.orig=ctx.innerHTML;const e=S.stack[S.stack.length-1];
+ ctx.innerHTML=e?'<button class="backlink" type="button" data-back="'+e.v+'" aria-label="Back to '+esc(e.t||'the previous screen')+'">'+CHEV+esc(e.t||'Back')+'</button>':ctx.dataset.orig}
+(function(){const ph=$('#phone'),ind=document.createElement('div');ind.id='edgeback';ind.setAttribute('aria-hidden','true');ind.innerHTML=CHEV.replace(/14/g,'18');ph.appendChild(ind);
+ const app=navigator.standalone===true||(window.matchMedia&&matchMedia('(display-mode: standalone)').matches)||/[?&]swipe=1/.test(location.search);if(!app)return;
+ let x0=null,y0=0,dx=0;const reset=()=>{x0=null;ind.style.transform='';ind.classList.remove('go')};
+ document.addEventListener('touchstart',e=>{const t=e.touches[0],r=ph.getBoundingClientRect();if(e.touches.length!==1||t.clientX-r.left>24||!S.stack.length||$('.sheet.on')||$('.drawer.on')||ph.classList.contains('typing-on'))return;x0=t.clientX;y0=t.clientY;dx=0},{passive:true});
+ document.addEventListener('touchmove',e=>{if(x0===null)return;const t=e.touches[0];dx=t.clientX-x0;if(Math.abs(t.clientY-y0)>50&&dx<40){reset();return}ind.style.transform='translateX('+Math.max(0,Math.min(dx,100))+'px)';ind.classList.toggle('go',dx>80)},{passive:true});
+ document.addEventListener('touchend',()=>{if(x0===null)return;const ok=dx>80;reset();if(ok)goBack()});
+ document.addEventListener('touchcancel',reset)})();
 
 /* init */
 setPhoto(PHOTOS[0]);$('#alt').value='Students talking together outside on a CUNY campus';
 </script>
-<script src="js/screens.js?v=20261120-15"></script>
-<script>go(location.hash.slice(1)||'welcome',false);</script>
+<script src="js/screens.js?v=20261121-16"></script>
+<script>try{history.replaceState({hub:1},'',location.hash||'#welcome')}catch(e){}go(location.hash.slice(1)||'welcome',false);</script>
 </body>
 </html>
