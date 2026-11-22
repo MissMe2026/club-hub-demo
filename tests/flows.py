@@ -63,7 +63,7 @@ async def blur(pg):
     return st
 
 async def to_create(pg):
-    await tap(pg, 'text=Get started'); await tap(pg, 'text=Enter demo workspace'); await tap(pg, '#v-overview >> text=Create post', 600); await tap(pg, '#studio-go', 500)
+    await tap(pg, '.sp-enter'); await tap(pg, '.ch-role[data-persona="lead"]'); await tap(pg, '#v-overview >> text=Create post', 600); await tap(pg, '#studio-go', 500)
     check((await state(pg))['view'] == 'v-create', 'reached Create post')
 
 async def shot(pg, name): await pg.screenshot(path=f'{OUT}/{name}.png')
@@ -159,9 +159,8 @@ async def flow3(b):
 async def flow4(b):
     print('F4 related event, autosaved draft, event -> create post, sign-in field')
     pg = await new_page(b)
-    await tap(pg, 'text=Get started')
-    await focus_field(pg, '#email', 'F4 sign-in email'); await blur(pg)
-    await tap(pg, 'text=Enter demo workspace'); await tap(pg, '#v-overview >> text=Create post', 600); await tap(pg, '#studio-go', 500)
+    await tap(pg, '.sp-enter')
+    await tap(pg, '.ch-role[data-persona="lead"]'); await tap(pg, '#v-overview >> text=Create post', 600); await tap(pg, '#studio-go', 500)
     await pg.select_option('#rel-event', 'e2'); await pg.wait_for_timeout(200)
     await tap(pg, '#btn-ai'); txt = await pg.inner_text('#aiopts'); check('Wed Nov 18' in txt, 'F4 drafts use related event')
     await tap(pg, '#aiopts .aiopt:nth-child(3)', 800)
@@ -179,7 +178,7 @@ async def flow4(b):
 
 async def flow5(b):
     print('F5 every screen loads; every text field on every screen behaves; chat bars stay visible')
-    pg = await new_page(b); await tap(pg, 'text=Get started'); await tap(pg, 'text=Enter demo workspace')
+    pg = await new_page(b); await tap(pg, '.sp-enter'); await tap(pg, '.ch-role[data-persona="lead"]')
     keys = await pg.evaluate('Object.keys(D)')
     for k in keys:
         try: await pg.evaluate(f"go('{k}')")
@@ -221,7 +220,7 @@ async def flow6(b):
 async def flow7(b):
     print('F7 v12 Create post: where are you posting, dictate, word limit, CTA, hashtags, AI alt, flyer layouts, preview arrows')
     pg = await new_page(b)
-    await tap(pg, 'text=Get started'); await tap(pg, 'text=Enter demo workspace')
+    await tap(pg, '.sp-enter'); await tap(pg, '.ch-role[data-persona="lead"]')
     await tap(pg, '#v-overview >> text=Create post', 600)
     check(await pg.evaluate("document.querySelector('#sheet').classList.contains('on')") and 'Where are you posting' in await pg.inner_text('#sheet'), 'F7 Create post opens Where are you posting?')
     check(await pg.inner_text('#soc-n') == '2 selected', 'F7 Facebook + Instagram on by default')
@@ -280,7 +279,7 @@ async def flow7(b):
 async def flow8(b):
     print('F8 roles: Contributor submits for review, Lead sees it, approves / asks for changes; preview arrows with 2 platforms')
     pg = await new_page(b)
-    await tap(pg, 'text=Get started'); await tap(pg, '[data-persona="contrib"]', 600)
+    await tap(pg, '.sp-enter'); await tap(pg, '[data-persona="contrib"]', 600)
     check('Sofia' in await pg.inner_text('#greet') and 'Contributor' in await pg.inner_text('#ov-role'), 'F8 Contributor overview')
     check(await pg.inner_text('#ov-review') == '', 'F8 Contributor has no review queue')
     await tap(pg, '#v-overview >> text=Create post', 600); await tap(pg, '#studio-go', 600)
@@ -341,7 +340,7 @@ async def flow8(b):
 async def flow9(b):
     print('F9 v12 fixes: dates, after-event warning, flyer placeholders, hashtags, menus, view post, fresh choices, no jumps')
     pg = await new_page(b)
-    await tap(pg, 'text=Get started'); await tap(pg, '[data-persona="contrib"]', 600)
+    await tap(pg, '.sp-enter'); await tap(pg, '[data-persona="contrib"]', 600)
     await pg.evaluate("openDrawer()"); await pg.wait_for_timeout(400)
     nav = await pg.inner_text('#nav'); check('Administration' not in nav and 'My Social Accounts' not in nav and 'Analytics' not in nav, 'F9 Contributor menu trimmed')
     await pg.evaluate("closeAll()"); await pg.wait_for_timeout(300)
@@ -400,7 +399,7 @@ async def flow9(b):
 async def flow10(b):
     print('F10 v13 phone review fixes: title style, flyer picker memory, long details, AI wording, alt confirm, approve now, calendar, roles, open posts')
     pg = await new_page(b)
-    await tap(pg, 'text=Get started'); await tap(pg, 'text=Enter demo workspace', 600)
+    await tap(pg, '.sp-enter'); await tap(pg, '.ch-role[data-persona="lead"]', 600)
     # posts open from Overview
     await tap(pg, '#ov-posts [data-post="0"]', 600)
     check(await pg.evaluate("document.querySelector('#sheet').classList.contains('on')"), 'F10 a post on Overview opens')
@@ -463,7 +462,7 @@ async def flow10(b):
 async def flow11(b):
     print('F11 v15 mobile polish: tap flash, double-tap zoom, hover, sheet scroll, keyboards, return keys')
     pg = await new_page(b)
-    await tap(pg, 'text=Get started'); await tap(pg, 'text=Enter demo workspace', 600)
+    await tap(pg, '.sp-enter'); await tap(pg, '.ch-role[data-persona="lead"]', 600)
     g = await pg.evaluate("[getComputedStyle(document.querySelector('#v-overview .btn')).webkitTapHighlightColor, getComputedStyle(document.querySelector('#v-overview .btn')).touchAction, getComputedStyle(document.querySelector('.tile')).touchAction]")
     check(g[0] in ('rgba(0, 0, 0, 0)', 'transparent') and g[1] == 'manipulation' and g[2] == 'manipulation', f'F11 no tap flash / no double-tap zoom on buttons {g}')
     hv = await pg.evaluate("[...document.styleSheets].flatMap(s=>{try{return [...s.cssRules]}catch(e){return []}}).filter(r=>r.selectorText&&r.selectorText.includes(':hover')).length")
@@ -495,7 +494,7 @@ async def flow11(b):
 async def flow12(b):
     print('F12 v16: back navigation, events, result rows, title, directory, settings, menu, self in directory')
     pg = await new_page(b)
-    await tap(pg, 'text=Get started'); await tap(pg, 'text=Enter demo workspace', 600)
+    await tap(pg, '.sp-enter'); await tap(pg, '.ch-role[data-persona="lead"]', 600)
     check(await pg.locator('#v-overview .backlink').count() == 0, 'F12 no back link on first screen')
     await tap(pg, '#v-overview [data-go="events"] >> nth=0', 600)
     check((await state(pg))['view'] == 'v-events', 'F12 View all -> events')
@@ -576,7 +575,7 @@ async def flow13(b):
     async def h(): return await pg.evaluate(H)
     async def back(w=700): await pg.go_back(); await pg.wait_for_timeout(w)
     async def fwd(w=700): await pg.go_forward(); await pg.wait_for_timeout(w)
-    await tap(pg, 'text=Get started'); await tap(pg, 'text=Enter demo workspace', 900)
+    await tap(pg, '.sp-enter'); await tap(pg, '.ch-role[data-persona="lead"]', 900)
     x = await h(); check(x['v'] == 'overview' and x['hi'] == 0 and x['st']['i'] == 0, f'F13 signing in leaves nothing to swipe back into {x}')
     # stale forward entry (old sign-in screen) is ignored
     await fwd(); x = await h(); check(x['v'] == 'overview', f'F13 swipe forward after sign-in stays on Overview {x}')
@@ -660,11 +659,109 @@ async def flow14(b):
     await blur(pg)
     check(not pg.errs, f'F14 errors {pg.errs}'); await pg.context.close()
 
+async def swipe_edge(pg, native=False):
+    """Simulate the home-screen edge swipe. native=True also does what newer iOS does on its own (one history.back)."""
+    await pg.evaluate("""(native)=>{const ph=document.querySelector('#phone').getBoundingClientRect();const mk=(t,x)=>{const tc=new Touch({identifier:1,target:document.body,clientX:x,clientY:400});document.dispatchEvent(new TouchEvent(t,{touches:t==='touchend'?[]:[tc],changedTouches:[tc],bubbles:true}))};
+      mk('touchstart',ph.left+5);mk('touchmove',ph.left+60);mk('touchmove',ph.left+140);mk('touchend',ph.left+140);if(native)history.back()}""", native)
+    await pg.wait_for_timeout(900)
+
+async def flow15(b):
+    print('F15 v18: opening, sign-up walkthrough, swipe-back fix, search + people, drafts, blog edit, clubs, cleanups')
+    # opening + walkthrough
+    pg = await new_page(b)
+    check(await pg.is_visible('.sp-enter') and 'Version Nov 22 · 18' in await pg.inner_text('#v-welcome'), 'F15 splash with Enter demo + version')
+    await tap(pg, '.sp-enter'); check((await state(pg))['view'] == 'v-signin' and await pg.locator('.ch-role').count() == 3, 'F15 Choose shows 3 roles')
+    await tap(pg, '.ch-browse button', 500); check(await pg.evaluate('S.view') == 'public', 'F15 Browse club events opens the teaser')
+    await tap(pg, 'text=Pick a role and try the Hub', 500); check(await pg.evaluate('S.view') == 'signin', 'F15 teaser -> back to Choose')
+    await tap(pg, '.ch-back', 500); check(await pg.evaluate('S.view') == 'welcome', 'F15 Choose back -> splash')
+    for who, steps, land in [('lead', ['ob3','ob5','ob6','ob7','ob8','ob9','ob10'], 'overview'), ('admin', ['ob3','ob5','ob6','ob7','ob9','ob10'], 'console'), ('contrib', ['ob3','ob5','ob6','ob7','ob8','ob9','ob10'], 'overview')]:
+        await pg.evaluate("S.persona='lead';go('welcome')"); await pg.wait_for_timeout(300)
+        await tap(pg, '.sp-walk'); await tap(pg, f'[data-act=obPick][data-v={who}]', 600)
+        seen = [await pg.evaluate('S.view')]
+        await tap(pg, '[data-act=obLogin]'); await tap(pg, '#ob-cont', 500); seen.append(await pg.evaluate('S.view'))
+        if who == 'contrib': await pg.fill('#ob-first', 'Sofi')
+        await tap(pg, '[data-act=obName]', 500); seen.append(await pg.evaluate('S.view'))
+        await tap(pg, '[data-act=obGo]', 500); seen.append(await pg.evaluate('S.view'))
+        await tap(pg, '[data-act=obGo]', 500); seen.append(await pg.evaluate('S.view'))
+        if who != 'admin': await tap(pg, '[data-act=obGo]', 500); seen.append(await pg.evaluate('S.view'))
+        if who == 'contrib':
+            await pg.go_back(); await pg.wait_for_timeout(500); check(await pg.evaluate('S.view') == 'ob8', 'F15 swipe back inside the walkthrough goes one step'); await pg.go_forward(); await pg.wait_for_timeout(500)
+        await tap(pg, '[data-act=obNotif]', 500); seen.append(await pg.evaluate('S.view'))
+        check(seen == steps, f'F15 {who} walkthrough steps {seen}')
+        if who == 'contrib': check('Sofi!' in await pg.inner_text('.ob-yay'), 'F15 name people see carries to You’re in')
+        await tap(pg, '[data-act=obFinish]', 900)
+        check(await pg.evaluate('S.view') == land and await pg.evaluate('S.persona') == who and await pg.evaluate('S.hi') == 0, f'F15 {who} lands on {land} with nothing to swipe back into')
+    await tap(pg, '.sp-enter') if await pg.evaluate("S.view")=='welcome' else None
+    await pg.evaluate("go('welcome')"); await pg.wait_for_timeout(300); await tap(pg, '.sp-walk'); await tap(pg, '[data-act=obPick][data-v=lead]', 600); await tap(pg, '[data-act=obFinish]', 900)
+    check(await pg.evaluate('S.view') == 'overview' and await pg.evaluate('S.hi') == 0, 'F15 Skip intro -> Overview')
+    check(not pg.errs, f'F15 errors {pg.errs}'); await pg.context.close()
+    # swipe-back fix: edge swipe + iOS's own back must go back ONE step
+    pg = await new_page(b); await pg.goto(URL + '?swipe=1'); await pg.wait_for_timeout(500)
+    await tap(pg, '.sp-enter'); await tap(pg, '.ch-role[data-persona="lead"]', 600)
+    await tap(pg, '#v-overview >> text=Create post', 600); await tap(pg, '#studio-go', 500)
+    await pg.fill('#post-title', 'Swipe test'); await pg.fill('#copy', 'Hello'); await pg.evaluate("$('#copy').oninput()")
+    await pg.evaluate("go('schedule')"); await pg.wait_for_timeout(500)
+    await swipe_edge(pg, native=True)
+    check(await pg.evaluate('S.view') == 'create' and await pg.input_value('#post-title') == 'Swipe test', f"F15 iOS swipe + edge swipe from Preview -> editor, not Overview ({await pg.evaluate('S.view')})")
+    await pg.wait_for_timeout(600); check(await pg.evaluate('S.view') == 'create', 'F15 stays on the editor (no late second back)')
+    await pg.go_forward(); await pg.wait_for_timeout(500); check(await pg.evaluate('S.view') == 'schedule', 'F15 forward returns to Preview')
+    await swipe_edge(pg, native=False); check(await pg.evaluate('S.view') == 'create', 'F15 edge swipe alone still goes back one step')
+    await swipe_edge(pg, native=False); check(await pg.evaluate('S.view') == 'overview', 'F15 edge swipe from editor -> Overview')
+    await pg.go_forward(); await pg.wait_for_timeout(500); check(not await pg.is_visible('#sheet.on'), 'F15 forward never reopens an old Where are you posting? sheet')
+    check(not pg.errs, f'F15 swipe errors {pg.errs}'); await pg.context.close()
+    # search, person card, drafts, notifications, blog edit
+    pg = await new_page(b); await tap(pg, '.sp-enter'); await tap(pg, '.ch-role[data-persona="lead"]', 600)
+    await tap(pg, '#v-overview [aria-label=Search]', 500); check(await pg.evaluate('S.view') == 'search', 'F15 Search icon opens Search')
+    await pg.locator('#sq').fill('ethics'); await pg.wait_for_timeout(300); r = await pg.inner_text('#sres')
+    check(all(x in r for x in ['People', 'Events', 'Posts', 'Blog', 'Devon Brooks', 'Sofia Patel', 'AI Ethics Reading Group']), f'F15 search groups {r[:200]}')
+    await pg.locator('#sq').fill('club lead'); await pg.wait_for_timeout(300); check('Aisha Rahman' in await pg.inner_text('#sres'), 'F15 role search finds Club Leads')
+    await pg.locator('#sq').fill('sofia'); await pg.wait_for_timeout(300); await tap(pg, '#sres [data-act=person]', 500)
+    t = await pg.inner_text('#sheet'); check('Message' in t and 'Change role' in t and 'Spring AI Ethics Panel' in t, f'F15 person card {t[:150]}')
+    await tap(pg, '#pc-role', 400); await tap(pg, '#rp [data-r=Editor]', 200); await tap(pg, '#rp-save', 500)
+    check('Editor' in [m['r'] for m in await pg.evaluate('S.members') if m['n']=='Sofia Patel'][0], 'F15 Change role saves')
+    await pg.evaluate("go('members')"); await pg.wait_for_timeout(400); await tap(pg, '#mlist [data-act=member] >> nth=1', 400)
+    await tap(pg, '#pc-msg', 400); await pg.fill('#pm-t', 'Hi Devon'); await blur(pg); await tap(pg, '#pm-send', 400)
+    check('Message sent to Devon Brooks' in await pg.inner_text('#toast'), 'F15 Message from Member directory works')
+    await pg.evaluate("go('drafts')"); await pg.wait_for_timeout(400); d = await pg.inner_text('#v-dyn')
+    check('Office Hours recap' in d and 'What the AI Ethics Panel taught us' in d, 'F15 Drafts lists post + blog drafts')
+    nav = await pg.evaluate("NAV_LEAD[0][1].map(x=>x[1])"); check('drafts' in nav, 'F15 Drafts in the menu')
+    await tap(pg, '[data-act=editDraft]', 600); check(await pg.evaluate('S.view') == 'create' and await pg.input_value('#post-title') == 'Office Hours recap', 'F15 draft opens in the editor')
+    await pg.evaluate("go('notifications')"); await pg.wait_for_timeout(400); n = await pg.inner_text('#v-dyn')
+    check('Finish your draft?' in n, 'F15 draft reminder in Notifications')
+    await tap(pg, '[data-act=draftLater]', 400); check('Finish your draft?' not in await pg.inner_text('#v-dyn'), 'F15 Not now removes the reminder')
+    await pg.evaluate("go('blog')"); await pg.wait_for_timeout(400); await tap(pg, '[data-act=editBlog]', 500)
+    check(await pg.evaluate('S.view') == 'blogedit', 'F15 blog Edit opens Edit story')
+    await pg.locator('#be-title').fill('Five Civic Tech Prototypes in One Evening'); await pg.wait_for_timeout(200)
+    check(await pg.is_visible('#be-saved'), 'F15 Edit story shows Saved')
+    await tap(pg, '[data-act=beSave]', 700); check(await pg.evaluate('S.view') == 'blog' and 'Five Civic Tech Prototypes in One Evening' in await pg.inner_text('#v-dyn'), 'F15 Update story saves and returns')
+    v = await pg.inner_text('#v-dyn'); check('AI Club Blog' in v, 'F15 AI Club Blog name')
+    await pg.evaluate("go('assistant')"); await pg.wait_for_timeout(300); v = await pg.inner_text('#v-dyn'); check('Simulated' not in v and '✦ AI' in v, 'F15 AI Assistant: ✦ AI mark, no Simulated')
+    await pg.evaluate("go('analytics')"); await pg.wait_for_timeout(300); v = await pg.inner_text('#v-dyn'); check('Demo data' not in v and 'Oct 15 –' not in v, 'F15 analytics dates + no demo note')
+    await pg.evaluate("go('calendar')"); await pg.wait_for_timeout(300); check('Times in ET' in await pg.inner_text('#v-dyn'), 'F15 calendar ET')
+    h = await pg.evaluate("Math.round(document.querySelector('#v-dyn .chips .chip').getBoundingClientRect().height)"); check(h == 28, f'F15 compact chips {h}')
+    check(not pg.errs, f'F15 lead errors {pg.errs}'); await pg.context.close()
+    # admin: create + edit club, cleanups
+    pg = await new_page(b); await tap(pg, '.sp-enter'); await tap(pg, '.ch-role[data-persona="admin"]', 600)
+    v = await pg.inner_text('#v-dyn'); check('Super Admin' not in v, 'F15 Student Life admin name')
+    await tap(pg, '[data-act=createClub]', 400); await tap(pg, '#cl-go', 300); check(await pg.evaluate('S.clubs.length') == 4, 'F15 Create club needs a name')
+    await pg.fill('#cl-n', 'Data Science Society'); await tap(pg, '[data-cat=__o]', 300); await pg.fill('#cl-oth', 'Data & Analytics')
+    await pg.fill('[data-ln="0"]', 'jordan.lee@spsmail.cuny.edu'); await tap(pg, '#cl-add', 300); await pg.fill('[data-lt="1"]', 'Vice President'); await pg.fill('[data-ln="1"]', 'priya.n@gmail.com')
+    await blur(pg); await tap(pg, '#cl-go', 400); check(await pg.evaluate('S.clubs.length') == 4, 'F15 non-CUNY leader email blocked')
+    await pg.fill('[data-ln="1"]', 'priya.n@spsmail.cuny.edu'); await pg.fill('#cl-notes', 'Approved Nov 18'); await blur(pg); await tap(pg, '#cl-go', 500)
+    c = await pg.evaluate('S.clubs[4]'); check(c['n'] == 'Data Science Society' and c['cat'] == 'Data & Analytics' and len(c['leaders']) == 2 and c['leaders'][0]['n'] == 'Jordan Lee', f'F15 club created {c}')
+    await pg.evaluate("go('clubsadmin')"); await pg.wait_for_timeout(400); await tap(pg, '[data-act=editClub][data-v="0"]', 400)
+    t = await pg.inner_text('#sheet'); check('Aisha Rahman' in t and 'Club email' in t and 'Status' in t and '+ Other' in t, 'F15 Edit club profile fields')
+    await tap(pg, '[data-led="1"]', 300); await pg.fill('[data-lt="1"]', 'Vice President'); await blur(pg); await tap(pg, '#cl-st [data-st=Transition]', 200); await tap(pg, '#cl-go', 500)
+    c = await pg.evaluate('S.clubs[0]'); check(c['st'] == 'Transition' and c['leaders'][1]['t'] == 'Vice President', f'F15 club profile saved {c["st"]}')
+    await pg.evaluate("go('audit')"); await pg.wait_for_timeout(300); v = await pg.inner_text('#v-dyn'); check('DEMO_PERSONA' not in v and 'CLUB_CREATED' in v, 'F15 audit plain words + logged')
+    await pg.evaluate("go('reports')"); await pg.wait_for_timeout(300); check('PRD' not in await pg.inner_text('#v-dyn'), 'F15 no PRD codes')
+    check(not pg.errs, f'F15 admin errors {pg.errs}'); await pg.context.close()
+
 async def main():
     import os; os.makedirs(OUT, exist_ok=True)
     async with async_playwright() as p:
         b = await p.chromium.launch(executable_path='/usr/bin/google-chrome')
-        ALL=[flow1, flow2, flow3, flow4, flow5, flow6, flow7, flow8, flow9, flow10, flow11, flow12, flow13, flow14]
+        ALL=[flow1, flow2, flow3, flow4, flow5, flow6, flow7, flow8, flow9, flow10, flow11, flow12, flow13, flow14, flow15]
         only=os.environ.get('ONLY')
         for f in ([g for g in ALL if g.__name__ in only.split(',')] if only else ALL):
             try: await f(b)

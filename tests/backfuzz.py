@@ -4,7 +4,7 @@ import asyncio, random, sys
 from playwright.async_api import async_playwright
 URL = sys.argv[1] if len(sys.argv) > 1 else 'http://localhost:8765/'
 SEEDS = int(sys.argv[2]) if len(sys.argv) > 2 else 8
-SC = "overview events calendar accounts assistant inbox analytics notifications announcements eventcal eventstats reminders forums messaging whatsapp blog tasks dashboard members team requests resources directory settings".split()
+SC = "overview events calendar accounts assistant inbox analytics notifications announcements eventcal eventstats reminders forums messaging whatsapp blog tasks dashboard members team requests resources directory settings search drafts".split()
 
 async def main():
     async with async_playwright() as p:
@@ -15,8 +15,8 @@ async def main():
             pg = await b.new_page(viewport={'width': 390, 'height': 844}); errs = []
             pg.on('pageerror', lambda e: errs.append(str(e)))
             await pg.goto(URL); await pg.wait_for_timeout(300)
-            await pg.locator('text=Get started >> visible=true').first.click(); await pg.wait_for_timeout(300)
-            await pg.locator('text=Enter demo workspace >> visible=true').first.click(); await pg.wait_for_timeout(500)
+            await pg.locator('.sp-enter >> visible=true').first.click(); await pg.wait_for_timeout(300)
+            await pg.locator('.ch-role[data-persona="lead"] >> visible=true').first.click(); await pg.wait_for_timeout(500)
             model, idx = ['overview'], 0
             for step in range(60):
                 a = r.random(); did = ''

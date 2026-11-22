@@ -68,7 +68,8 @@ button{cursor:pointer;background:none;border:0}
 .btn.inv{background:var(--white);color:var(--blue)}
 .btn.block{width:100%}
 .btn[disabled]{background:var(--dove);color:var(--pewter);box-shadow:none;cursor:not-allowed}
-.chip{min-height:40px;padding:0 16px;border-radius:999px;font-size:13px;font-weight:600;border:1px solid var(--dove);background:var(--white);color:var(--indigo);white-space:nowrap}
+.chips .chip,#sheet .tones .chip{min-height:28px!important;height:28px;padding:0 12px!important;font-size:12px!important}.chips{gap:6px!important}.aimark{display:inline-block;font-size:12px;font-weight:700;color:var(--blue);margin-bottom:4px}
+ .chip{min-height:40px;padding:0 16px;border-radius:999px;font-size:13px;font-weight:600;border:1px solid var(--dove);background:var(--white);color:var(--indigo);white-space:nowrap}
 .chip[aria-pressed="true"]{background:var(--indigo);color:var(--white);border-color:var(--indigo)}
 .chips{display:flex;gap:8px;overflow-x:auto;padding:2px 16px 4px;scrollbar-width:none}
 .chips::-webkit-scrollbar{display:none}
@@ -457,6 +458,70 @@ button.postrow{background:none;color:inherit;font:inherit}
 .rvitem{display:flex;gap:10px;align-items:flex-start}
 .rvitem+.rvitem{margin-top:12px;padding-top:12px;border-top:1px solid var(--smoke)}
 .pill.taxi{background:var(--taxi);color:var(--indigo)}
+
+/* v18 opening: photo splash + choose sheet */
+#v-welcome,#v-signin{padding-bottom:0}#v-welcome.on,#v-signin.on{height:100%}
+.splash{position:relative;height:100%;min-height:560px;overflow:hidden;background:#011D49;color:#fff}
+.sp-photo{position:absolute;left:-45.6%;top:-20.4%;width:216.4%;height:150%;max-width:none;object-fit:cover;transform:rotate(8deg);transform-origin:44.2% 47.1%}
+.sp-photo.blur{filter:blur(28px) saturate(1.15)}
+.sp-fade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(1,29,73,0) 0%,rgba(1,29,73,0) 62%,rgba(1,29,73,.8) 100%)}
+.sp-mid{position:absolute;left:0;right:0;top:37%;display:flex;flex-direction:column;align-items:center;text-align:center;padding:0 28px}
+.sp-mid::before{content:"";position:absolute;left:50%;top:50%;width:320px;height:320px;transform:translate(-50%,-55%);border-radius:50%;background:radial-gradient(closest-side,rgba(1,29,73,.22),rgba(1,29,73,0));z-index:-1}
+.sp-logo{width:104px;height:104px;border-radius:26px;box-shadow:0 8px 26px rgba(1,29,73,.4)}
+.sp-name{margin:12px 0 0;font-size:34px;line-height:38px;font-weight:800;letter-spacing:-.6px;color:#fff;text-shadow:0 2px 6px rgba(1,29,73,.55)}
+.sp-tag{margin:4px 0 0;font-size:17px;line-height:23px;font-weight:600;text-shadow:0 1px 4px rgba(1,29,73,.65)}
+.sp-actions{position:absolute;left:24px;right:24px;bottom:calc(14px + env(safe-area-inset-bottom))}
+.sp-enter{width:100%;height:56px;border-radius:999px;background:#fff;color:var(--indigo);font-size:17px;font-weight:800;box-shadow:0 8px 24px rgba(1,29,73,.3)}
+.sp-walk{margin-top:6px;min-height:44px;width:100%;color:#fff;font-size:15px;font-weight:700;display:flex;align-items:center;justify-content:center;gap:6px;text-shadow:0 1px 4px rgba(1,29,73,.7)}
+.sp-ver{margin:2px 0 0;text-align:center;font-size:11px;opacity:.8}
+.ch-tint{position:absolute;inset:0;background:rgba(1,29,73,.25)}
+.ch-back{position:absolute;left:8px;top:calc(8px + env(safe-area-inset-top));width:48px;height:48px;color:#fff;display:grid;place-items:center}
+.ch-head{position:absolute;left:0;right:0;top:calc(13% + env(safe-area-inset-top));text-align:center;padding:0 28px}
+.ch-head img{width:64px;height:64px;border-radius:16px;box-shadow:0 10px 26px rgba(1,29,73,.35)}
+.ch-head h1{margin:18px 0 0;font-size:32px;line-height:36px;font-weight:800;letter-spacing:-.7px;color:#fff}.ch-head em{color:var(--taxi);font-style:italic}
+.ch-sheet{position:absolute;left:0;right:0;bottom:0;background:#fff;border-radius:28px 28px 0 0;padding:10px 24px calc(18px + env(safe-area-inset-bottom));color:var(--indigo)}
+.ch-sheet .grab{width:40px;height:5px;border-radius:4px;background:#D5DAE3;margin:0 auto 16px}
+.ch-sheet h2{margin:0;font-size:20px;line-height:26px;font-weight:800}.ch-sheet>p{margin:4px 0 6px;font-size:14px;line-height:20px;color:#3B4150}
+.ch-role{width:100%;display:flex;align-items:center;gap:14px;padding:12px 4px;min-height:68px;border-bottom:1px solid #EEF0F4;color:var(--indigo);text-align:left}
+.ch-num{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;font-size:14px;font-weight:800;flex:none}.ch-num.n1{background:#FFE7B0}.ch-num.n2{background:#E6DDF3}.ch-num.n3{background:#CFF2DE}
+.ch-t{flex:1}.ch-t b{display:block;font-size:17px;font-weight:800}.ch-t span{display:block;margin-top:2px;font-size:14px;line-height:19px;color:#3B4150}.ch-chev{color:var(--blue);display:flex}
+.ch-browse{display:flex;justify-content:center;margin-top:8px}.ch-browse button{min-height:44px;color:var(--blue);font-size:14px;font-weight:700;display:flex;align-items:center;gap:6px}
+
+/* v18 new screens */
+.sbox{display:flex;align-items:center;gap:8px;height:48px;border:2px solid var(--blue);border-radius:24px;padding:0 14px;color:var(--blue)}.sbox input{flex:1;border:0;outline:0;font-size:15px;color:var(--indigo);background:none;min-width:0;height:44px}
+.draftnote{display:flex;gap:10px;padding:14px;border-bottom:1px solid var(--smoke);background:#FFFBF0}.draftnote .t{flex:1}.draftnote b{display:block;color:var(--indigo);font-size:15px}.draftnote .udot{margin-top:6px;flex:none}
+.btn.sm{min-height:40px;padding:0 16px;font-size:14px}
+.be-title{width:100%;border:0;border-bottom:2px dashed var(--dove);font-size:22px;line-height:28px;font-weight:700;color:var(--indigo);resize:none;padding:0 0 6px;margin-bottom:14px;background:none;font-family:inherit}.be-title:focus{outline:none;border-bottom-color:var(--blue)}
+.be-cover{height:150px;border-radius:14px;background:var(--sky) center/cover;display:flex;align-items:flex-end;padding:10px}
+.catrow{display:flex;flex-wrap:wrap;gap:6px}.catrow .chip{min-height:28px;height:28px;padding:0 12px;font-size:12px}.catrow .chip[aria-pressed="true"]{background:var(--indigo);color:#fff;border-color:var(--indigo)}.catrow .addchip{border-style:dashed;color:var(--blue)}
+#cl-oth{margin-top:8px}
+.ldr{display:flex;align-items:center;gap:10px;min-height:52px;border-bottom:1px solid var(--smoke)}.ldr .t{flex:1;min-width:0}.ldr .t b{display:block;color:var(--indigo);font-size:15px}
+.ldr-in{display:flex;gap:8px;margin-bottom:8px}.ldr-in input{border:1px solid var(--pewter);border-radius:12px;min-height:46px;padding:0 12px;font-size:15px;color:var(--charcoal);min-width:0}.ldr-in input:first-child{width:118px;flex:none}.ldr-in input:last-child{flex:1}
+.btn.addl{width:100%;min-height:44px;border:2px dashed var(--dove);border-radius:22px;background:#fff;color:var(--blue);font-weight:700;margin-top:8px}
+
+/* v18 sign-up walkthrough */
+.ob{position:relative;min-height:100%;display:flex;flex-direction:column;background:#fff;color:var(--indigo);padding-bottom:calc(20px + env(safe-area-inset-bottom))}
+#v-dyn:has(>.ob){display:flex!important;flex-direction:column;padding-bottom:0;height:100%}#v-dyn>.ob{flex:1 0 auto}
+.persona[aria-pressed="true"]{border-color:var(--blue);box-shadow:inset 0 0 0 1.5px var(--blue);background:#F3F7FF}
+.ob-top{display:flex;align-items:center;justify-content:space-between;padding:calc(8px + env(safe-area-inset-top)) 12px 0 8px}.ob-ic{width:48px;height:48px;display:grid;place-items:center;color:var(--indigo)}.ob-ic svg{width:22px;height:22px}
+.ob-skip{font-size:14px;font-weight:600;color:#3B4150;padding:12px 4px;min-height:48px}
+.ob-bar{display:flex;gap:6px;padding:4px 24px 0}.ob-bar i{flex:1;height:4px;border-radius:4px;background:#D5DAE3}.ob-bar i.on{background:var(--blue)}
+.ob-logo{display:flex;justify-content:center;padding-top:48px}.ob-logo img{width:84px;height:84px;border-radius:22px}
+.ob-h{padding:36px 24px 0;text-align:center}.ob-h h1{margin:0;font-size:30px;line-height:36px;font-weight:800;letter-spacing:-.5px;color:var(--indigo)}.ob-h p{margin:10px 0 0;font-size:15px;line-height:22px;color:#3B4150}
+.ob-info{margin:28px 24px 0;padding:14px 16px;border-radius:16px;background:#F5F3EE;display:flex;gap:12px;align-items:center;font-size:14px;line-height:20px;color:#3B4150}.ob-infoic{width:40px;height:40px;border-radius:50%;background:#DCE8FA;color:var(--blue);display:grid;place-items:center;flex:none}
+.ob-foot{margin-top:auto;padding:24px 24px 0}.ob-btn{width:100%;height:54px;border-radius:999px;background:var(--blue);color:#fff;font-size:16px;font-weight:700;display:grid;place-items:center;cursor:pointer}.ob-btn.taxi{background:var(--taxi);color:var(--indigo)}
+.ob-txt{width:100%;min-height:48px;font-size:15px;font-weight:600;color:var(--blue);margin-top:4px;display:grid;place-items:center;cursor:pointer}
+.ob-form{padding:28px 24px 0;display:flex;flex-direction:column}.ob-l{display:block;font-size:13px;font-weight:600;margin:0 0 6px}.ob-in{display:flex;align-items:center;justify-content:space-between;height:50px;padding:0 16px;border-radius:14px;border:1.5px solid var(--blue);background:#fff;font-size:16px;color:var(--indigo);margin-bottom:14px;width:100%}.ob-in.lock{border-color:#D5DAE3;background:#F5F3EE}input.ob-in:focus{outline:none;box-shadow:0 0 0 3px rgba(31,92,255,.25)}
+.ob-pic{display:flex;justify-content:center;margin-top:44px}.ob-av{position:relative;width:168px;height:168px;border-radius:50%;background:#DCE8FA;display:grid;place-items:center}.ob-av img{width:100%;height:100%;border-radius:50%;object-fit:cover}.ob-cam{position:absolute;right:6px;bottom:6px;width:48px;height:48px;border-radius:50%;background:var(--blue);border:4px solid #fff;display:grid;place-items:center;color:#fff}
+.ob-club{margin:24px 24px 0;padding:16px;border-radius:20px;background:#F5F3EE;display:flex;gap:14px;align-items:center}.ob-club img{width:56px;height:56px;border-radius:50%}.ob-club b{display:block;font-weight:800;font-size:17px}.ob-badge{display:inline-block;margin-top:4px;background:var(--blue);color:#fff;font-size:12px;font-weight:700;padding:3px 10px;border-radius:999px}
+.ob-can{padding:12px 24px 0}.ob-can>div{display:flex;gap:14px;align-items:flex-start;padding:12px 0}.ob-canic{width:40px;height:40px;border-radius:12px;background:#DCE8FA;color:var(--blue);display:grid;place-items:center;flex:none}.ob-can b{display:block;font-size:15px}.ob-can span span{display:block;margin-top:2px;font-size:13px;line-height:18px;color:#3B4150}
+.ob-small{margin:6px 24px 0;font-size:13px;line-height:18px;color:#3B4150}
+.ob-ints{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;padding:32px 20px 0}.ob-int{height:44px;padding:0 18px;border-radius:999px;font-size:15px;font-weight:600;border:1.5px solid #D5DAE3;background:#fff;color:var(--indigo)}.ob-int[aria-pressed="true"]{border-color:var(--blue);background:var(--blue);color:#fff}
+.ob-notes{position:relative;height:260px;margin-top:26px;background:#F5F3EE}.ob-note{position:absolute;left:34px;right:34px;background:#fff;border-radius:18px;box-shadow:0 10px 26px rgba(1,29,73,.14);padding:12px 14px;display:flex;gap:12px;align-items:center}.ob-note img{width:36px;height:36px;border-radius:9px}.ob-note b{display:block;font-size:14px}.ob-note span span{display:block;font-size:13px;color:#3B4150}
+.ob-done{background:radial-gradient(120% 70% at 100% 0%,#3E74D6 0%,rgba(62,116,214,0) 55%),radial-gradient(90% 60% at 0% 100%,#011D49 0%,rgba(1,29,73,0) 60%),#0033A1;color:#fff;min-height:100%}
+.ob-photo{margin:calc(96px + env(safe-area-inset-top)) 40px 0;height:300px;border-radius:28px;overflow:hidden;border:5px solid #fff;transform:rotate(-5deg);box-shadow:0 20px 40px rgba(1,29,73,.4)}.ob-photo img{width:100%;height:100%;object-fit:cover}
+.ob-tag{position:absolute;right:30px;top:calc(78px + env(safe-area-inset-top));background:var(--taxi);color:var(--indigo);font-size:13px;font-weight:700;padding:6px 12px;border-radius:999px;transform:rotate(10deg)}
+.ob-yay{text-align:center;padding:40px 24px 0}.ob-yay h1{margin:0;font-size:40px;line-height:44px;font-weight:800;letter-spacing:-1px;color:#fff}.ob-yay p{margin:10px 0 0;font-size:16px;line-height:23px;opacity:.92}
 </style>
 </head>
 <body>
@@ -467,68 +532,54 @@ button.postrow{background:none;color:inherit;font:inherit}
     <p>A clickable simulation of the v2 mobile design, in CUNY 2025 colors. Everything runs on sample data. Nothing connects to real accounts, and nothing is posted anywhere.</p>
     <p><b>Try this path:</b></p>
     <ol>
-      <li>Tap <b>Get started</b>, then sign in as Aisha, the Club Lead.</li>
+      <li>Tap <b>Enter demo</b>, then pick <b>Club Lead</b>. Or tap <b>Walk through sign-up</b> to see the first-time sign-up.</li>
       <li>Tap <b>Create post</b>, pick a photo, try the AI caption helper.</li>
       <li>Add alt text, choose accounts, schedule it.</li>
       <li>See it appear on Overview, then open <b>Upcoming events</b> from the menu.</li>
     </ol>
-    <p class="mt12"><b>Then explore:</b> every item in the menu works, including Calendar, Inbox, AI Assistant, Analytics, Forums, Tasks and Members. Sign out and enter as <b>Dr. Elena Vance</b> to see the Student Life console, approve account requests and watch your actions appear in the audit log.</p><p>Built from all 42 Figma v2 screens. Refreshing resets the demo.</p>
+    <p class="mt12"><b>Then explore:</b> every item in the menu works, including Calendar, Inbox, AI Assistant, Analytics, Forums, Tasks and Members. Switch to <b>Admin</b> (Dr. Elena Vance) to see the Student Life console, approve account requests and watch your actions appear in the audit log.</p><p>Built from all 42 Figma v2 screens. Refreshing resets the demo.</p>
   </aside>
 
   <div class="phone" id="phone">
     <div class="status" aria-hidden="true"><span>9:41</span><span>●●● ▮</span></div>
     <div class="screen" id="screen">
 
-      <!-- WELCOME -->
+      <!-- WELCOME · v18 splash (Opening #2) -->
       <section class="view" id="v-welcome" aria-label="Welcome">
-        <div class="wel">
-          <div class="collage" aria-hidden="true">
-            <div class="pc p1" style="background-image:url(img/summer-at-cuny-students-campus.jpg)"></div>
-            <div class="pc p2" style="background-image:url(img/cuny-skates-club-group.jpg)"></div>
-            <div class="pc p3" style="background-image:url(img/cuny-student-portrait-msa.jpg)"></div>
-            <span class="sticker s1">Build Night · Thu 6:30 PM</span>
-            <span class="sticker s3">✓ Post scheduled</span>
-            <span class="sticker s2">42 members</span>
+        <div class="splash">
+          <img class="sp-photo" src="img/splash-skate-circle.jpg" alt="CUNY students in a circle holding skateboards, looking down at the camera">
+          <div class="sp-fade" aria-hidden="true"></div>
+          <div class="sp-mid">
+            <img class="sp-logo" src="img/hub-icon-180.png" alt="Club Social Hub logo">
+            <h1 class="sp-name">Club Social Hub</h1>
+            <p class="sp-tag">Your student life, all in one place.</p>
           </div>
-          <div class="wel-body">
-            <div class="wel-brand"><img src="img/hub-icon-180.png" alt="">Club Social Hub · CUNY SPS</div>
-            <h1 class="wel-h">Your club, <em>all in one</em> place.</h1>
-            <p class="wel-p">Post to your club’s accounts, plan events and keep members in the loop. Made for CUNY SPS student clubs.</p>
-            <div class="stack">
-              <button class="btn taxi block" data-go="signin">Get started →</button>
-              <button class="btn ghost block" data-go="public">Browse club events first</button>
-            </div>
-            <p class="fine">A CUNY SPS AI Club pilot · demo with sample data, no real accounts<br><span style="opacity:.7">Version Nov 21 · 17</span></p>
+          <div class="sp-actions">
+            <button class="sp-enter" data-go="signin">Enter demo</button>
+            <button class="sp-walk" data-act="obStart"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>Walk through sign-up</button>
+            <p class="sp-ver">Version Nov 22 · 18</p>
           </div>
         </div>
       </section>
 
-      <!-- S01 SIGN IN -->
-      <section class="view" id="v-signin" aria-label="Sign in">
-        <header class="top"><button class="icon" data-go="welcome" aria-label="Back to welcome"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></button><div class="ttl"><div class="title">Sign in</div></div></header>
-        <div class="banner">Demo workspace · sample data, no live integrations</div>
-        <div class="brand">
-          <img class="hublogo" src="img/hub-logo.jpg" alt="Club Social Hub logo">
-          <div><div class="h2">Club Social Hub</div><div class="cap">CUNY SPS · Office of Student Life</div></div>
-        </div>
-        <div class="pad" style="padding-top:8px">
-          <h1 class="h1 mb8">Social media and events for CUNY SPS clubs, in one place</h1>
-          <p class="cap mb16">A CUNY SPS AI Club engineering pilot.</p>
-          <form id="signin-form" novalidate>
-            <div class="field" id="f-email">
-              <label class="label" for="email">CUNY institutional email</label>
-              <input id="email" type="email" autocomplete="off" placeholder="name@spsmail.cuny.edu" value="aisha.rahman@spsmail.cuny.edu">
-              <span class="err">Use a CUNY address ending in cuny.edu</span>
-            </div>
-            <button class="btn pri block" type="submit">Enter demo workspace</button>
-          </form>
-          <div class="note mt12">Demonstration only. Real sign-in will use CUNY Login. Don’t enter passwords or real social account details.</div>
-          <button class="btn txt block mt12" data-go="public">Browse approved club events & request to join</button>
-          <div class="label mt16 mb8">Or jump in as a sample person</div>
-          <div class="stack">
-            <button class="persona" data-persona="lead" data-go="overview"><span class="avatar">AR</span><span><b style="color:var(--indigo)">Aisha Rahman</b><br><span class="cap">Club Lead · Artificial Intelligence Club</span></span></button>
-            <button class="persona" data-persona="contrib" data-go="overview"><span class="avatar" style="background:var(--thistle)">SP</span><span><b style="color:var(--indigo)">Sofia Patel</b><br><span class="cap">Contributor · drafts posts for review</span></span></button>
-            <button class="persona" data-persona="admin" data-go="console"><span class="avatar" style="background:var(--mint)">EV</span><span><b style="color:var(--indigo)">Dr. Elena Vance</b><br><span class="cap">Student Life admin · approves accounts, sees audit logs</span></span></button>
+      <!-- CHOOSE (was sign in) · pick a role -->
+      <section class="view" id="v-signin" aria-label="Choose how to try it">
+        <div class="splash choose">
+          <img class="sp-photo blur" src="img/splash-skate-circle.jpg" alt="">
+          <div class="ch-tint" aria-hidden="true"></div>
+          <button class="ch-back" data-back="welcome" aria-label="Back"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
+          <div class="ch-head">
+            <img src="img/hub-icon-180.png" alt="">
+            <h1>Hey there!<br>Welcome to the <em>Hub.</em></h1>
+          </div>
+          <div class="ch-sheet">
+            <div class="grab" aria-hidden="true"></div>
+            <h2>How do you want to try it?</h2>
+            <p>Pick a role to explore. Switch anytime from the menu.</p>
+            <button class="ch-role" data-persona="lead" data-go="overview"><span class="ch-num n1">1.</span><span class="ch-t"><b>Club Lead</b><span>Publish, review posts, run events</span></span><span class="ch-chev"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></span></button>
+            <button class="ch-role" data-persona="contrib" data-go="overview"><span class="ch-num n2">2.</span><span class="ch-t"><b>Contributor</b><span>Keep up with your clubs</span></span><span class="ch-chev"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></span></button>
+            <button class="ch-role" data-persona="admin" data-go="console"><span class="ch-num n3">3.</span><span class="ch-t"><b>Admin</b><span>Student Life: approve clubs and accounts</span></span><span class="ch-chev"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></span></button>
+            <div class="ch-browse"><button data-go="public"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>Browse club events</button></div>
           </div>
         </div>
       </section>
@@ -538,7 +589,7 @@ button.postrow{background:none;color:inherit;font:inherit}
         <header class="top">
           <button class="icon" data-menu aria-label="Open menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button>
           <div class="ttl"><div class="ctx">Artificial Intelligence Club</div><div class="title">Overview</div></div>
-          <button class="icon" data-soon="x" aria-label="Search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg></button>
+          <button class="icon" data-go="search" aria-label="Search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg></button>
           <button class="icon" data-go="notifications" aria-label="Notifications, 3 new"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 8a6 6 0 1 1 12 0c0 7 3 8 3 8H3s3-1 3-8"/><path d="M10 20a2 2 0 0 0 4 0"/></svg><span class="dot"></span></button>
         </header>
         <div class="banner">Demo workspace · sample data, no live integrations</div>
@@ -644,7 +695,7 @@ button.postrow{background:none;color:inherit;font:inherit}
         <header class="top">
           <button class="icon" data-menu aria-label="Open menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button>
           <div class="ttl"><div class="ctx">Artificial Intelligence Club</div><div class="title">Upcoming events</div></div>
-          <button class="icon" data-soon="x" aria-label="Search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg></button>
+          <button class="icon" data-go="search" aria-label="Search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg></button>
           <button class="icon" data-go="notifications" aria-label="Notifications"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 8a6 6 0 1 1 12 0c0 7 3 8 3 8H3s3-1 3-8"/><path d="M10 20a2 2 0 0 0 4 0"/></svg><span class="dot"></span></button>
         </header>
         <div class="banner">Demo workspace · sample data, no live integrations</div>
@@ -687,7 +738,7 @@ const EVENTS=[
  {id:'e3',type:'club',mon:'NOV',day:'23',when:'Mon 10 PM',title:'Pre-Submission Office Hours',meta:'Mon Nov 23 · 10:00 PM · Zoom',going:2,seats:15,img:PHOTOS[1].src,tag:'Club meeting'},
  {id:'e4',type:'campus',mon:'DEC',day:'3',when:'Thu Dec 3',title:'Student Life Town Hall',meta:'Thu Dec 3 · 12:00 PM · 119 W 31st St + Zoom',going:2,seats:80,img:'',tag:'Campus event'},
  {id:'e5',type:'club',mon:'NOV',day:'30',when:'Mon 7 PM',title:'AI Ethics Reading Group',meta:'Mon Nov 30 · 7:00 PM · Zoom',going:4,seats:25,img:PHOTOS[0].src,tag:'Club meeting'}];
-const NAV_LEAD=[['Workspace',[['Overview','overview'],['Club Announcements','announcements'],['Notifications','notifications']]],['Social Publishing',[['Create Post','create'],['Content Calendar','calendar'],['My Social Accounts','accounts'],['AI Assistant','assistant'],['Inbox','inbox'],['Analytics','analytics']]],['Club Community',[['Upcoming Events','events'],['Club Event Calendar','eventcal'],['Event Analytics','eventstats'],['Email Reminders','reminders'],['Club Forums','forums'],['Messaging Center','messaging'],['WhatsApp Group','whatsapp'],['Club Blog','blog'],['Project Tasks','tasks']]],['Administration',[['Club Dashboard','dashboard'],['Member Directory','members'],['Team Management','team'],['Account Requests','requests'],['Club Resources','resources'],['Campus Directory','directory'],['Settings','settings']]],['Account',[['Switch identity · Sign out','signin']]]];
+const NAV_LEAD=[['Workspace',[['Overview','overview'],['Drafts','drafts'],['Club Announcements','announcements'],['Notifications','notifications']]],['Social Publishing',[['Create Post','create'],['Content Calendar','calendar'],['My Social Accounts','accounts'],['AI Assistant','assistant'],['Inbox','inbox'],['Analytics','analytics']]],['Club Community',[['Upcoming Events','events'],['Club Event Calendar','eventcal'],['Event Analytics','eventstats'],['Email Reminders','reminders'],['Club Forums','forums'],['Messaging Center','messaging'],['WhatsApp Group','whatsapp'],['AI Club Blog','blog'],['Project Tasks','tasks']]],['Administration',[['Club Dashboard','dashboard'],['Member Directory','members'],['Team Management','team'],['Account Requests','requests'],['Club Resources','resources'],['Campus Directory','directory'],['Settings','settings']]],['Account',[['Switch identity · Sign out','signin']]]];
 const EVAT={e1:'2026-11-19T18:30',e2:'2026-11-18T17:30',e3:'2026-11-23T22:00',e4:'2026-12-03T12:00',e5:'2026-11-30T19:00'};
 function evAt(e){return new Date(e.at||EVAT[e.id])}
 function evPast(e){const d=evAt(e);return !isNaN(d)&&d.getTime()+2*36e5<Date.now()}
@@ -774,7 +825,7 @@ document.addEventListener('click',e=>{const a=e.target.closest('[data-acc]');if(
 $('#ws').onchange=e=>{toast('Switching clubs isn’t part of this demo. Staying in AI Club.');e.target.value='Artificial Intelligence Club'};
 
 /* sign in */
-$('#signin-form').onsubmit=e=>{e.preventDefault();const v=$('#email').value.trim().toLowerCase();const ok=/^[^@\s]+@([a-z0-9-]+\.)*cuny\.edu$/.test(v);$('#f-email').classList.toggle('bad',!ok);if(!ok)shake($('#email'));if(ok){if(S.persona!=='lead'){S.persona='lead';resetPost()}recountUnread();go('overview')}else $('#email').focus()};
+if($('#signin-form'))$('#signin-form').onsubmit=e=>{e.preventDefault();const v=$('#email').value.trim().toLowerCase();const ok=/^[^@\s]+@([a-z0-9-]+\.)*cuny\.edu$/.test(v);$('#f-email').classList.toggle('bad',!ok);if(!ok)shake($('#email'));if(ok){if(S.persona!=='lead'){S.persona='lead';resetPost()}recountUnread();go('overview')}else $('#email').focus()};
 
 /* overview */
 function greeting(){const h=new Date().getHours();return h<12?'Good morning':h<18?'Good afternoon':'Good evening'}
@@ -865,7 +916,7 @@ $('#btn-ai').onclick=()=>{const t=$('#post-title').value.trim()||'our next event
  const opts=['Join the AI Club for '+t+'! '+when+'. Bring questions, bring a friend, and help shape how CUNY SPS talks about AI. RSVP in the Hub.',
   tc+' is coming up. '+when+'. Students, faculty and alumni welcome. No experience needed. Save your seat in the Hub.',
   'Curious where AI is headed and who gets a say? '+tc+' · '+when+'. Free for all CUNY SPS students.'];
- openSheet('<div class="row mb8"><h2 class="h2">✦ AI caption helper</h2><span class="pill cream">Simulated</span></div><p class="cap mb12">Three drafts from your title'+(ev?' and the related event':'')+'. Pick one to edit. Nothing posts without a person reviewing it.'+(copy.value.trim()?' Picking one replaces what you wrote.':'')+'</p><div id="aiopts">'+opts.map((o,i)=>'<button class="aiopt" data-ai="'+i+'">'+esc(o)+'</button>').join('')+'</div><div class="label mb8">Adjust the tone</div><div class="row" style="justify-content:flex-start;gap:8px;flex-wrap:wrap"><button class="chip" data-tone="short">Shorter</button><button class="chip" data-tone="formal">More formal</button><button class="chip" data-tone="emoji">Add emoji</button></div>');
+ openSheet('<h2 class="h2 mb12">✦ AI caption helper</h2>'+(copy.value.trim()?'<p class="cap mb12">Picking one replaces what you wrote.</p>':'')+'<div id="aiopts">'+opts.map((o,i)=>'<button class="aiopt" data-ai="'+i+'">'+esc(o)+'</button>').join('')+'</div><div class="label mb8">Adjust the tone</div><div class="chips tones" style="padding:0;margin:0"><button class="chip" data-tone="short">Shorter</button><button class="chip" data-tone="formal">More formal</button><button class="chip" data-tone="emoji">Add emoji</button></div>');
  $$('#sheet [data-ai]').forEach(b=>b.onclick=()=>{copy.value=opts[+b.dataset.ai];copy.oninput();closeAll();toast('AI draft added. Tap the text to edit it.');try{document.activeElement&&document.activeElement.blur()}catch(e){};$('#phone').scrollTop=0;setTimeout(()=>{const sc=$('#screen'),r=copy.getBoundingClientRect(),s=sc.getBoundingClientRect();sc.scrollTo({top:Math.max(0,sc.scrollTop+(r.top-s.top)-90),behavior:'smooth'});const f=$('#f-copy');f.classList.add('squish');setTimeout(()=>f.classList.remove('squish'),400)},260)});
  const base=opts.slice();const T={short:false,formal:false,emoji:false};
  const SHORT=['Join us for '+t+'! '+when+'. RSVP in the Hub.',tc+': '+when+'. All welcome, save your seat.','Who gets a say in AI? Find out at '+t+'. '+when+'.'];
@@ -940,7 +991,7 @@ function doPublish(){const data=snap();dropDraft();S.editing=null;const t=$('#po
   '<h1 class="h1 mb8" style="text-align:center">'+(igFail?'Post '+(S.when==='now'?'published':'scheduled')+', with one problem':(S.when==='now'?'Post published':'Post scheduled'))+'</h1>'+
   '<p class="cap mb16" style="text-align:center">'+esc(t)+(S.when==='now'?'':' · '+when)+'</p>'+
   rows.map(r=>'<div class="card mb12" style="padding:12px 14px"><div class="row"><div><b style="color:var(--indigo)">'+r[0]+'</b><div class="cap">'+r[1]+'</div></div><span class="pill '+(r[3]?(r[2]==='Published'?'mint':'solid'):'coral')+'">'+r[2]+'</span></div>'+(r[3]?'':'<p class="cap mt12">Instagram accepts JPEG images only. Replace the image and retry, or remove Instagram. Nothing was posted twice.</p><div class="row mt12" style="justify-content:flex-start;gap:8px"><button class="btn pri" data-go="create">Fix image</button><button class="btn sec" id="rm-ig">Remove Instagram</button></div>')+'</div>').join('')+
-  '<div class="note mb16">Every publishing attempt is recorded in the audit log with who, when and the result.</div>'+
+  ''+
   '<div class="stack"><button class="btn sec block" data-go="overview">Back to Overview</button><button class="btn txt block" id="another">Create another post</button></div>';
  const rm=$('#rm-ig');if(rm)rm.onclick=()=>{S.posts=S.posts.filter(p=>p.st!=='Needs fix');toast('Instagram removed from this post');go('overview')};
  $('#another').onclick=()=>{resetPost();go('create')};
@@ -1050,7 +1101,7 @@ go=function(v,mode){
  const logout=S.logout;S.logout=false;
  if(!from||(from===to&&!logout)){_go(v,false);hop(()=>{if(S.hist[S.hi]&&S.hist[S.hi].ov)replaceEntry(to)});updateBack();return}
  saveHere();
- const login=from==='signin'&&!AUTHV.includes(to);
+ const isOb=x=>/^ob\d+$/.test(x||'');const login=(from==='signin'||isOb(from))&&!AUTHV.includes(to)&&!isOb(to)&&to!=='public';
  _go(v,false);
  hop(()=>{
   const cur=S.hist[S.hi];
@@ -1068,7 +1119,7 @@ closeAll=function(){uiClose();if(!S.ovl)return;S.ovl=false;
  setTimeout(()=>hop(()=>{const c=S.hist[S.hi];if(S.ovl||!c||!c.ov)return;S.hi--;S.hist.length=S.hi+1;S.ignorePop++;try{history.back()}catch(e){S.ignorePop--}updateBack()}),0)};
 const _openSheet=openSheet;openSheet=function(h){overlayOpen();_openSheet(h)};
 const _openDrawer=openDrawer;openDrawer=function(){overlayOpen();_openDrawer()};
-window.addEventListener('popstate',e=>{const st=(e.state&&e.state.hub)?e.state:{i:0,v:S.view};const i=st.i||0;
+window.addEventListener('popstate',e=>{S.popAt=Date.now();const st=(e.state&&e.state.hub)?e.state:{i:0,v:S.view};const i=st.i||0;
  if(S.rewinding){finishRewind(i);return}
  if(S.ignorePop){S.ignorePop--;return}
  S.pendingBack=false;
@@ -1095,13 +1146,13 @@ function updateBack(){const top=$('#'+(VIEWS.includes(S.view)?'v-'+S.view:'v-dyn
  let x0=null,y0=0,dx=0;const reset=()=>{x0=null;ind.style.transform='';ind.classList.remove('go')};
  document.addEventListener('touchstart',e=>{const t=e.touches[0],r=ph.getBoundingClientRect();if(e.touches.length!==1||t.clientX-r.left>24||!S.stack.length||$('.sheet.on')||$('.drawer.on')||ph.classList.contains('typing-on'))return;x0=t.clientX;y0=t.clientY;dx=0},{passive:true});
  document.addEventListener('touchmove',e=>{if(x0===null)return;const t=e.touches[0];dx=t.clientX-x0;if(Math.abs(t.clientY-y0)>50&&dx<40){reset();return}ind.style.transform='translateX('+Math.max(0,Math.min(dx,100))+'px)';ind.classList.toggle('go',dx>80)},{passive:true});
- document.addEventListener('touchend',()=>{if(x0===null)return;const ok=dx>80;reset();if(ok)goBack()});
+ document.addEventListener('touchend',()=>{if(x0===null)return;const ok=dx>80,h0=S.hi,p0=S.popAt||0;reset();if(!ok)return;/* v18: newer iOS has its own swipe back in home-screen apps. Wait a moment: if iOS already went back (popstate), don't go back a second time */setTimeout(()=>{if(S.hi===h0&&(S.popAt||0)===p0&&!S.rewinding)goBack()},450)});
  document.addEventListener('touchcancel',reset)})();
 
 /* init */
 setPhoto(PHOTOS[0]);$('#alt').value='Students talking together outside on a CUNY campus';
 </script>
-<script src="js/screens.js?v=20261121-17"></script>
+<script src="js/screens.js?v=20261122-18"></script>
 <script>(function(){const v=resolveV(location.hash.slice(1)||'welcome'),st=history.state;if(st&&st.hub&&typeof st.i==='number')S.hi=st.i;else{S.hi=0;try{history.replaceState(hstate(0,v),'','#'+v)}catch(e){}}S.hist[S.hi]={v};go(v,false)})();</script>
 </body>
 </html>
