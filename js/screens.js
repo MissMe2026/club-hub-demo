@@ -55,7 +55,7 @@ S.tasks=[{t:'Finalize Civic Tech Build Night slide deck & demo order',who:'Devon
 S.members=[{n:'Aisha Rahman',r:'President · Club Lead / Co-Chair',av:'AR'},{n:'Devon Brooks',r:'Social Media Chair · Editor',av:'DB'},{n:'Sofia Patel',r:'Member · Contributor',av:'SP'},{n:'Marcus Lee',r:'Treasurer',av:'ML'}];
 S.pending=[{n:'Noah Kim',r:'B.S. in Information Systems · Interest: Events Coordinator',q:'“Interested in joining the Spring 2027 civic tech prototyping track.”'}];
 S.invites=[];
-S.reqs=[{id:'REQ-2026-014',t:'New Official Account: AI Club Showcase Page',p:'LinkedIn',club:'Artificial Intelligence Club',step:2,st:'Under Student Life Review',by:'Aisha Rahman · Nov 10'},
+S.reqs=[{id:'REQ-2026-014',t:'New Official Account: AI Club Showcase Page',p:'LinkedIn',club:'Artificial Intelligence Club',step:1,st:'Under Student Life Review',by:'Aisha Rahman · Nov 10'},
  {id:'REQ-2026-012',t:'Account transfer: MSA Instagram custodian change',p:'Instagram',club:'Muslim Student Association',step:1,st:'Awaiting CUNY Approval',by:'Fatima Noor · Nov 6'}];
 S.clubs=[{n:'Artificial Intelligence Club',c:'AI-CLUB · Academic & Technology',m:42,adv:'Prof. Jordan Reyes',st:'Active',mine:true},{n:'Muslim Student Association',c:'MSA · Identity, Faith & Cultural',m:31,adv:'Prof. Amira Hassan',st:'Active'},
  {n:'Anime Club',c:'ANIME · Arts, Media & Creative',m:0,adv:'Prof. Kenji Takahashi',st:'Active'},{n:'Arts and Crafts Club',c:'CRAFTS · Arts, Media & Creative',m:0,adv:'Pending',st:'Transition'}];
@@ -648,3 +648,137 @@ const _pc27=personCard;personCard=function(n){const b=Object.keys(PKEY).find(x=>
 ACT.person=function(v){personCard(v)};ACT.member=function(v){personCard(v)};
 document.addEventListener('input',e=>{if(e.target.id!=='msearch')return;const q=e.target.value.toLowerCase();const l=document.getElementById('mlist');if(!l)return;
  l.innerHTML=S.members.filter(m=>(m.n+' '+pubName(m.n)).toLowerCase().includes(q)).map(m=>lrow({av:pubAv(m.n,m.av),t:esc(pubName(m.n)),s:m.r,act:'data-act="member" data-v="'+esc(m.n)+'"'})).join('')||'<div class="pad cap">No members match.</div>'});
+
+/* ===== v28: the 4 gaps from Abdul's app (Wallis, Nov 22 answers) ===== */
+const chevDown='<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>';
+const rowB=(attr,t,s,right)=>'<button type="button" class="you-row" '+attr+'><span><b>'+t+'</b>'+(s?'<span class="cap">'+s+'</span>':'')+'</span>'+(right||tbSvg('chev',18,2))+'</button>';
+const rowS=(t,s,right)=>'<div class="you-row" style="cursor:default"><span><b>'+t+'</b>'+(s?'<span class="cap">'+s+'</span>':'')+'</span>'+(right||'')+'</div>';
+
+/* --- Gap 2: real club switching (chips on Clubs + Switch club sheet from the club name in the header) --- */
+S.curClub='ai';S.clubP=null;S.msaGo={};
+const MSA={n:'Muslim Student Association',ann:[{t:'Ramadan study circle planning',s:'Fatima Noor · Nov 20'},{t:'Thanks for coming to Tea & Study Circle',s:'Fatima Noor · Nov 19'}],
+ ev:[{id:'m1',t:'MSA Community Iftar Planning',s:'Wed Dec 2 · 6:00 PM · Zoom'}]};
+function inMsa(){if(S.clubP!==S.persona){S.curClub='ai';S.clubP=S.persona}return S.persona!=='admin'&&S.curClub==='msa'}
+function clubName(){return inMsa()?MSA.n:'Artificial Intelligence Club'}
+const _hdr28=hdr;hdr=function(t,b,ctx){return _hdr28(t,b,ctx||(S.persona==='admin'?undefined:clubName()))};
+function msaBody(){const go=S.msaGo;
+ return '<h2 class="h2 mt16 mb8">Announcements</h2><div class="card you-list">'+MSA.ann.map(a=>rowS(esc(a.t),esc(a.s))).join('')+'</div>'+
+  '<h2 class="h2 mt16 mb8">Events</h2><div class="card you-list">'+MSA.ev.map(e=>rowS(esc(e.t),esc(e.s),'<button type="button" class="btn '+(go[e.id]?'sec':'pri')+' sm" data-act="msaRsvp" data-v="'+e.id+'">'+(go[e.id]?'✓ Going':'RSVP')+'</button>')).join('')+
+  rowS('MSA Tea & Study Circle','Wed Nov 18 · 5:30 PM · Zoom','<span class="pill cream">Ended</span>')+'</div>'}
+function clubChips(){const ct=S.persona==='contrib',m=inMsa();
+ return '<div class="cap mb8">Your clubs</div><div class="row mb8 club-sw" style="justify-content:flex-start;gap:8px;flex-wrap:wrap"><button type="button" class="chip'+(m?'':' on')+'" aria-pressed="'+!m+'" data-act="setClub" data-v="ai">AI Club · '+(ct?'Contributor':'Club Lead')+'</button><button type="button" class="chip'+(m?' on':'')+'" aria-pressed="'+m+'" data-act="setClub" data-v="msa">MSA · Member</button>'+(ct?'':'<button type="button" class="chip" data-go="directory">＋ Find a club</button>')+'</div>'}
+const _myclubs28=D.myclubs;D.myclubs=function(){let h=_myclubs28.apply(this,arguments);h=h.replace(/<div class="cap mb8">Your clubs<\/div><div class="row mb8 club-sw"[\s\S]*?<\/div>/,clubChips());
+ if(!inMsa())return h;const ct=S.persona==='contrib';
+ return hdr('Clubs')+'<div class="pad">'+clubChips()+'<p class="cap">You’re a Member here: read, RSVP and join the chat.</p>'+msaBody()+
+  '<h2 class="h2 mt16 mb8">Club</h2><div class="card you-list">'+rowB('data-act="msaChat"','MSA group chat','Members only')+(ct?'':rowB('data-go="directory"','Campus directory','All CUNY SPS clubs'))+'</div></div>'};
+ACT.setClub=function(v){if(v===S.curClub&&S.clubP===S.persona)return;S.curClub=v;S.clubP=S.persona;closeAll();toast(v==='msa'?'Now in Muslim Student Association':'Back in AI Club');
+ if(S.view==='overview'||S.view==='events'){go(S.view,false)}else render()};
+ACT.otherClub=function(){ACT.setClub('msa')};
+ACT.switchClub=function(){const ct=S.persona==='contrib',m=inMsa();const opt=(k,t,r)=>'<button type="button" class="persona" data-act="setClub" data-v="'+k+'"'+((k==='msa')===m?' aria-current="true"':'')+'><span><b style="color:var(--indigo)">'+t+'</b><br><span class="cap">'+r+'</span></span>'+((k==='msa')===m?'<span class="pill mint" style="margin-left:auto">Here now</span>':'')+'</button>';
+ openSheet('<h2 class="h2 mb12">Switch club</h2><div class="stack">'+opt('ai','Artificial Intelligence Club',ct?'Contributor':'Club Lead')+opt('msa','Muslim Student Association','Member')+'</div>'+(ct?'':'<button type="button" class="btn sec block mt12" data-go="directory">＋ Find a club</button>'))};
+ACT.msaRsvp=function(v){S.msaGo[v]=!S.msaGo[v];toast(S.msaGo[v]?'You’re going':'RSVP removed');if(S.view==='overview')go('overview',false);else render()};
+ACT.msaChat=function(){openSheet('<h2 class="h2 mb8">MSA group chat</h2><div class="card you-list">'+rowS('Fatima Noor','“Iftar planning call is Dec 2, all welcome.”')+rowS('Omar Siddiqui','“I can bring the slides from last time.”')+'</div>')};
+/* the club name in the header opens Switch club on the tab screens */
+const SW_ROOTS=['overview','events','myclubs','you'];
+function markCtx(){if(S.persona==='admin'||!SW_ROOTS.includes(S.view))return;const v=document.querySelector(VIEWS.includes(S.view)?'#v-'+S.view:'#v-dyn');const c=v&&v.querySelector('.top .ctx');if(!c||c.querySelector('.backlink'))return;
+ c.innerHTML='<button type="button" class="ctx-sw" data-act="switchClub" aria-label="'+clubName()+'. Switch club">'+clubName()+chevDown+'</button>'}
+/* Home and Events follow the club you're in */
+function msaPanel(id,home){const v=document.getElementById(id);if(!v)return;const on=inMsa();v.classList.toggle('msa',on);let p=v.querySelector('.msa-panel');if(!on){if(p)p.remove();return}
+ if(!p){p=document.createElement('div');p.className='msa-panel pad';v.appendChild(p)}
+ p.innerHTML=(home?'<div class="card pad"><b class="you-n">'+greeting()+', '+esc(ME().replace(/^Dr\.\s*/,'').split(' ')[0])+'</b><div class="cap">Member · Muslim Student Association</div></div>':'')+msaBody()+'<button type="button" class="btn sec block mt16" data-act="setClub" data-v="ai">Back to AI Club</button>'}
+const _renderOverview28=renderOverview;renderOverview=function(){_renderOverview28.apply(this,arguments);msaPanel('v-overview',true)};
+const _renderEvents28=renderEvents;renderEvents=function(){_renderEvents28.apply(this,arguments);msaPanel('v-events',false)};
+const _renderEvBar28=renderEvBar;renderEvBar=function(){if(inMsa()&&S.view==='events'){const b=document.getElementById('evbar');if(b)b.classList.remove('on');document.getElementById('phone').classList.remove('has-evbar');return}return _renderEvBar28.apply(this,arguments)};
+const _renderTabs28=renderTabs;renderTabs=function(){const r=_renderTabs28.apply(this,arguments);try{markCtx()}catch(e){}return r};
+/* Create in MSA: members can only ask AI here */
+const _openCreate28=openCreate;openCreate=function(){if(!inMsa())return _openCreate28();
+ openSheet('<h2 class="h2 mb12">Create</h2><div class="cr-grid"><button type="button" class="cr-card" data-cr="ai"><b>✦ Ask AI</b><span class="cap">Draft anything</span></button><button type="button" class="cr-card" data-act="setClub" data-v="ai"><b>Post for AI Club</b><span class="cap">Switch back to post</span></button></div>')};
+
+/* --- Gap 1: Student Life opens any club's view, and can post and remove there --- */
+S.cv=0;
+S.cvData={0:{posts:[{t:'Fall AI & Civic Tech Build Night',s:'Facebook + Instagram · Published Nov 16'},{t:'Finals Week Study Jam',s:'Instagram · Scheduled'}],threads:[{t:'Best free tools for transcribing interviews?',s:'Maya Chen · 4 replies'},{t:'Looking for a Build Night teammate',s:'Noah Kim · 2 replies'}]},
+ 1:{posts:[{t:'Tea & Study Circle recap',s:'Instagram · Published Nov 19'}],threads:[{t:'Ramadan study schedule ideas',s:'Fatima Noor · 6 replies'}]}};
+function cvD(i){return S.cvData[i]||(S.cvData[i]={posts:[],threads:[]})}
+D.clubview=function(){const c=S.clubs[S.cv]||S.clubs[0],d=cvD(S.cv);
+ const item=(k,x,j)=>rowS(esc(x.t)+(x.sl?' <span class="pill mint" style="vertical-align:1px">Student Life</span>':''),esc(x.s),'<button type="button" class="btn txt sm cv-rm" data-act="cvRemove" data-v="'+k+'|'+j+'" aria-label="Remove '+esc(x.t)+'">Remove</button>');
+ const list=(k,h,arr)=>'<h2 class="h2 mt16 mb8">'+h+'</h2>'+(arr.length?'<div class="card you-list">'+arr.map((x,j)=>item(k,x,j)).join('')+'</div>':'<div class="card pad"><p class="cap">Nothing here yet.</p></div>');
+ const ev=S.cv===0?upcomingEvents().filter(e=>!/^MSA/.test(e.title)&&e.type!=='campus'):S.cv===1?EVENTS.filter(e=>/^MSA/.test(e.title)):[];
+ return hdr(esc(c.n),null,'CUNY SPS · Student Life')+'<div class="pad"><div class="note">Club view as Student Life. You can post and remove here; the Club Leads get a notice each time.</div>'+
+  '<div class="two mt12"><button type="button" class="btn pri" data-act="cvPost">Post to this club</button><button type="button" class="btn sec" data-act="viewMembers" data-v="'+esc(c.n)+'">Members</button></div>'+
+  list('posts','Posts',d.posts)+list('threads','Forum threads',d.threads)+
+  '<h2 class="h2 mt16 mb8">Events</h2>'+(ev.length?'<div class="card you-list">'+ev.map(e=>rowS(esc(e.title),esc(e.meta),evPast(e)?'<span class="pill cream">Ended</span>':'')).join('')+'</div>':'<div class="card pad"><p class="cap">No events yet.</p></div>')+'</div>'};
+TAB_ADMIN.clubview='clubsadmin';
+const _clubsadmin28=D.clubsadmin;D.clubsadmin=function(){const h=_clubsadmin28.apply(this,arguments);
+ return h.replace(/<button class="btn sec" data-act="editClub" data-v="(\d+)">Edit profile<\/button><button class="btn sec" data-act="viewMembers" data-v="([^"]*)">View members<\/button><\/div>/g,(m,ci,n)=>m+'<button type="button" class="btn pri block mt8" data-act="openClubView" data-v="'+ci+'">Open club view</button>')};
+ACT.openClubView=function(v){S.cv=+v;go('clubview')};
+ACT.cvPost=function(){const c=S.clubs[S.cv];let kind='posts';
+ openSheet('<h2 class="h2 mb8">Post to '+esc(c.n)+'</h2><div class="chips mb12" role="group" aria-label="Where it goes"><button type="button" class="chip" aria-pressed="true" data-cvk="posts">Club post</button><button type="button" class="chip" aria-pressed="false" data-cvk="threads">Forum thread</button></div>'+
+  '<div class="field" id="f-cvt"><label class="label" for="cv-t">Title</label><input id="cv-t" maxlength="80" enterkeyhint="next" placeholder="e.g. Officer handover reminder"><span class="err">Add a title</span></div><div class="field"><label class="label" for="cv-b">Message</label><textarea id="cv-b" maxlength="500" placeholder="What do members need to know?"></textarea></div><button type="button" class="btn pri block" id="cv-go">Post as Student Life</button>');
+ $$('#sheet [data-cvk]').forEach(b=>b.onclick=()=>{kind=b.dataset.cvk;$$('#sheet [data-cvk]').forEach(x=>x.setAttribute('aria-pressed',x===b))});
+ $('#cv-go').onclick=()=>{const t=$('#cv-t').value.trim();if(!t){$('#f-cvt').classList.add('bad');return}
+  cvD(S.cv)[kind].unshift({t,s:'Student Life · Just now',sl:true});audit(ME(),'Moderation','STUDENT_LIFE_POST · '+c.code+' · '+t);
+  if(S.cv===0)pushNote({to:'lead',k:'club',t:'Student Life posted in AI Club',s:t,go:'myclubs'});closeAll();toast('Posted to '+c.n);render()}};
+ACT.cvRemove=function(v){const [k,j]=v.split('|'),c=S.clubs[S.cv],x=cvD(S.cv)[k][+j];if(!x)return;
+ openSheet('<h2 class="h2 mb8">Remove “'+esc(x.t)+'”?</h2><p class="cap mb12">It comes down for everyone in '+esc(c.n)+'. The Club Leads see your reason.</p><div class="field" id="f-cvr"><label class="label" for="cv-r">Reason</label><textarea id="cv-r" maxlength="200" placeholder="e.g. Shares a member’s personal phone number"></textarea><span class="err">Add a reason for the Club Leads</span></div><div class="two"><button type="button" class="btn sec" id="cvr-no">Cancel</button><button type="button" class="btn pri" id="cvr-yes">Remove</button></div>');
+ $('#cvr-no').onclick=closeAll;$('#cvr-yes').onclick=()=>{const r=$('#cv-r').value.trim();if(!r){$('#f-cvr').classList.add('bad');return}
+  cvD(S.cv)[k].splice(+j,1);audit(ME(),'Moderation','CONTENT_REMOVED · '+c.code+' · '+x.t);if(S.cv===0)pushNote({to:'lead',k:'club',t:'Student Life removed “'+x.t+'”',s:'Reason: '+r,go:'myclubs'});closeAll();toast('Removed. The Club Leads were told why.');render()}};
+
+/* --- Gap 3: AI Assistant for Student Life (row on Console, 3 admin prompts, answers link to the page) --- */
+const ADMIN_AI=['Draft an announcement to all club leads about the Dec 4 officer handover','Summarize this week’s audit log','Which clubs have been quiet lately?'];
+TAB_ADMIN.assistant='console';
+const _console28=D.console;D.console=function(){return _console28().replace('<div class="card you-list mb16" id="con-more">','<div class="card you-list mb16" id="con-more">'+rowB('data-go="assistant"','✦ AI Assistant','Announcements, audit summaries, quiet clubs'))};
+const _assistant28=D.assistant;D.assistant=function(){if(S.persona!=='admin')return _assistant28.apply(this,arguments);
+ const keep=S.f.aiMode;S.f.aiMode='chat';let h;try{h=_assistant28.apply(this,arguments)}finally{S.f.aiMode=keep}
+ h=h.replace(/<div class="chips mb12" role="group">[\s\S]*?<\/div>/,'');
+ h=h.replace(/<div class="pad" style="padding-top:0"><div class="label mb8">Try asking<\/div>[\s\S]*?<\/div><\/div>(?=<form)/,'');
+ h=h.replace('<form class="bottombar"','<div class="pad" style="padding-top:0"><div class="label mb8">Try asking</div><div class="stack">'+ADMIN_AI.map(q=>'<button class="aiopt" data-act="ask" data-v="'+esc(q)+'">'+esc(q)+'</button>').join('')+'</div></div><form class="bottombar"');
+ let i=-1;h=h.replace(/<div class="msg (me)?">/g,(mm)=>{i++;return mm.replace('>',' data-mi="'+i+'">')});
+ S.chat.forEach((m,j)=>{if(m.link){h=h.replace(new RegExp('(<div class="msg " data-mi="'+j+'">[\\s\\S]*?)(</div>)'),'$1<button class="chip mt12" data-go="'+m.link[0]+'">'+m.link[1]+' →</button>$2')}});return h};
+function adminAnswer(q){const l=q.toLowerCase();
+ if(l.includes('announcement'))return {t:'Here’s a draft you can edit:\n“Hi club leads, a reminder that officer handover is due Thursday, Dec 4. Please add your incoming officers in the Hub and complete the 4-step handover checklist with your faculty advisor. Reply here if you need more time. Student Life”',link:['leaders','Open Club leaders']};
+ if(l.includes('audit')){const a=S.audit||[];const by={};a.forEach(x=>by[x.action]=(by[x.action]||0)+1);return {t:'This week in the audit log ('+a.length+' entries):\n'+Object.entries(by).map(([k,n])=>'• '+k+': '+n).join('\n')+'\nNothing flagged as a security issue.',link:['audit','Open Audit logs']}}
+ if(l.includes('quiet'))return {t:'Clubs with no posts or events in the last 14 days:\n'+S.clubs.slice(1).map(c=>'• '+c.n+' ('+c.m+' members)').join('\n')+'\nArtificial Intelligence Club is active (2 posts, 3 events this month).',link:['clubsadmin','Open Clubs']};
+ return null}
+const _ask28=ask;ask=function(q){if(S.persona!=='admin'){return _ask28(q)}const a=adminAnswer(q);if(!a)return _ask28(q);
+ S.chat.push({me:true,t:q});S.typing=true;render();setTimeout(()=>{S.typing=false;S.chat.push({me:false,t:a.t,link:a.link});if(S.view==='assistant'){render();const cl=$('#chatlog');cl&&cl.lastElementChild&&cl.lastElementChild.scrollIntoView({block:'nearest'})}},380)};
+/* each person has their own assistant chat */
+S.chats={};const _go28=go;go=function(v){if(v==='assistant'){const k=S.persona;if(S.chatFor!==k){if(S.chatFor)S.chats[S.chatFor]=S.chat;S.chat=S.chats[k]||[{me:false,t:'Hi there. '+(k==='admin'?'I can draft announcements to club leads, summarize the audit log, or spot clubs that have gone quiet. What do you need?':'I can draft captions, plan a posting schedule, or check a post against CUNY accessibility guidance. What are you working on?')}];S.chatFor=k}}return _go28.apply(this,arguments)};
+S.chatFor='lead';
+
+/* --- Gap 4: account requests get 4 kinds: New, Transfer, Archive, Close --- */
+const RQ_STEPS={new:['Submitted','Under Student Life Review','Awaiting CUNY Approval','Approved for setup','Setup in progress','Connected'],
+ transfer:['Submitted','Under Student Life Review','Contact updated'],archive:['Submitted','Under Student Life Review','Awaiting CUNY Approval','Archived'],close:['Submitted','Under Student Life Review','Awaiting CUNY Approval','Closed']};
+const RQ_KIND={new:'New',transfer:'Transfer',archive:'Archive',close:'Close'};
+Object.assign(S.reqs.find(r=>r.id==='REQ-2026-012')||{},{kind:'transfer',st:'Under Student Life Review',step:1});
+function reqsOpen(){return (S.reqs||[]).filter(r=>!/Approved|Rejected|Live|Declined|Connected|Archived|Closed|Contact updated/.test(r.st||'')).length}
+D.requests=function(){const ad=S.persona==='admin';
+ return hdr('Account requests')+intro('Official account requests','New accounts, transfers, archiving and closing','<button class="btn pri" data-act="reqAcct">New</button>')+'<div class="pad stack" style="padding-top:0">'+S.reqs.filter(r=>ad||r.club==='Artificial Intelligence Club').map(r=>{const k=r.kind||'new',steps=RQ_STEPS[k],end=steps.length-1;
+  const done=r.step>=end&&k!=='new'||/Declined/.test(r.st);
+  let btn='';if(ad&&!/Declined/.test(r.st)){
+   if(k==='new'&&r.step<3)btn='<div class="stack mt12"><button class="btn pri" data-act="decide" data-v="'+r.id+'|approve">Approve for setup</button><button class="btn sec" data-act="decide" data-v="'+r.id+'|info">More information required</button><button class="btn txt" data-act="decide" data-v="'+r.id+'|decline">Decline</button></div>';
+   else if(k!=='new'&&r.step===1)btn='<div class="two mt12"><button class="btn pri" data-act="decide2" data-v="'+r.id+'|approve">Approve</button><button class="btn sec" data-act="decide2" data-v="'+r.id+'|decline">Decline</button></div>';
+   else if(k!=='new'&&r.step===2&&k!=='transfer')btn='<button class="btn pri block mt12" data-act="decide2" data-v="'+r.id+'|cuny">CUNY Communications approved</button>'}
+  return '<article class="card pad"><div class="row mb8" style="justify-content:flex-start;gap:6px"><span class="pill '+(/Approved|Connected|Archived|Closed|Contact updated/.test(r.st)?'mint':r.st==='Declined'?'coral':'cream')+'">'+r.st+'</span><span class="pill">'+RQ_KIND[k]+'</span></div><h2 class="h2 mb8">'+esc(r.t)+'</h2><p class="cap mb12">'+r.id+' · '+r.p+' · '+r.by+'</p>'+(r.why?'<p class="cap mb12">'+esc(r.why)+'</p>':'')+
+   '<ol class="steps2">'+steps.map((s,i)=>'<li class="'+(i<r.step||(done&&i===r.step&&!/Declined/.test(r.st))?'done':i===r.step?'cur':'')+'">'+s+(i===r.step&&!done?' · current':'')+'</li>').join('')+'</ol>'+btn+'</article>'}).join('')+
+  '<div class="note">The account always stays owned by CUNY SPS. New accounts, archiving and closing also need CUNY Communications (about 10 business days).</div></div>'};
+ACT.decide2=function(v){const [id,d]=v.split('|');const r=S.reqs.find(x=>x.id===id),k=r.kind,steps=RQ_STEPS[k];
+ if(d==='decline'){r.st='Declined'}else if(d==='approve'){r.step=2;r.st=steps[2]}else if(d==='cuny'){r.step=3;r.st=steps[3]}
+ audit(ME(),'Governance','ACCOUNT_REQUEST_DECISION · '+id+' · '+r.st);if(r.club==='Artificial Intelligence Club')pushNote({to:'lead',k:'req',t:'Account request: '+r.st,s:id+' · '+r.t,go:'requests'});
+ toast(id+': '+r.st);render()};
+ACT.reqAcct=function(){let kind='new';const acc=S.accts.map(a=>'<option>'+esc(a.n+' · '+a.h)+'</option>').join('');
+ const body={new:'<div class="field"><label class="label" for="rq-p">Platform</label><select id="rq-p"><option>LinkedIn</option><option>TikTok</option><option>YouTube</option><option>Threads</option></select></div><div class="field"><label class="label" for="rq-r">Purpose</label><textarea id="rq-r">Share club events and student projects with alumni and employers.</textarea></div>',
+  transfer:'<div class="field"><label class="label" for="rq-a">Account</label><select id="rq-a">'+acc+'</select></div><div class="two"><div class="field" id="f-rqn"><label class="label" for="rq-n">New club contact</label><input id="rq-n" placeholder="Full name" enterkeyhint="next"><span class="err">Add a name</span></div><div class="field" id="f-rqm"><label class="label" for="rq-m">CUNY email</label><input id="rq-m" type="email" inputmode="email" autocapitalize="off" placeholder="name@spsmail.cuny.edu" enterkeyhint="done"><span class="err">Use a CUNY email</span></div></div>',
+  archive:'<div class="field"><label class="label" for="rq-a">Account</label><select id="rq-a">'+acc+'</select></div><div class="field" id="f-rqw"><label class="label" for="rq-w">Why archive it?</label><textarea id="rq-w" placeholder="e.g. We’re pausing this page until spring"></textarea><span class="err">Add a reason</span></div>',
+  close:'<div class="field"><label class="label" for="rq-a">Account</label><select id="rq-a">'+acc+'</select></div><div class="field" id="f-rqw"><label class="label" for="rq-w">Why close it?</label><textarea id="rq-w" placeholder="e.g. The club no longer uses this platform"></textarea><span class="err">Add a reason</span></div>'};
+ const sub={new:'Goes to Student Life, then CUNY Communications.',transfer:'Ownership stays with CUNY SPS. Only the club contact changes. Student Life approves.',archive:'Goes to Student Life, then CUNY Communications. Posts stay saved.',close:'Goes to Student Life, then CUNY Communications. This can’t be undone.'};
+ openSheet('<h2 class="h2 mb8">New account request</h2><div class="chips mb12" role="group" aria-label="Request type">'+Object.keys(RQ_KIND).map(k=>'<button type="button" class="chip" data-rqk="'+k+'" aria-pressed="'+(k==='new')+'">'+RQ_KIND[k]+'</button>').join('')+'</div><p class="cap mb12" id="rq-sub">'+sub.new+'</p><div id="rq-body">'+body.new+'</div><button class="btn pri block" id="rq-go">Submit request</button>');
+ $$('#sheet [data-rqk]').forEach(b=>b.onclick=()=>{kind=b.dataset.rqk;$$('#sheet [data-rqk]').forEach(x=>x.setAttribute('aria-pressed',x===b));$('#rq-body').innerHTML=body[kind];$('#rq-sub').textContent=sub[kind]});
+ $('#rq-go').onclick=()=>{const id='REQ-2026-0'+(15+S.reqs.length);let r;
+  if(kind==='new'){const p=$('#rq-p').value;r={t:'New Official Account: AI Club '+p,p}}
+  else{const a=S.accts[$('#rq-a').selectedIndex];
+   if(kind==='transfer'){const n=$('#rq-n').value.trim(),m=$('#rq-m').value.trim(),ok=/cuny\.edu$/i.test(m);$('#f-rqn').classList.toggle('bad',!n);$('#f-rqm').classList.toggle('bad',!ok);if(!n||!ok)return;r={t:'Transfer: '+a.n+' contact to '+n,p:a.n.split(' ')[0],why:'New club contact: '+n+' · '+m}}
+   else{const w=$('#rq-w').value.trim();$('#f-rqw').classList.toggle('bad',!w);if(!w)return;r={t:(kind==='archive'?'Archive: ':'Close: ')+a.n+' '+a.h,p:a.n.split(' ')[0],why:'Reason: '+w}}}
+  S.reqs.unshift(Object.assign(r,{id,kind,club:'Artificial Intelligence Club',step:kind==='new'?0:1,st:kind==='new'?'Submitted':'Under Student Life Review',by:ME()+' · Nov '+TODAY}));
+  audit(ME(),'Governance','ACCOUNT_REQUEST_SUBMITTED · '+id+' · '+RQ_KIND[kind]);pushNote({to:'admin',k:'req',t:'New '+RQ_KIND[kind].toLowerCase()+' request',s:id+' · '+r.t,go:'requests'});
+  closeAll();toast(id+' sent to Student Life');if(S.view==='requests')render();else go('requests')}};
+const _updateBack28=updateBack;updateBack=function(){_updateBack28.apply(this,arguments);try{markCtx()}catch(e){}};
