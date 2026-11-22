@@ -572,7 +572,7 @@ button.postrow{background:none;color:inherit;font:inherit}
           <div class="sp-actions">
             <button class="sp-enter" data-go="signin">Enter demo</button>
             <button class="sp-walk" data-act="obStart"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>Walk through sign-up</button>
-            <p class="sp-ver">Version Nov 22 · 21</p>
+            <p class="sp-ver">Version Nov 22 · 22</p>
           </div>
         </div>
       </section>
@@ -1082,7 +1082,7 @@ function renderEvents(){setTimeout(squishAtt,0);const all=EVENTS.filter(e=>S.fil
  $$('[data-chk]').forEach(b=>b.onclick=()=>{const id=b.dataset.chk;const ev=EVENTS.find(e=>e.id===id);
   openSheet('<h2 class="h2 mb8">Check in · officer view</h2><p class="cap mb12">'+ev.title+'</p><div class="card pad mb12" style="text-align:center"><div style="width:150px;height:150px;margin:0 auto 10px;background:repeating-linear-gradient(45deg,var(--indigo) 0 6px,#fff 6px 12px);border-radius:12px" aria-label="Sample check-in code"></div><p class="cap">Attendees scan this code at the door.</p></div><button class="btn pri block" id="self-chk">Check myself in</button>');
   $('#self-chk').onclick=()=>{S.checked[id]=true;S.attending[id]=true;closeAll();swapNext('[data-chk="'+id+'"]');toast('Checked in. Attendance recorded for officers.');renderEvents()}});
- $$('[data-more]').forEach(b=>b.onclick=()=>{const id=b.dataset.more;openSheet('<h2 class="h2 mb12">More actions</h2>'+[['Add to calendar','data-act="evIcs" data-v="'+id+'"'],['Share event','data-act="shareEv"'],['Create a post about this event','id="mk-post"'],['Message attendees','data-act="evMsg" data-v="'+id+'"'],['Edit event','data-act="evEdit" data-v="'+id+'"']].map(([t,a])=>'<button class="navitem" '+a+'>'+t+'</button>').join(''))},0);
+ $$('[data-more]').forEach(b=>b.onclick=()=>{const id=b.dataset.more;openSheet('<h2 class="h2 mb12">More actions</h2>'+[[(S.inCal&&S.inCal[id]?'✓ In your calendar':'Add to calendar'),'data-act="evIcs" data-v="'+id+'"'],['Share event','data-act="shareEv"'],['Create a post about this event','id="mk-post"'],['Message attendees','data-act="evMsg" data-v="'+id+'"'],['Edit event','data-act="evEdit" data-v="'+id+'"']].map(([t,a])=>'<button class="navitem" '+a+'>'+t+'</button>').join(''))},0);
  const mk=()=>{const m=$('#mk-post');if(m)m.onclick=()=>{resetPost();$('#post-title').value=h.title;$('#rel-event').value=h.id;setPhoto(PHOTOS.find(p=>p.src===h.img)||null);go('create')}};
  document.querySelectorAll('[data-more]').forEach(b=>b.addEventListener('click',()=>setTimeout(mk,0)));}
 
@@ -1168,7 +1168,7 @@ function updateBack(){const top=$('#'+(VIEWS.includes(S.view)?'v-'+S.view:'v-dyn
 /* init */
 setPhoto(PHOTOS[0]);$('#alt').value='Students talking together outside on a CUNY campus';
 </script>
-<script src="js/screens.js?v=20261122-21"></script>
+<script src="js/screens.js?v=20261122-22"></script>
 <script>(function(){const v=resolveV(location.hash.slice(1)||'welcome'),st=history.state;if(st&&st.hub&&typeof st.i==='number')S.hi=st.i;else{S.hi=0;try{history.replaceState(hstate(0,v),'','#'+v)}catch(e){}}S.hist[S.hi]={v};go(v,false)})();</script>
 </body>
 </html>
