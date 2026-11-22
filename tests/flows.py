@@ -669,7 +669,7 @@ async def flow15(b):
     print('F15 v18: opening, sign-up walkthrough, swipe-back fix, search + people, drafts, blog edit, clubs, cleanups')
     # opening + walkthrough
     pg = await new_page(b)
-    check(await pg.is_visible('.sp-enter') and 'Version Nov 22 · 19' in await pg.inner_text('#v-welcome'), 'F15 splash with Enter demo + version')
+    check(await pg.is_visible('.sp-enter') and 'Version Nov 22 · 20' in await pg.inner_text('#v-welcome'), 'F15 splash with Enter demo + version')
     await tap(pg, '.sp-enter'); check((await state(pg))['view'] == 'v-signin' and await pg.locator('.ch-role').count() == 3, 'F15 Choose shows 3 roles')
     await tap(pg, '.ch-browse button', 500); check(await pg.evaluate('S.view') == 'public', 'F15 Browse club events opens the teaser')
     await tap(pg, 'text=Pick a role and try the Hub', 500); check(await pg.evaluate('S.view') == 'signin', 'F15 teaser -> back to Choose')
@@ -703,6 +703,8 @@ async def flow15(b):
     await pg.evaluate("go('schedule')"); await pg.wait_for_timeout(500)
     await swipe_edge(pg, native=True)
     check(await pg.evaluate('S.view') == 'create' and await pg.input_value('#post-title') == 'Swipe test', f"F15 iOS swipe + edge swipe from Preview -> editor, not Overview ({await pg.evaluate('S.view')})")
+    check(await pg.evaluate('S.nativeSwipe') is True, 'F15 the app notices iOS does its own swipe back')
+    await pg.evaluate("S.nativeSwipe=false;localStorage.removeItem('hubNativeSwipe')")  # older iOS: the app's own edge swipe
     await pg.wait_for_timeout(600); check(await pg.evaluate('S.view') == 'create', 'F15 stays on the editor (no late second back)')
     await pg.go_forward(); await pg.wait_for_timeout(500); check(await pg.evaluate('S.view') == 'schedule', 'F15 forward returns to Preview')
     await swipe_edge(pg, native=False); check(await pg.evaluate('S.view') == 'create', 'F15 edge swipe alone still goes back one step')
@@ -822,11 +824,59 @@ async def flow16(b):
     check(ws == ws2, 'F16 interest chips don’t move when tapped')
     check(not pg.errs, f'F16 walkthrough errors {pg.errs}'); await pg.context.close()
 
+async def flow17(b):
+    print('F17 v20: fixes from the v19 phone check')
+    pg = await new_page(b); await tap(pg, '.sp-enter'); await tap(pg, '.ch-role[data-persona="lead"]', 700)
+    nu = await pg.evaluate("[...document.querySelectorAll('#ov-events .ev-mini')].map(x=>[x.textContent,x.querySelector('.ph').className])")
+    th = [x for x in nu if 'Town Hall' in x[0]]
+    check(th and 'noimg' in th[0][1] and 'Student Life' in th[0][0], f'F17 photo-less Next up card gets the Student Life graphic {nu}')
+    await pg.evaluate("go('events')"); await pg.wait_for_timeout(400); ev = await pg.inner_text('#v-events')
+    check('Mon Nov 23 · 6:00 PM' in ev and '10:00 PM' not in ev, 'F17 Office Hours is at 6:00 PM')
+    await tap(pg, '#ev-list [data-more="e3"]', 500); await tap(pg, '#sheet [data-act="evIcs"]', 500)
+    check(await pg.is_visible('#cal-apple') and await pg.is_visible('#cal-google'), 'F17 Add to calendar offers iPhone and Google Calendar')
+    await pg.evaluate("window.open=u=>{window.__open=u}"); await tap(pg, '#cal-google', 400)
+    u = await pg.evaluate('window.__open||""')
+    check('calendar.google.com' in u and 'dates=20261123T180000/20261123T193000' in u and 'ctz=America/New_York' in u, f'F17 Google Calendar link has the right time {u}')
+    ics = await pg.evaluate("fetch('cal/e3.ics').then(r=>r.text())")
+    check('DTSTART;TZID=America/New_York:20261123T180000' in ics and 'SUMMARY:Pre-Submission Office Hours' in ics, 'F17 iPhone calendar file has the event')
+    allc = await pg.evaluate("fetch('cal/ai-club-events.ics').then(r=>r.text())")
+    check(allc.count('BEGIN:VEVENT') == 3, 'F17 Export .ics file has the 3 upcoming events')
+    await tap(pg, '#ev-list [data-more="e3"]', 500); await tap(pg, '#sheet [data-act="evEdit"]', 500)
+    await pg.fill('#ee-d', '2026-11-10'); await pg.fill('#ee-h', '00:00'); await blur(pg); await tap(pg, '#ee-save', 500)
+    check(await pg.is_visible('#ee-save') and await pg.evaluate("!EVENTS.find(e=>e.id==='e3').at"), 'F17 Edit event blocks a past date')
+    check('hasn’t passed' in await pg.inner_text('#toast'), 'F17 past date explains why')
+    check(await pg.evaluate("!!document.querySelector('#ee-d').min"), 'F17 date picker starts at today')
+    await pg.fill('#ee-d', '2026-12-01'); await pg.fill('#ee-h', '18:00'); await blur(pg); await tap(pg, '#ee-save', 600)
+    t=await pg.inner_text('#ev-list'); check('Dec 1' in t and '6:00 PM' in t, 'F17 a future date still saves')
+    # going back with a swipe / browser back: no fade-in (that showed as a white flash)
+    await pg.evaluate("go('notifications')"); await pg.wait_for_timeout(500)
+    await pg.go_back(); await pg.wait_for_timeout(60)
+    c = await pg.evaluate("document.querySelector('.view.on').className")
+    check(await pg.evaluate('S.view') == 'events' and 'in-back' not in c, f'F17 swipe back has no fade-in ({c})')
+    await pg.evaluate("go('announcements')"); await pg.wait_for_timeout(500); await tap(pg, '#v-dyn .backlink', 60)
+    c = await pg.evaluate("document.querySelector('.view.on').className")
+    check('in-back' in c, f'F17 the back link still slides ({c})')
+    await pg.wait_for_timeout(400); await pg.evaluate("go('announcements')"); await pg.wait_for_timeout(400)
+    b2 = pg.locator('#v-dyn [data-act=ack] >> visible=true')
+    if await b2.count():
+        await b2.first.tap(); await pg.wait_for_timeout(300); check((await pg.inner_text('#toast')).strip() == 'Marked as read', 'F17 short Marked as read notice')
+    check(not pg.errs, f'F17 errors {pg.errs}'); await pg.context.close()
+    # home-screen app: once iOS shows it does its own swipe back, the app's arrow stays out of the way
+    pg = await new_page(b); await pg.goto(URL + '?swipe=1'); await pg.wait_for_timeout(500)
+    await tap(pg, '.sp-enter'); await tap(pg, '.ch-role[data-persona="lead"]', 600)
+    await pg.evaluate("go('events')"); await pg.wait_for_timeout(400); await pg.evaluate("go('notifications')"); await pg.wait_for_timeout(400)
+    await swipe_edge(pg, native=True)
+    check(await pg.evaluate('S.view') == 'events' and await pg.evaluate('S.nativeSwipe') is True, 'F17 iOS swipe goes back one step and is remembered')
+    await pg.evaluate("go('notifications')"); await pg.wait_for_timeout(400)
+    await pg.evaluate("""()=>{const ph=document.querySelector('#phone').getBoundingClientRect();const tc=new Touch({identifier:1,target:document.body,clientX:ph.left+5,clientY:400});document.dispatchEvent(new TouchEvent('touchstart',{touches:[tc],changedTouches:[tc],bubbles:true}));const t2=new Touch({identifier:1,target:document.body,clientX:ph.left+120,clientY:400});document.dispatchEvent(new TouchEvent('touchmove',{touches:[t2],changedTouches:[t2],bubbles:true}))}""")
+    check(await pg.evaluate("document.querySelector('#edgeback').style.transform") in ('', None), 'F17 no blue arrow once iOS handles the swipe')
+    check(not pg.errs, f'F17 swipe errors {pg.errs}'); await pg.context.close()
+
 async def main():
     import os; os.makedirs(OUT, exist_ok=True)
     async with async_playwright() as p:
         b = await p.chromium.launch(executable_path='/usr/bin/google-chrome')
-        ALL=[flow1, flow2, flow3, flow4, flow5, flow6, flow7, flow8, flow9, flow10, flow11, flow12, flow13, flow14, flow15, flow16]
+        ALL=[flow1, flow2, flow3, flow4, flow5, flow6, flow7, flow8, flow9, flow10, flow11, flow12, flow13, flow14, flow15, flow16, flow17]
         only=os.environ.get('ONLY')
         for f in ([g for g in ALL if g.__name__ in only.split(',')] if only else ALL):
             try: await f(b)

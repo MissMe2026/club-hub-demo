@@ -273,7 +273,7 @@ html,body{overflow-x:hidden;max-width:100%}
 
 #rel-event{max-width:170px;overflow:hidden;text-overflow:ellipsis}
 .noimg{background:radial-gradient(rgba(255,255,255,.2) 1px,transparent 1.5px) 0 0/14px 14px,linear-gradient(135deg,var(--blue),var(--indigo))!important;display:flex;align-items:flex-end;justify-content:flex-end;padding:12px;color:#fff;font-weight:800;font-size:18px;letter-spacing:.02em}
-.evrow .noimg{font-size:10px;padding:6px;text-align:right}
+.ev-mini .noimg{position:relative}.ev-mini .noimg .nu-sl{font-size:13px;line-height:15px;text-align:right}.evrow .noimg{font-size:10px;padding:6px;text-align:right}
 .statgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .stat{background:var(--pearl);border-radius:14px;padding:12px}.stat b{display:block;font-size:22px;line-height:28px;font-weight:800;color:var(--indigo)}.stat span{font-size:12px;line-height:16px}
 .lrow{display:flex;align-items:center;gap:12px;padding:12px 14px;border-bottom:1px solid var(--smoke);width:100%;text-align:left;min-height:56px}
@@ -572,7 +572,7 @@ button.postrow{background:none;color:inherit;font:inherit}
           <div class="sp-actions">
             <button class="sp-enter" data-go="signin">Enter demo</button>
             <button class="sp-walk" data-act="obStart"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>Walk through sign-up</button>
-            <p class="sp-ver">Version Nov 22 · 19</p>
+            <p class="sp-ver">Version Nov 22 · 20</p>
           </div>
         </div>
       </section>
@@ -750,11 +750,11 @@ const PHOTOS=[
 const EVENTS=[
  {id:'e1',type:'workshop',mon:'NOV',day:'19',when:'Thu 6:30 PM',title:'Fall AI & Civic Tech Build Night',meta:'Thu Nov 19 · 6:30 PM · Room 402 + Zoom · Co-hosted with WSTEM',going:3,seats:35,img:PHOTOS[0].src,tag:'Workshop'},
  {id:'e2',type:'club',mon:'NOV',day:'18',when:'Wed 5:30 PM',title:'MSA Tea & Study Circle',meta:'Wed Nov 18 · 5:30 PM · Zoom',going:2,seats:20,img:PHOTOS[2].src,tag:'Club meeting'},
- {id:'e3',type:'club',mon:'NOV',day:'23',when:'Mon 10 PM',title:'Pre-Submission Office Hours',meta:'Mon Nov 23 · 10:00 PM · Zoom',going:2,seats:15,img:PHOTOS[1].src,tag:'Club meeting'},
+ {id:'e3',type:'club',mon:'NOV',day:'23',when:'Mon 6 PM',title:'Pre-Submission Office Hours',meta:'Mon Nov 23 · 6:00 PM · Zoom',going:2,seats:15,img:PHOTOS[1].src,tag:'Club meeting'},
  {id:'e4',type:'campus',mon:'DEC',day:'3',when:'Thu Dec 3',title:'Student Life Town Hall',meta:'Thu Dec 3 · 12:00 PM · 119 W 31st St + Zoom',going:2,seats:80,img:'',tag:'Campus event'},
  {id:'e5',type:'club',mon:'NOV',day:'30',when:'Mon 7 PM',title:'AI Ethics Reading Group',meta:'Mon Nov 30 · 7:00 PM · Zoom',going:4,seats:25,img:PHOTOS[0].src,tag:'Club meeting'}];
 const NAV_LEAD=[['Workspace',[['Overview','overview'],['Drafts','drafts'],['Club Announcements','announcements'],['Notifications','notifications']]],['Social Publishing',[['Create Post','create'],['Content Calendar','calendar'],['My Social Accounts','accounts'],['AI Assistant','assistant'],['Inbox','inbox'],['Analytics','analytics']]],['Club Community',[['Upcoming Events','events'],['Club Event Calendar','eventcal'],['Event Analytics','eventstats'],['Email Reminders','reminders'],['Club Forums','forums'],['Messaging Center','messaging'],['WhatsApp Group','whatsapp'],['AI Club Blog','blog'],['Project Tasks','tasks']]],['Administration',[['Club Dashboard','dashboard'],['Member Directory','members'],['Team Management','team'],['Account Requests','requests'],['Club Resources','resources'],['Campus Directory','directory'],['Settings','settings']]],['Account',[['Switch identity · Sign out','signin']]]];
-const EVAT={e1:'2026-11-19T18:30',e2:'2026-11-18T17:30',e3:'2026-11-23T22:00',e4:'2026-12-03T12:00',e5:'2026-11-30T19:00'};
+const EVAT={e1:'2026-11-19T18:30',e2:'2026-11-18T17:30',e3:'2026-11-23T18:00',e4:'2026-12-03T12:00',e5:'2026-11-30T19:00'};
 function evAt(e){return new Date(e.at||EVAT[e.id])}
 function evPast(e){const d=evAt(e);return !isNaN(d)&&d.getTime()+2*36e5<Date.now()}
 function upcomingEvents(){return EVENTS.filter(e=>!evPast(e)).sort((a,b)=>evAt(a)-evAt(b))}
@@ -767,7 +767,7 @@ const S={posts:[{title:'Build Night reminder',sub:'Instagram · Thu 9:00 AM',st:
 
 /* routing */
 const VIEWS=['welcome','signin','overview','create','schedule','result','events'];const ADMIN=['console','clubsadmin','requests','leaders','socialadmin','users','audit','reports','platform','notifications'];
-function go(v,push=true){if(S.persona==='contrib'&&CONTRIB_NO.includes(v)){toast('That’s for Club Leads and Editors.');v='overview'}const dyn=typeof D!=='undefined'&&D[v];if(!VIEWS.includes(v)&&!dyn)v='welcome';$('#phone').classList.toggle('blue',v==='welcome');$('#phone').classList.toggle('full',v==='welcome'||v==='signin');if(S.persona==='admin'&&VIEWS.includes(v)&&v!=='signin'&&v!=='welcome')S.persona='lead';const prev=S.view;S.view=v;$$('.view').forEach(x=>{x.classList.toggle('on',dyn?x.id==='v-dyn':x.id==='v-'+v);x.classList.remove('in-fwd','in-back')});if(prev&&prev!==v){const el=$(dyn?'#v-dyn':'#v-'+v);void el.offsetWidth;el.classList.add(S.dir==='back'?'in-back':'in-fwd')}S.dir='fwd';if(dyn)render();$('#ws').closest('.field').style.display=S.persona==='admin'?'none':'';$('#ws').closest('.field').previousElementSibling.textContent=S.persona==='admin'?'Student Life · all clubs':'Active club workspace';$('#screen').scrollTop=0;try{window.scrollTo(0,0);document.documentElement.scrollLeft=0;document.body.scrollLeft=0}catch(e){}$('#phone').scrollTop=0;closeAll();
+function go(v,push=true){if(S.persona==='contrib'&&CONTRIB_NO.includes(v)){toast('That’s for Club Leads and Editors.');v='overview'}const dyn=typeof D!=='undefined'&&D[v];if(!VIEWS.includes(v)&&!dyn)v='welcome';$('#phone').classList.toggle('blue',v==='welcome');$('#phone').classList.toggle('full',v==='welcome'||v==='signin');if(S.persona==='admin'&&VIEWS.includes(v)&&v!=='signin'&&v!=='welcome')S.persona='lead';const prev=S.view;S.view=v;$$('.view').forEach(x=>{x.classList.toggle('on',dyn?x.id==='v-dyn':x.id==='v-'+v);x.classList.remove('in-fwd','in-back')});if(prev&&prev!==v&&S.dir!=='none'){const el=$(dyn?'#v-dyn':'#v-'+v);void el.offsetWidth;el.classList.add(S.dir==='back'?'in-back':'in-fwd')}S.dir='fwd';if(dyn)render();$('#ws').closest('.field').style.display=S.persona==='admin'?'none':'';$('#ws').closest('.field').previousElementSibling.textContent=S.persona==='admin'?'Student Life · all clubs':'Active club workspace';$('#screen').scrollTop=0;try{window.scrollTo(0,0);document.documentElement.scrollLeft=0;document.body.scrollLeft=0}catch(e){}$('#phone').scrollTop=0;closeAll();
  if(v==='overview')renderOverview();if(v==='create')setTimeout(fitTitle,0);if(v==='events'){renderEvents();const f=$('#ev-filter');if(f)f.scrollLeft=0}if(v==='schedule')renderSchedule();
  if(push&&location.hash!=='#'+v){try{history.replaceState(null,'','#'+v)}catch(e){location.hash=v}}renderNav();
  const h=document.querySelector('#v-'+(dyn?'dyn':v)+' .title, #v-'+(dyn?'dyn':v)+' h1');if(h){h.setAttribute('tabindex','-1');h.focus({preventScroll:true});}}
@@ -848,7 +848,7 @@ function renderOverview(){const ct=S.persona==='contrib';$('#greet').textContent
  const sch=S.posts.filter(p=>p.st==='Scheduled').length,mine=S.queue.filter(q=>q.to===LEAD).length,inrev=S.posts.filter(p=>p.st==='In review').length,chg=S.posts.filter(p=>p.st==='Changes asked').length,dr=S.posts.filter(p=>p.st==='Draft').length,pl=(n,w)=>n+' '+w+(n===1?'':'s');
  $('#ov-summary').textContent=ct?(inrev?pl(inrev,'post')+' in review':'Nothing in review')+(chg?', '+chg+' need'+(chg===1?'s':'')+' your changes.':'.'):pl(sch,'post')+' scheduled, '+mine+' waiting for your review'+(dr?', '+pl(dr,'draft'):'')+'.';
  const wk=weekCount();$('#tile-cal').textContent=wk+' this week';
- const UP=upcomingEvents();$('#ov-events').innerHTML=UP.length?UP.slice(0,3).map(ev=>'<button class="ev-mini" data-go="events"><div class="ph" style="background-image:url('+ev.img+')"><span class="datechip">'+ev.when+'</span></div><b>'+ev.title+'</b><span>'+ev.meta.split(' · ').slice(2).join(' · ')+'</span></button>').join(''):'<div class="card pad" style="flex:1;text-align:center"><b style="color:var(--indigo)">No upcoming events</b><p class="cap mt8">Post one so members can RSVP.</p></div>';
+ const UP=upcomingEvents();$('#ov-events').innerHTML=UP.length?UP.slice(0,3).map(ev=>'<button class="ev-mini" data-go="events"><div class="ph'+(ev.img?'':' noimg')+'" style="'+(ev.img?'background-image:url('+ev.img+')':'')+'"><span class="datechip">'+ev.when+'</span>'+(ev.img?'':'<span class="nu-sl">CUNY SPS<br>Student Life</span>')+'</div><b>'+ev.title+'</b><span>'+ev.meta.split(' · ').slice(2).join(' · ')+'</span></button>').join(''):'<div class="card pad" style="flex:1;text-align:center"><b style="color:var(--indigo)">No upcoming events</b><p class="cap mt8">Post one so members can RSVP.</p></div>';
  $('#ov-tiles').innerHTML=ct?'<button class="tile" data-go="calendar"><b>Content calendar</b><span id="tile-cal">'+wk+' this week</span></button><button class="tile" data-go="assistant"><b>AI Assistant</b><span>Draft ideas</span></button><button class="tile" data-go="notifications"><b>Notifications'+(S.unread?'<span class="count">'+S.unread+'</span>':'')+'</b><span>'+(S.unread?S.unread+' new':'All caught up')+'</span></button>'
   :'<button class="tile" data-go="calendar"><b>Content calendar</b><span id="tile-cal">'+wk+' this week</span></button><button class="tile" data-go="accounts"><b>My accounts</b><span>2 connected</span></button><button class="tile" data-go="inbox"><b>Inbox<span class="count">2</span></b><span>2 new</span></button>';
  $('#ov-posts-h').textContent=ct?'Your posts':'Scheduled posts';
@@ -1137,12 +1137,13 @@ const _openDrawer=openDrawer;openDrawer=function(){overlayOpen();_openDrawer()};
 window.addEventListener('popstate',e=>{S.popAt=Date.now();const st=(e.state&&e.state.hub)?e.state:{i:0,v:S.view};const i=st.i||0;
  if(S.rewinding){finishRewind(i);return}
  if(S.ignorePop){S.ignorePop--;return}
- S.pendingBack=false;
+ S.pendingBack0=S.pendingBack;S.pendingBack=false;
  if(S.ovl&&i<S.hi){uiClose();S.ovl=false;S.hi=i;updateBack();return}       /* swipe back with a sheet or the menu open: just close it */
  if(i>S.hi&&(st.ov||!S.hist[i])){S.ignorePop++;try{history.go(S.hi-i)}catch(e){S.ignorePop--}return} /* stale forward entry: stay put */
  if(st.ov){S.ignorePop++;try{history.back()}catch(e){S.ignorePop--}return}
  if(S.ovl){uiClose();S.ovl=false}
- const dir=i<S.hi?'back':'fwd';saveHere();S.hi=i;
+ const viaApp=S.pendingBack0;S.pendingBack0=false;/* v20: a swipe or browser back already animates the screen (iOS slides its own picture), so don't fade the new screen in again; that fade showed as a white flash */
+ const dir=viaApp?(i<S.hi?'back':'fwd'):'none';saveHere();S.hi=i;
  const ent=S.hist[i]||(S.hist[i]={v:st.v});if(!ent.v)ent.v=st.v;
  if(ent.f)S.f=Object.assign({},ent.f);
  showV(resolveV(ent.v),dir,ent.y)});
@@ -1158,16 +1159,16 @@ function updateBack(){const top=$('#'+(VIEWS.includes(S.view)?'v-'+S.view:'v-dyn
  ctx.innerHTML=e?'<button class="backlink" type="button" data-back="'+e.v+'" aria-label="Back to '+esc(e.t||'the previous screen')+'">'+CHEV+esc(e.t||'Back')+'</button>':ctx.dataset.orig}
 (function(){const ph=$('#phone'),ind=document.createElement('div');ind.id='edgeback';ind.setAttribute('aria-hidden','true');ind.innerHTML=CHEV.replace(/14/g,'18');ph.appendChild(ind);
  const app=navigator.standalone===true||(window.matchMedia&&matchMedia('(display-mode: standalone)').matches)||/[?&]swipe=1/.test(location.search);if(!app)return;
- let x0=null,y0=0,dx=0;const reset=()=>{x0=null;ind.style.transform='';ind.classList.remove('go')};
- document.addEventListener('touchstart',e=>{const t=e.touches[0],r=ph.getBoundingClientRect();if(e.touches.length!==1||t.clientX-r.left>24||!S.stack.length||$('.sheet.on')||$('.drawer.on')||ph.classList.contains('typing-on'))return;x0=t.clientX;y0=t.clientY;dx=0},{passive:true});
- document.addEventListener('touchmove',e=>{if(x0===null)return;const t=e.touches[0];dx=t.clientX-x0;if(Math.abs(t.clientY-y0)>50&&dx<40){reset();return}ind.style.transform='translateX('+Math.max(0,Math.min(dx,100))+'px)';ind.classList.toggle('go',dx>80)},{passive:true});
- document.addEventListener('touchend',()=>{if(x0===null)return;const ok=dx>80,h0=S.hi,p0=S.popAt||0;reset();if(!ok)return;/* v18: newer iOS has its own swipe back in home-screen apps. Wait a moment: if iOS already went back (popstate), don't go back a second time */setTimeout(()=>{if(S.hi===h0&&(S.popAt||0)===p0&&!S.rewinding)goBack()},450)});
+ let x0=null,y0=0,dx=0,t0=0;try{S.nativeSwipe=localStorage.getItem('hubNativeSwipe')==='1'}catch(e){}const native=()=>{S.nativeSwipe=true;try{localStorage.setItem('hubNativeSwipe','1')}catch(e){}};const reset=()=>{x0=null;ind.style.transform='';ind.classList.remove('go')};
+ document.addEventListener('touchstart',e=>{const t=e.touches[0],r=ph.getBoundingClientRect();if(e.touches.length!==1||t.clientX-r.left>24||!S.stack.length||$('.sheet.on')||$('.drawer.on')||ph.classList.contains('typing-on')||S.nativeSwipe)return;x0=t.clientX;y0=t.clientY;dx=0;t0=Date.now()},{passive:true});
+ document.addEventListener('touchmove',e=>{if(x0===null)return;if((S.popAt||0)>t0){native();reset();return}const t=e.touches[0];dx=t.clientX-x0;if(Math.abs(t.clientY-y0)>50&&dx<40){reset();return}ind.style.transform='translateX('+Math.max(0,Math.min(dx,100))+'px)';ind.classList.toggle('go',dx>80)},{passive:true});
+ document.addEventListener('touchend',()=>{if(x0===null)return;const ok=dx>80,h0=S.hi,p0=S.popAt||0;reset();if(!ok)return;/* v18: newer iOS has its own swipe back in home-screen apps. Wait a moment: if iOS already went back (popstate), don't go back a second time */if((S.popAt||0)>t0){native();return}setTimeout(()=>{if((S.popAt||0)!==p0){native();return}if(S.hi===h0&&!S.rewinding)goBack()},450)});
  document.addEventListener('touchcancel',reset)})();
 
 /* init */
 setPhoto(PHOTOS[0]);$('#alt').value='Students talking together outside on a CUNY campus';
 </script>
-<script src="js/screens.js?v=20261122-19"></script>
+<script src="js/screens.js?v=20261122-20"></script>
 <script>(function(){const v=resolveV(location.hash.slice(1)||'welcome'),st=history.state;if(st&&st.hub&&typeof st.i==='number')S.hi=st.i;else{S.hi=0;try{history.replaceState(hstate(0,v),'','#'+v)}catch(e){}}S.hist[S.hi]={v};go(v,false)})();</script>
 </body>
 </html>
