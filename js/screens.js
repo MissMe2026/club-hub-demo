@@ -619,3 +619,9 @@ const _you25=D.you;D.you=function(){const p=prof();let h=_you25();if(!p)return h
  const card='<div class="card pad you-card">'+avHtml(56)+'<div style="flex:1;min-width:0"><b class="you-n">'+esc(ME())+'</b>'+(p.pron?' <span class="cap">('+esc(p.pron)+')</span>':'')+'<div class="cap">'+esc(myRole())+(S.persona==='admin'?' · CUNY SPS Student Life':' · Artificial Intelligence Club')+'</div>'+(p.about?'<div class="cap mt8" style="color:var(--charcoal)">'+esc(p.about)+'</div>':'')+'</div></div><button type="button" class="btn sec block mb12" data-go="profile">Edit profile</button>';
  return h.replace(/<div class="card pad you-card">[\s\S]*?<\/div><\/div><\/div>/,card)};
 TAB_OF.profile='you';TAB_ADMIN.profile='you';
+/* v26: nav sweep. The Student Life pages that only lived in the old menu get a home on Console */
+const _console26=D.console;D.console=function(){const row=(v,t,s)=>'<button type="button" class="you-row" data-go="'+v+'"><span><b>'+t+'</b><span class="cap">'+s+'</span></span>'+tbSvg('chev',18,2)+'</button>';
+ const card='<h2 class="h2 mb8">Manage</h2><div class="card you-list mb16" id="con-more">'+row('leaders','Club leaders','Authorize who leads each club')+row('socialadmin','Social accounts','Official accounts and staff custodians')+row('users','Users & access control','Roles and permissions')+row('search','Search the Hub','People, events, posts and clubs')+'</div>';
+ return _console26().replace('<h2 class="h2 mb8">Pending account requests',card+'<h2 class="h2 mb8">Pending account requests')};
+TAB_ADMIN.search='console';
+TAB_ADMIN.leaders='console';

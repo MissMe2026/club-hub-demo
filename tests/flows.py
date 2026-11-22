@@ -669,7 +669,7 @@ async def flow15(b):
     print('F15 v18: opening, sign-up walkthrough, swipe-back fix, search + people, drafts, blog edit, clubs, cleanups')
     # opening + walkthrough
     pg = await new_page(b)
-    check(await pg.is_visible('.sp-enter') and 'Version Nov 22 · 25' in await pg.inner_text('#v-welcome'), 'F15 splash with Enter demo + version')
+    check(await pg.is_visible('.sp-enter') and 'Version Nov 22 · 26' in await pg.inner_text('#v-welcome'), 'F15 splash with Enter demo + version')
     await tap(pg, '.sp-enter'); check((await state(pg))['view'] == 'v-signin' and await pg.locator('.ch-role').count() == 3, 'F15 Choose shows 3 roles')
     await tap(pg, '.ch-browse button', 500); check(await pg.evaluate('S.view') == 'public', 'F15 Browse club events opens the teaser')
     await tap(pg, 'text=Pick a role and try the Hub', 500); check(await pg.evaluate('S.view') == 'signin', 'F15 teaser -> back to Choose')
@@ -972,11 +972,33 @@ async def flow20(b):
     await pg.wait_for_timeout(500); check(await pg.evaluate('S.prof.contrib.first') == 'Sofi', 'F20 leaving without saving keeps the old profile')
     check(not pg.errs, f'F20 errors {pg.errs}'); await pg.context.close()
 
+async def flow21(b):
+    # v26: every page from the old side menu is still reachable from the tab bar, for every role
+    COLLECT = """()=>[...new Set([...document.querySelectorAll('[data-go],[data-tab]')].filter(e=>!e.closest('#drawer,#nav,#scrim')&&(e.offsetParent!==null||getComputedStyle(e).position==='fixed')).map(e=>e.getAttribute('data-go')||e.getAttribute('data-tab')))]"""
+    for who in ['lead', 'contrib', 'admin']:
+        pg = await new_page(b); await tap(pg, '.sp-enter'); await tap(pg, f'[data-persona="{who}"]', 700)
+        old = await pg.evaluate('navPages().map(x=>x.t)'); start = await pg.evaluate('S.view')
+        seen = {start}; q = [start]
+        while q:
+            v = q.pop(0); await pg.evaluate(f"go('{v}')"); await pg.wait_for_timeout(150)
+            for t in await pg.evaluate(COLLECT):
+                if t not in seen: seen.add(t); q.append(t)
+        miss = [t for t in old if t not in seen]
+        check(not miss, f'F21 {who}: old menu pages with no way in {miss}')
+        if who == 'admin':
+            await pg.evaluate("go('console')"); await pg.wait_for_timeout(300)
+            for v in ['leaders', 'socialadmin', 'users', 'search']:
+                await tap(pg, f'#con-more [data-go="{v}"]', 450)
+                check(await pg.evaluate('S.view') == v and await pg.evaluate("document.querySelector('.tb[data-tab=console]').classList.contains('on')||document.querySelector('.tb[data-tab=console]').getAttribute('aria-current')==='page'"), f'F21 Console > {v} opens under the Console tab')
+                await pg.go_back(); await pg.wait_for_timeout(450)
+                check(await pg.evaluate('S.view') == 'console', f'F21 back from {v} returns to Console')
+        check(not pg.errs, f'F21 {who} errors {pg.errs}'); await pg.context.close()
+
 async def main():
     import os; os.makedirs(OUT, exist_ok=True)
     async with async_playwright() as p:
         b = await p.chromium.launch(executable_path='/usr/bin/google-chrome')
-        ALL=[flow1, flow2, flow3, flow4, flow5, flow6, flow7, flow8, flow9, flow10, flow11, flow12, flow13, flow14, flow15, flow16, flow17, flow18, flow19, flow20]
+        ALL=[flow1, flow2, flow3, flow4, flow5, flow6, flow7, flow8, flow9, flow10, flow11, flow12, flow13, flow14, flow15, flow16, flow17, flow18, flow19, flow20, flow21]
         only=os.environ.get('ONLY')
         for f in ([g for g in ALL if g.__name__ in only.split(',')] if only else ALL):
             try: await f(b)
