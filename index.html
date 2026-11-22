@@ -572,7 +572,7 @@ button.postrow{background:none;color:inherit;font:inherit}
           <div class="sp-actions">
             <button class="sp-enter" data-go="signin">Enter demo</button>
             <button class="sp-walk" data-act="obStart"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>Walk through sign-up</button>
-            <p class="sp-ver">Version Nov 22 · 20</p>
+            <p class="sp-ver">Version Nov 22 · 21</p>
           </div>
         </div>
       </section>
@@ -1078,9 +1078,9 @@ function renderEvents(){setTimeout(squishAtt,0);const all=EVENTS.filter(e=>S.fil
  $('#ev-list').innerHTML='<article class="card evhero"><div class="ph'+(h.img?'':' noimg')+'" style="'+(h.img?'background-image:url('+h.img+')':'')+'">'+(h.img?'':'<span>CUNY SPS<br>Student Life</span>')+'<div class="dateblock"><small>'+h.mon+'</small><strong>'+h.day+'</strong></div></div><div class="pad"><h2 class="h2 mb8">'+h.title+'</h2><p class="cap mb8">'+h.meta+'</p><div class="row mb12" style="justify-content:flex-start;gap:8px"><span class="avs"><i style="background:var(--mint)"></i><i style="background:var(--thistle)"></i><i style="background:var(--sky)"></i>'+(S.attending[h.id]?'<i class="me"></i>':'')+'</span><span class="cap">'+(h.going+(S.attending[h.id]?1:0))+' going · '+h.seats+' seats</span></div>'+
   '<div class="row" style="justify-content:flex-start;gap:8px"><button class="btn '+(S.attending[h.id]?'pri':'sec')+'" data-att="'+h.id+'" aria-pressed="'+!!S.attending[h.id]+'">'+(S.attending[h.id]?'✓ Attending':'Attend')+'</button><button class="btn sec" data-chk="'+h.id+'">'+(S.checked[h.id]?'Checked in':'Check-in')+'</button><button class="btn txt" data-more="'+h.id+'">More</button></div></div></article>'+
   rest.map(e=>'<article class="card"><div class="evrow"><div class="ph'+(e.img?'':' noimg')+'" style="'+(e.img?'background-image:url('+e.img+')':'')+'">'+(e.img?'':'Student Life')+'</div><div style="flex:1;min-width:0"><b>'+e.title+'</b><div class="cap mb8">'+e.meta+'</div><div class="row"><span class="pill">'+e.tag+'</span><button class="chip" data-att="'+e.id+'" aria-pressed="'+!!S.attending[e.id]+'">'+(S.attending[e.id]?'✓ Going':'Attend')+'</button></div></div></div></article>').join('')+PAST;
- $$('[data-att]').forEach(b=>b.onclick=()=>{const id=b.dataset.att;swapOut(b,()=>{S.attending[id]=!S.attending[id];S.justAtt=S.attending[id]?id:null;swapNext('[data-att="'+id+'"]');toast(S.attending[id]?'You’re going. Added to your calendar.':'RSVP removed');renderEvents()})});
+ $$('[data-att]').forEach(b=>b.onclick=()=>{const id=b.dataset.att;swapOut(b,()=>{S.attending[id]=!S.attending[id];S.justAtt=S.attending[id]?id:null;swapNext('[data-att="'+id+'"]');toast(S.attending[id]?'You’re going':'RSVP removed');renderEvents()})});
  $$('[data-chk]').forEach(b=>b.onclick=()=>{const id=b.dataset.chk;const ev=EVENTS.find(e=>e.id===id);
-  openSheet('<h2 class="h2 mb8">Check in · officer view</h2><p class="cap mb12">'+ev.title+'</p><div class="card pad mb12" style="text-align:center"><div style="width:150px;height:150px;margin:0 auto 10px;background:repeating-linear-gradient(45deg,var(--indigo) 0 6px,#fff 6px 12px);border-radius:12px" aria-label="Sample check-in code"></div><p class="cap">Attendees scan this code at the door. Sample only.</p></div><button class="btn pri block" id="self-chk">Check myself in</button>');
+  openSheet('<h2 class="h2 mb8">Check in · officer view</h2><p class="cap mb12">'+ev.title+'</p><div class="card pad mb12" style="text-align:center"><div style="width:150px;height:150px;margin:0 auto 10px;background:repeating-linear-gradient(45deg,var(--indigo) 0 6px,#fff 6px 12px);border-radius:12px" aria-label="Sample check-in code"></div><p class="cap">Attendees scan this code at the door.</p></div><button class="btn pri block" id="self-chk">Check myself in</button>');
   $('#self-chk').onclick=()=>{S.checked[id]=true;S.attending[id]=true;closeAll();swapNext('[data-chk="'+id+'"]');toast('Checked in. Attendance recorded for officers.');renderEvents()}});
  $$('[data-more]').forEach(b=>b.onclick=()=>{const id=b.dataset.more;openSheet('<h2 class="h2 mb12">More actions</h2>'+[['Add to calendar','data-act="evIcs" data-v="'+id+'"'],['Share event','data-act="shareEv"'],['Create a post about this event','id="mk-post"'],['Message attendees','data-act="evMsg" data-v="'+id+'"'],['Edit event','data-act="evEdit" data-v="'+id+'"']].map(([t,a])=>'<button class="navitem" '+a+'>'+t+'</button>').join(''))},0);
  const mk=()=>{const m=$('#mk-post');if(m)m.onclick=()=>{resetPost();$('#post-title').value=h.title;$('#rel-event').value=h.id;setPhoto(PHOTOS.find(p=>p.src===h.img)||null);go('create')}};
@@ -1168,7 +1168,7 @@ function updateBack(){const top=$('#'+(VIEWS.includes(S.view)?'v-'+S.view:'v-dyn
 /* init */
 setPhoto(PHOTOS[0]);$('#alt').value='Students talking together outside on a CUNY campus';
 </script>
-<script src="js/screens.js?v=20261122-20"></script>
+<script src="js/screens.js?v=20261122-21"></script>
 <script>(function(){const v=resolveV(location.hash.slice(1)||'welcome'),st=history.state;if(st&&st.hub&&typeof st.i==='number')S.hi=st.i;else{S.hi=0;try{history.replaceState(hstate(0,v),'','#'+v)}catch(e){}}S.hist[S.hi]={v};go(v,false)})();</script>
 </body>
 </html>

@@ -669,7 +669,7 @@ async def flow15(b):
     print('F15 v18: opening, sign-up walkthrough, swipe-back fix, search + people, drafts, blog edit, clubs, cleanups')
     # opening + walkthrough
     pg = await new_page(b)
-    check(await pg.is_visible('.sp-enter') and 'Version Nov 22 · 20' in await pg.inner_text('#v-welcome'), 'F15 splash with Enter demo + version')
+    check(await pg.is_visible('.sp-enter') and 'Version Nov 22 · 21' in await pg.inner_text('#v-welcome'), 'F15 splash with Enter demo + version')
     await tap(pg, '.sp-enter'); check((await state(pg))['view'] == 'v-signin' and await pg.locator('.ch-role').count() == 3, 'F15 Choose shows 3 roles')
     await tap(pg, '.ch-browse button', 500); check(await pg.evaluate('S.view') == 'public', 'F15 Browse club events opens the teaser')
     await tap(pg, 'text=Pick a role and try the Hub', 500); check(await pg.evaluate('S.view') == 'signin', 'F15 teaser -> back to Choose')
@@ -872,11 +872,28 @@ async def flow17(b):
     check(await pg.evaluate("document.querySelector('#edgeback').style.transform") in ('', None), 'F17 no blue arrow once iOS handles the swipe')
     check(not pg.errs, f'F17 swipe errors {pg.errs}'); await pg.context.close()
 
+async def flow18(b):
+    print('F18 v21: iPhone Calendar opens the calendar file')
+    pg = await new_page(b); await tap(pg, '.sp-enter'); await tap(pg, '.ch-role[data-persona="lead"]', 700)
+    await pg.evaluate("go('events')"); await pg.wait_for_timeout(400)
+    await pg.evaluate("window.open=(u)=>{window.__open=u;return {}}")
+    await tap(pg, '#ev-list [data-more="e3"]', 500); await tap(pg, '#sheet [data-act="evIcs"]', 500); await tap(pg, '#cal-apple', 400)
+    u = await pg.evaluate('window.__open||""'); check(u.startswith('http') and u.endswith('/cal/e3.ics'), f'F18 iPhone Calendar opens the event file in Safari ({u})')
+    check(await pg.evaluate("location.hash") == '#events', 'F18 the app stays on Upcoming events')
+    await tap(pg, '#ev-list [data-att="e3"]', 600); check((await pg.inner_text('#toast')).strip() == 'You’re going', 'F18 Attend notice no longer claims a calendar add')
+    await tap(pg, '#ev-list [data-more="e3"]', 500); await tap(pg, '#sheet [data-act="evEdit"]', 500)
+    await pg.fill('#ee-d', '2026-12-16'); await blur(pg); await tap(pg, '#ee-save', 600)
+    await pg.evaluate("ACT.evIcs('e3')"); await pg.wait_for_timeout(500)
+    check(not await pg.is_visible('#cal-apple') and await pg.is_visible('#cal-google'), 'F18 an edited event offers Google Calendar (its file would be out of date)')
+    await pg.evaluate('closeAll()'); await pg.wait_for_timeout(400)
+    await tap(pg, '#ev-list [data-chk]', 500); check('Sample only' not in await pg.inner_text('#sheet'), 'F18 no Sample only note on check-in')
+    check(not pg.errs, f'F18 errors {pg.errs}'); await pg.context.close()
+
 async def main():
     import os; os.makedirs(OUT, exist_ok=True)
     async with async_playwright() as p:
         b = await p.chromium.launch(executable_path='/usr/bin/google-chrome')
-        ALL=[flow1, flow2, flow3, flow4, flow5, flow6, flow7, flow8, flow9, flow10, flow11, flow12, flow13, flow14, flow15, flow16, flow17]
+        ALL=[flow1, flow2, flow3, flow4, flow5, flow6, flow7, flow8, flow9, flow10, flow11, flow12, flow13, flow14, flow15, flow16, flow17, flow18]
         only=os.environ.get('ONLY')
         for f in ([g for g in ALL if g.__name__ in only.split(',')] if only else ALL):
             try: await f(b)
