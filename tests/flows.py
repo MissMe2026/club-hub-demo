@@ -669,7 +669,7 @@ async def flow15(b):
     print('F15 v18: opening, sign-up walkthrough, swipe-back fix, search + people, drafts, blog edit, clubs, cleanups')
     # opening + walkthrough
     pg = await new_page(b)
-    check(await pg.is_visible('.sp-enter') and 'Version Nov 22 · 23' in await pg.inner_text('#v-welcome'), 'F15 splash with Enter demo + version')
+    check(await pg.is_visible('.sp-enter') and 'Version Nov 22 · 24' in await pg.inner_text('#v-welcome'), 'F15 splash with Enter demo + version')
     await tap(pg, '.sp-enter'); check((await state(pg))['view'] == 'v-signin' and await pg.locator('.ch-role').count() == 3, 'F15 Choose shows 3 roles')
     await tap(pg, '.ch-browse button', 500); check(await pg.evaluate('S.view') == 'public', 'F15 Browse club events opens the teaser')
     await tap(pg, 'text=Pick a role and try the Hub', 500); check(await pg.evaluate('S.view') == 'signin', 'F15 teaser -> back to Choose')
