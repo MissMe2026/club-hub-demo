@@ -274,7 +274,7 @@ Object.assign(S.clubs[0],{about:'Build nights, reading groups and peer study for
 S.blog.forEach((b,i)=>{b.body=b.body||['On Nov 11, twenty-three students from across CUNY SPS spent one evening turning civic problems into working prototypes.','A short guide to checking whether an AI tool gives the same answer twice before you rely on it for coursework.','Notes from the panel: what students and faculty said about fairness, privacy and AI in the classroom.'][i]||'';b.img=b.img||PHOTOS[i%PHOTOS.length].src});
 S.notes.unshift({id:7,k:'draft',draft:true,to:'lead',t:'Finish your draft?',s:'“Office Hours recap” hasn’t been touched in 2 days.',u:true,go:'drafts'});recountUnread();
 const CATS=['Academic & Technology','Arts, Media & Creative','Identity, Faith & Cultural','Service'];
-const ME=()=>({lead:'Aisha Rahman',contrib:'Sofia Patel',admin:'Dr. Elena Vance'}[S.persona]);
+let ME=()=>({lead:'Aisha Rahman',contrib:'Sofia Patel',admin:'Dr. Elena Vance'}[S.persona]);
 const ini=n=>n.replace(/^Dr\.\s*/,'').split(/\s+/).map(w=>w[0]).slice(0,2).join('').toUpperCase();
 function people(){const m={};S.members.forEach(x=>m[x.n]={n:x.n,r:x.r,av:x.av});S.users.forEach(u=>{if(!m[u.n])m[u.n]={n:u.n,r:u.r,av:ini(u.n)}});S.clubs.forEach(c=>(c.leaders||[]).forEach(l=>{if(l.n&&!m[l.n])m[l.n]={n:l.n,r:l.t+' · '+l.r,av:ini(l.n)}}));return Object.values(m)}
 function myPosts(){return S.persona==='contrib'?S.posts.filter(p=>p.mine):S.posts}
@@ -508,7 +508,7 @@ const TBI={home:"<path d='M4 11l8-7 8 7v9h-5v-6H9v6H4z'/>",cal:"<rect x='4' y='5
 const tbSvg=(k,s,w,fill)=>'<svg width="'+(s||24)+'" height="'+(s||24)+'" viewBox="0 0 24 24" fill="'+(fill||'none')+'" stroke="currentColor" stroke-width="'+(w||1.9)+'" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+TBI[k]+'</svg>';
 const myIni=()=>({lead:'AR',contrib:'SP',admin:'EV'}[S.persona]||'');
 const myRole=()=>({lead:'Club Lead',contrib:'Contributor',admin:'Student Life admin'}[S.persona]||'');
-const avHtml=(s)=>'<span class="tb-av" style="width:'+s+'px;height:'+s+'px;font-size:'+Math.round(s*.38)+'px">'+myIni()+'</span>';
+let avHtml=(s)=>'<span class="tb-av" style="width:'+s+'px;height:'+s+'px;font-size:'+Math.round(s*.38)+'px">'+myIni()+'</span>';
 S.clubsNew=3;
 function reqsOpen(){return (S.reqs||[]).filter(r=>!/Approved|Rejected|Live|Declined/.test(r.st||'')).length}
 function tabsFor(){return S.persona==='admin'?[['console','grid','Console'],['clubsadmin','club','Clubs'],['requests','inbox','Requests',reqsOpen()],['reports','chart','Reports'],['you','','You']]
@@ -581,3 +581,41 @@ setTimeout(renderTabs,0);
 /* tab screens are top level: no "‹ previous screen" link (swipe back still works) */
 const TAB_ROOTS=['overview','events','myclubs','you','console','clubsadmin','requests','reports'];
 const _updateBack23=updateBack;updateBack=function(){_updateBack23.apply(this,arguments);if(!TAB_ROOTS.includes(S.view))return;if(S.view==='requests'&&S.persona!=='admin')return;const top=document.querySelector((VIEWS.includes(S.view)?'#v-'+S.view:'#v-dyn')+' .top');const ctx=top&&top.querySelector('.ctx');if(ctx&&ctx.dataset.orig!==undefined)ctx.innerHTML=ctx.dataset.orig};
+
+/* ===== v25: edit your profile any time (You → Edit profile) ===== */
+S.prof=S.prof||{};
+const PROF_INTS=['AI & tech','Careers','Arts & design','Wellness','Gaming','Volunteering','Culture','Entrepreneurship','Writing','Sports','Music','Faith'];
+function prof(){const k=S.persona;if(!k||!OBP[k])return null;if(!S.prof[k]){const o=OBP[k],ob=(S.ob&&S.ob.who===k)?S.ob:{};
+  S.prof[k]={first:ob.first||o.first,last:o.last,pron:'',prog:o.prog,about:'',pic:ob.pic||'',ints:(ob.ints||[]).slice(),showMail:false}}return S.prof[k]}
+const _ME25=ME;ME=function(){const p=prof();if(!p)return _ME25();return (S.persona==='admin'?'Dr. ':'')+p.first+' '+p.last};
+const myIni25=()=>{const p=prof();return p?(p.first[0]||'')+(p.last[0]||''):''};
+/* photo in every avatar once you add one */
+avHtml=function(s){const p=prof();return p&&p.pic?'<span class="tb-av" style="width:'+s+'px;height:'+s+'px;background:center/cover url('+p.pic+')" role="img" aria-label="Your photo"></span>':'<span class="tb-av" style="width:'+s+'px;height:'+s+'px;font-size:'+Math.round(s*.38)+'px">'+myIni25()+'</span>'};
+const _renderOverview25=renderOverview;renderOverview=function(){_renderOverview25.apply(this,arguments);const p=prof();if(p&&S.persona!=='admin')$('#greet').textContent=greeting()+', '+p.first};
+D.profile=function(){const p=prof(),o=OBP[S.persona];
+ const pr=['','she/her','he/him','they/them','she/they','he/they'];
+ return hdr('Edit profile')+'<div class="pad"><div class="pf-photo">'+avHtml(88)+'<div class="row" style="gap:8px;justify-content:center"><label class="btn sec sm">'+(p.pic?'Change photo':'Add a photo')+'<input type="file" accept="image/*" id="pf-file" hidden></label>'+(p.pic?'<button type="button" class="btn txt sm" data-act="pfRemovePic">Remove</button>':'')+'</div></div>'+
+  '<div class="two"><div class="field"><label class="label" for="pf-first">First name</label><input id="pf-first" value="'+esc(p.first)+'" autocomplete="given-name" enterkeyhint="next"><span class="err">Add your first name</span></div><div class="field"><label class="label" for="pf-last">Last name</label><input id="pf-last" value="'+esc(p.last)+'" autocomplete="family-name" enterkeyhint="next"></div></div>'+
+  '<div class="field"><label class="label" for="pf-pron">Pronouns</label><select id="pf-pron">'+pr.map(x=>'<option value="'+x+'"'+(x===p.pron?' selected':'')+'>'+(x||'Don’t show')+'</option>').join('')+'</select></div>'+
+  '<div class="field"><label class="label" for="pf-prog">Program</label><input id="pf-prog" value="'+esc(p.prog)+'" enterkeyhint="done"></div>'+
+  '<div class="field"><label class="label" for="pf-about">About you <span class="cap" id="pf-n">'+p.about.length+'/160</span></label><textarea id="pf-about" maxlength="160" placeholder="A line or two for your clubs">'+esc(p.about)+'</textarea></div>'+
+  (S.persona==='admin'?'':'<div class="label mb8">Interests</div><div class="pf-ints" role="group" aria-label="Interests">'+PROF_INTS.map(a=>'<button type="button" class="chip" data-act="pfInt" data-v="'+esc(a)+'" aria-pressed="'+p.ints.includes(a)+'">'+esc(a)+'</button>').join('')+'</div>')+
+  '<div class="card pad mt16"><div class="row"><span><b style="color:var(--indigo)">Show my CUNY email</b><div class="cap">To members of clubs you’re in</div></span><button type="button" class="switch" role="switch" id="pf-mail" aria-checked="'+p.showMail+'" aria-label="Show my CUNY email"></button></div></div>'+
+  '<div class="card you-list mt16"><div class="you-row"><span><b>CUNY email</b><span class="cap">'+esc(o.mail)+'</span></span></div><div class="you-row"><span><b>Role</b><span class="cap">'+esc(myRole())+(S.persona==='admin'?' · Student Life':' · AI Club')+'</span></span></div></div></div>'+
+  '<div class="bottombar"><button type="button" class="btn pri block" data-act="pfSave">Save profile</button></div>'};
+document.addEventListener('change',e=>{if(e.target.id!=='pf-file')return;const f=e.target.files&&e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{S.pfDraft=pfRead();S.pfDraft.pic=r.result;render();toast('Photo added. Save to keep it.')};r.readAsDataURL(f)});
+document.addEventListener('input',e=>{if(e.target.id==='pf-about'){const n=document.getElementById('pf-n');if(n)n.textContent=e.target.value.length+'/160'}});
+document.addEventListener('click',e=>{const s=e.target.closest('#pf-mail');if(s)s.setAttribute('aria-checked',s.getAttribute('aria-checked')!=='true')});
+function pfRead(){const p=Object.assign({},prof(),S.pfDraft||{});const g=id=>document.getElementById(id);if(g('pf-first')){p.first=g('pf-first').value.trim();p.last=g('pf-last').value.trim();p.pron=g('pf-pron').value;p.prog=g('pf-prog').value.trim();p.about=g('pf-about').value.trim();p.showMail=g('pf-mail').getAttribute('aria-checked')==='true';p.ints=[...document.querySelectorAll('.pf-ints [aria-pressed=true]')].map(b=>b.dataset.v)}return p}
+/* the editor shows unsaved edits while you work (photo, chips), and drops them if you leave without saving */
+const _profile25=D.profile;D.profile=function(){const real=S.prof[S.persona];if(S.pfDraft&&real){S.prof[S.persona]=Object.assign({},real,S.pfDraft);const h=_profile25();S.prof[S.persona]=real;return h}return _profile25()};
+ACT.pfInt=function(v){const b=document.querySelector('.pf-ints [data-v="'+v+'"]');if(b)b.setAttribute('aria-pressed',b.getAttribute('aria-pressed')!=='true')};
+ACT.pfRemovePic=function(){S.pfDraft=pfRead();S.pfDraft.pic='';render()};
+ACT.pfSave=function(){const p=pfRead();if(!p.first){const f=document.getElementById('pf-first');f.closest('.field').classList.add('bad');shake(f);return}
+ S.prof[S.persona]=p;S.pfDraft=null;document.querySelectorAll('[data-menu]').forEach(b=>b.dataset.av='');toast('Profile saved');goBack('you')};
+const _go25=go;go=function(v){if(v!=='profile')S.pfDraft=null;return _go25.apply(this,arguments)};
+/* You: the card shows what people see, with Edit profile */
+const _you25=D.you;D.you=function(){const p=prof();let h=_you25();if(!p)return h;
+ const card='<div class="card pad you-card">'+avHtml(56)+'<div style="flex:1;min-width:0"><b class="you-n">'+esc(ME())+'</b>'+(p.pron?' <span class="cap">('+esc(p.pron)+')</span>':'')+'<div class="cap">'+esc(myRole())+(S.persona==='admin'?' · CUNY SPS Student Life':' · Artificial Intelligence Club')+'</div>'+(p.about?'<div class="cap mt8" style="color:var(--charcoal)">'+esc(p.about)+'</div>':'')+'</div></div><button type="button" class="btn sec block mb12" data-go="profile">Edit profile</button>';
+ return h.replace(/<div class="card pad you-card">[\s\S]*?<\/div><\/div><\/div>/,card)};
+TAB_OF.profile='you';TAB_ADMIN.profile='you';

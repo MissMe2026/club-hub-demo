@@ -669,7 +669,7 @@ async def flow15(b):
     print('F15 v18: opening, sign-up walkthrough, swipe-back fix, search + people, drafts, blog edit, clubs, cleanups')
     # opening + walkthrough
     pg = await new_page(b)
-    check(await pg.is_visible('.sp-enter') and 'Version Nov 22 · 24' in await pg.inner_text('#v-welcome'), 'F15 splash with Enter demo + version')
+    check(await pg.is_visible('.sp-enter') and 'Version Nov 22 · 25' in await pg.inner_text('#v-welcome'), 'F15 splash with Enter demo + version')
     await tap(pg, '.sp-enter'); check((await state(pg))['view'] == 'v-signin' and await pg.locator('.ch-role').count() == 3, 'F15 Choose shows 3 roles')
     await tap(pg, '.ch-browse button', 500); check(await pg.evaluate('S.view') == 'public', 'F15 Browse club events opens the teaser')
     await tap(pg, 'text=Pick a role and try the Hub', 500); check(await pg.evaluate('S.view') == 'signin', 'F15 teaser -> back to Choose')
@@ -950,11 +950,33 @@ async def flow19(b):
     await tap(pg, '#v-dyn [data-act=signOut]', 900); check(await pg.evaluate("document.getElementById('tabbar').classList.contains('off')"), 'F19 sign out hides the tab bar')
     check(not pg.errs, f'F19 admin errors {pg.errs}'); await pg.context.close()
 
+async def flow20(b):
+    print('F20 v25: edit your profile from You')
+    pg = await new_page(b); await tap(pg, '.sp-enter'); await tap(pg, '.ch-role[data-persona="contrib"]', 700)
+    await tap(pg, '[data-tab=you]', 600); await tap(pg, '#v-dyn [data-go=profile]', 600)
+    check(await pg.evaluate('S.view') == 'profile' and await pg.input_value('#pf-first') == 'Sofia', 'F20 Edit profile opens with her details')
+    check(await pg.evaluate("document.getElementById('tabbar').classList.contains('off')"), 'F20 tab bar steps aside for the Save bar')
+    await pg.fill('#pf-first', ''); await blur(pg); await tap(pg, '[data-act=pfSave]', 400)
+    check(await pg.evaluate('S.view') == 'profile', 'F20 first name is required')
+    await pg.fill('#pf-first', 'Sofi'); await pg.select_option('#pf-pron', 'she/her'); await pg.fill('#pf-about', 'Writing for the AI Club Blog.')
+    await pg.set_input_files('#pf-file', 'img/splash-skate-circle.jpg'); await pg.wait_for_timeout(700)
+    check(await pg.input_value('#pf-first') == 'Sofi' and await pg.input_value('#pf-about') == 'Writing for the AI Club Blog.', 'F20 adding a photo keeps what you typed')
+    await tap(pg, '.pf-ints [data-v="Music"]', 200); await blur(pg); await tap(pg, '[data-act=pfSave]', 800)
+    y = await pg.inner_text('#v-dyn')
+    check(await pg.evaluate('S.view') == 'you' and 'Sofi Patel' in y and 'she/her' in y and 'Writing for the AI Club Blog.' in y, 'F20 You shows the saved profile')
+    check(await pg.evaluate("S.prof.contrib.ints.includes('Music') && !!S.prof.contrib.pic"), 'F20 interests and photo saved')
+    check(await pg.evaluate("!!document.querySelector('[data-tab=you] .tb-av').style.backgroundImage"), 'F20 your photo shows in the tab bar')
+    await tap(pg, '[data-tab=overview]', 600); check('Sofi' in await pg.inner_text('#greet'), 'F20 Home greets the new name')
+    await tap(pg, '[data-tab=you]', 600); await tap(pg, '#v-dyn [data-go=profile]', 600); await pg.fill('#pf-first', 'Nope'); await blur(pg)
+    await tap(pg, '[data-tab=overview]', 600) if await pg.locator('[data-tab=overview] >> visible=true').count() else await pg.evaluate("goBack('you')")
+    await pg.wait_for_timeout(500); check(await pg.evaluate('S.prof.contrib.first') == 'Sofi', 'F20 leaving without saving keeps the old profile')
+    check(not pg.errs, f'F20 errors {pg.errs}'); await pg.context.close()
+
 async def main():
     import os; os.makedirs(OUT, exist_ok=True)
     async with async_playwright() as p:
         b = await p.chromium.launch(executable_path='/usr/bin/google-chrome')
-        ALL=[flow1, flow2, flow3, flow4, flow5, flow6, flow7, flow8, flow9, flow10, flow11, flow12, flow13, flow14, flow15, flow16, flow17, flow18, flow19]
+        ALL=[flow1, flow2, flow3, flow4, flow5, flow6, flow7, flow8, flow9, flow10, flow11, flow12, flow13, flow14, flow15, flow16, flow17, flow18, flow19, flow20]
         only=os.environ.get('ONLY')
         for f in ([g for g in ALL if g.__name__ in only.split(',')] if only else ALL):
             try: await f(b)
