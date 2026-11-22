@@ -625,3 +625,26 @@ const _console26=D.console;D.console=function(){const row=(v,t,s)=>'<button type
  return _console26().replace('<h2 class="h2 mb8">Pending account requests',card+'<h2 class="h2 mb8">Pending account requests')};
 TAB_ADMIN.search='console';
 TAB_ADMIN.leaders='console';
+/* v27: a saved profile is what other people see too (Member directory, Search, person card) */
+const PKEY={'Aisha Rahman':'lead','Sofia Patel':'contrib','Dr. Elena Vance':'admin'};
+function pubProf(base){const k=PKEY[base];return k&&S.prof&&S.prof[k]?S.prof[k]:null}
+function pubName(base){const p=pubProf(base);return p?(base.startsWith('Dr. ')?'Dr. ':'')+p.first+' '+p.last:base}
+function pubAv(base,txt){const p=pubProf(base);if(p&&p.pic)return '<span class="av-pic" role="img" aria-label="Photo of '+esc(pubName(base))+'" style="background-image:url('+p.pic+')"></span>';return p?((p.first[0]||'')+(p.last[0]||'')).toUpperCase():txt}
+const _members27=D.members;D.members=function(){const o=S.members;S.members=o.map(m=>PKEY[m.n]?Object.assign({},m,{n:pubName(m.n),av:pubAv(m.n,m.av),_b:m.n}):m);if(S.f.q)S.members=S.members.filter((m,i)=>(m.n+' '+o[i].n).toLowerCase().includes(S.f.q.toLowerCase())).concat([]);
+ const q=(S.f.q||'').toLowerCase();let h;try{h=_members27.apply(this,arguments)}finally{S.members=o}
+ o.forEach(m=>{if(PKEY[m.n]&&pubName(m.n)!==m.n)h=h.split('data-v="'+esc(pubName(m.n))+'"').join('data-v="'+esc(m.n)+'"')});return h};
+const _search27=searchResults;searchResults=function(){const R=_search27.apply(this,arguments);const q=(S.f.sq||'').trim().toLowerCase();
+ const i=R.findIndex(r=>r[0]==='People');const extra=q?Object.keys(PKEY).filter(b=>pubName(b)!==b&&hit(q,pubName(b))):[];
+ let ppl=people().filter(p=>q?hit(q,p.n,p.r,pubName(p.n))||activity(p.n).some(a=>hit(q,a.t)):true);
+ if(i<0&&!ppl.length)return R;const rows=ppl.slice(0,q?8:4).map(p=>lrow({av:pubAv(p.n,p.av),t:esc(pubName(p.n)),s:esc(why(p,q)),act:'data-act="person" data-v="'+esc(p.n)+'"'}));
+ if(i>=0)R[i]=['People',rows];else if(!S.f.sk||S.f.sk==='all'||S.f.sk==='people')R.unshift(['People',rows]);return R};
+const _pc27=personCard;personCard=function(n){const b=Object.keys(PKEY).find(x=>pubName(x)===n)||n;const meNow=ME;ME=()=>_ME25();try{_pc27(b)}finally{ME=meNow}
+ const p=pubProf(b);const sh=document.getElementById('sheet');if(!sh)return;const h2=sh.querySelector('h2.h2');const me=b===_ME25();
+ if(h2)h2.textContent=pubName(b)+(me?' (you)':'');const av=sh.querySelector('.avatar');if(av)av.innerHTML=pubAv(b,av.textContent);
+ if(p){const bits=[p.pron,p.prog].filter(Boolean).join(' · ');let x='';if(bits)x+='<div class="cap pc-bits">'+esc(bits)+'</div>';if(p.about)x+='<p class="pc-about mt8">'+esc(p.about)+'</p>';
+  if(p.ints&&p.ints.length)x+='<div class="pf-ints pc-ints mt8">'+p.ints.map(t=>'<span class="chip on" aria-pressed="true">'+esc(t)+'</span>').join('')+'</div>';
+  if(p.showMail)x+='<div class="cap mt8">'+esc(OBP[PKEY[b]].mail)+'</div>';
+  if(x){const row=sh.querySelector('.row');if(row)row.insertAdjacentHTML('afterend','<div class="mb12 pc-prof">'+x+'</div>')}}};
+ACT.person=function(v){personCard(v)};ACT.member=function(v){personCard(v)};
+document.addEventListener('input',e=>{if(e.target.id!=='msearch')return;const q=e.target.value.toLowerCase();const l=document.getElementById('mlist');if(!l)return;
+ l.innerHTML=S.members.filter(m=>(m.n+' '+pubName(m.n)).toLowerCase().includes(q)).map(m=>lrow({av:pubAv(m.n,m.av),t:esc(pubName(m.n)),s:m.r,act:'data-act="member" data-v="'+esc(m.n)+'"'})).join('')||'<div class="pad cap">No members match.</div>'});
