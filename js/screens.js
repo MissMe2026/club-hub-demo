@@ -502,3 +502,82 @@ S.clubTotal=34;const _console19=D.console;D.console=function(){return _console19
 ACT.newTask=function(){const d0=ymd(new Date(Date.now()+7*864e5));openSheet('<h2 class="h2 mb8">Assign a task</h2><div class="field"><label class="label" for="tk-t">Task</label><input id="tk-t" placeholder="What needs doing?" enterkeyhint="done"><span class="err">Add a task</span></div><div class="two"><div class="field"><label class="label" for="tk-w">Assignee</label><select id="tk-w">'+S.members.map(m=>'<option>'+m.n+'</option>').join('')+'</select></div><div class="field"><label class="label" for="tk-d">Due</label><input id="tk-d" type="date" min="'+ymd(new Date())+'" value="'+d0+'"><span class="err">Pick a date that hasn’t passed</span></div></div><button class="btn pri block" id="tk-go">Assign</button>');
  $('#tk-go').onclick=()=>{const t=$('#tk-t').value.trim(),dv=$('#tk-d').value,ok=dv&&dv>=ymd(new Date());$('#tk-t').closest('.field').classList.toggle('bad',!t);$('#tk-d').closest('.field').classList.toggle('bad',!ok);if(!t){shake($('#tk-t'));return}if(!ok){shake($('#tk-d'));return}
   const d=new Date(dv+'T12:00');S.tasks.unshift({t,who:$('#tk-w').value,due:d.toLocaleDateString('en-US',{month:'short',day:'numeric'}),st:'To do'});S.f.tk='all';const who=$('#tk-w').value;closeAll();toast('Task assigned to '+who);render()}};
+
+/* ===== v23: bottom tab bar (Wallis, Nov 22 whiteboard: style A, labels under icons, ＋ Create in the middle, badge counts) ===== */
+const TBI={home:"<path d='M4 11l8-7 8 7v9h-5v-6H9v6H4z'/>",cal:"<rect x='4' y='5' width='16' height='15' rx='2'/><path d='M4 10h16M9 3v4M15 3v4'/>",plus:"<path d='M12 6v12M6 12h12'/>",club:"<circle cx='9' cy='9' r='3'/><circle cx='16.5' cy='10' r='2.5'/><path d='M3.5 19c.6-3.2 2.8-5 5.5-5s4.9 1.8 5.5 5M14.5 15.2c.6-.3 1.3-.5 2-.5 2.2 0 3.7 1.5 4 4.3'/>",grid:"<rect x='4' y='4' width='7' height='7' rx='1.5'/><rect x='13' y='4' width='7' height='7' rx='1.5'/><rect x='4' y='13' width='7' height='7' rx='1.5'/><rect x='13' y='13' width='7' height='7' rx='1.5'/>",inbox:"<path d='M4 13l2.5-8h11L20 13v6H4z'/><path d='M4 13h5l1 2h4l1-2h5'/>",chart:"<path d='M5 20V10M12 20V4M19 20v-7'/>",edit:"<path d='M4 20h4L19 9l-4-4L4 16z'/>",msg:"<path d='M4 5h16v11H9l-5 4z'/>",invite:"<circle cx='10' cy='8' r='3.5'/><path d='M3.5 20c.7-3.6 3.3-5.5 6.5-5.5 1.6 0 3 .4 4.1 1.3M18 13v6M15 16h6'/>",more:"<circle cx='6' cy='12' r='1.6' fill='currentColor'/><circle cx='12' cy='12' r='1.6' fill='currentColor'/><circle cx='18' cy='12' r='1.6' fill='currentColor'/>",chev:"<path d='M9 5l7 7-7 7'/>"};
+const tbSvg=(k,s,w,fill)=>'<svg width="'+(s||24)+'" height="'+(s||24)+'" viewBox="0 0 24 24" fill="'+(fill||'none')+'" stroke="currentColor" stroke-width="'+(w||1.9)+'" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+TBI[k]+'</svg>';
+const myIni=()=>({lead:'AR',contrib:'SP',admin:'EV'}[S.persona]||'');
+const myRole=()=>({lead:'Club Lead',contrib:'Contributor',admin:'Student Life admin'}[S.persona]||'');
+const avHtml=(s)=>'<span class="tb-av" style="width:'+s+'px;height:'+s+'px;font-size:'+Math.round(s*.38)+'px">'+myIni()+'</span>';
+S.clubsNew=3;
+function reqsOpen(){return (S.reqs||[]).filter(r=>!/Approved|Rejected|Live|Declined/.test(r.st||'')).length}
+function tabsFor(){return S.persona==='admin'?[['console','grid','Console'],['clubsadmin','club','Clubs'],['requests','inbox','Requests',reqsOpen()],['reports','chart','Reports'],['you','','You']]
+ :[['overview','home','Home'],['events','cal','Events'],['create','plus','Create'],['myclubs','club','Clubs',S.clubsNew],['you','','You']]}
+const TAB_OF={overview:'overview',calendar:'overview',assistant:'overview',inbox:'overview',message:'overview',accounts:'overview',analytics:'overview',announcements:'overview',notifications:'overview',search:'overview',connect:'overview',
+ events:'events',eventcal:'events',eventstats:'events',reminders:'events',
+ create:'create',schedule:'create',result:'create',
+ myclubs:'myclubs',forums:'myclubs',thread:'myclubs',messaging:'myclubs',whatsapp:'myclubs',blog:'myclubs',blogedit:'myclubs',tasks:'myclubs',members:'myclubs',team:'myclubs',resources:'myclubs',directory:'myclubs',dashboard:'myclubs',settings:'myclubs',
+ you:'you',drafts:'you'};
+const TAB_ADMIN={console:'console',leaders:'clubsadmin',clubsadmin:'clubsadmin',requests:'requests',reports:'reports',audit:'reports',socialadmin:'console',users:'console',platform:'you',notifications:'you',you:'you'};
+function curTab(){const v=S.view;if(S.persona==='admin')return TAB_ADMIN[v]||'';if(v==='requests')return 'myclubs';return TAB_OF[v]||''}
+function tbHidden(){const v=S.view;if(!S.persona||!v||['welcome','signin','public','create','schedule'].includes(v)||/^ob\d+$/.test(v))return true;const el=document.querySelector(VIEWS.includes(v)?'#v-'+v:'#v-dyn');return !!(el&&el.querySelector('.bottombar'))}
+function renderTabs(){let tb=document.getElementById('tabbar');if(!tb){tb=document.createElement('nav');tb.id='tabbar';tb.setAttribute('aria-label','Main');const sc=document.getElementById('screen');sc.parentNode.insertBefore(tb,sc.nextSibling)}
+ const off=tbHidden();tb.classList.toggle('off',off);document.getElementById('phone').classList.toggle('has-tabs',!off);
+ document.querySelectorAll('[data-menu]').forEach(b=>{if(S.persona&&b.dataset.av!==S.persona){b.innerHTML=avHtml(30);b.dataset.av=S.persona;b.setAttribute('aria-label','You: profile, drafts, settings')}});
+ if(off){renderEvBar();return}const cur=curTab();
+ tb.innerHTML=tabsFor().map(([k,ic,lab,n])=>{const on=k===cur;const icon=k==='you'?avHtml(26):k==='create'?'<span class="tb-mid">'+tbSvg('plus',22,2.6)+'</span>':tbSvg(ic,24,on?2.2:1.8);
+  return '<button type="button" class="tb'+(on?' on':'')+'" data-tab="'+k+'"'+(on?' aria-current="page"':'')+' aria-label="'+lab+(n?', '+n+' new':'')+'">'+(n?'<span class="tb-bdg" aria-hidden="true">'+n+'</span>':'')+icon+'<span class="tb-l">'+lab+'</span></button>'}).join('');
+ renderEvBar()}
+/* Create sheet: one place for everything you can make */
+function openCreate(){const ct=S.persona==='contrib';const it=[['post','Post','Facebook · Instagram · club'],!ct&&['event','Event','RSVPs and check-in'],['blog','Blog story','AI Club Blog'],!ct&&['ann','Announcement','Message all members'],['task','Task','Project tasks'],['ai','✦ Ask AI','Draft anything']].filter(Boolean);
+ openSheet('<h2 class="h2 mb12">Create</h2><div class="cr-grid">'+it.map(([k,t,s])=>'<button type="button" class="cr-card" data-cr="'+k+'"><b>'+t+'</b><span class="cap">'+s+'</span></button>').join('')+'</div>')}
+document.addEventListener('click',e=>{const t=e.target.closest('[data-tab]');if(t){e.preventDefault();e.stopPropagation();const k=t.dataset.tab;S.dir='fwd';
+  if(k==='create'){openCreate();return}
+  if(k===S.view){$('#screen').scrollTo({top:0,behavior:'smooth'});return}
+  go(k);return}
+ const c=e.target.closest('[data-cr]');if(c){e.preventDefault();e.stopPropagation();const k=c.dataset.cr;S.dir='fwd';
+  if(k==='post'){closeAll();openStudio();return}
+  const then=(v,fn)=>{go(v);if(fn)setTimeout(fn,80)};
+  if(k==='event')then('events',()=>ACT.postEvent());else if(k==='blog')then('blog',()=>ACT.newPost());else if(k==='ann')then('messaging',()=>ACT.compose());else if(k==='task')then('tasks',()=>ACT.newTask());else if(k==='ai')then('assistant')}},true);
+/* You */
+D.you=function(){const ad=S.persona==='admin',ct=S.persona==='contrib';
+ const row=(attr,t,s)=>'<button type="button" class="you-row" '+attr+'><span><b>'+t+'</b>'+(s?'<span class="cap">'+s+'</span>':'')+'</span>'+tbSvg('chev',18,2)+'</button>';
+ const rows=ad?[row('data-go="notifications"','Notifications'),row('data-go="platform"','Platform settings')]
+  :[row('data-go="drafts"','Drafts','Posts and blog stories you haven’t finished'),row('data-go="notifications"','Notifications'),!ct&&row('data-go="settings"','Club settings'),row('data-go="calendar"','Content calendar')].filter(Boolean);
+ return hdr('You')+'<div class="pad"><div class="card pad you-card">'+avHtml(56)+'<div><b class="you-n">'+ME()+'</b><div class="cap">'+myRole()+(ad?' · CUNY SPS Student Life':' · Artificial Intelligence Club')+'</div></div></div><div class="card you-list">'+rows.join('')+'</div><div class="two mt16"><button class="btn sec" data-act="switchWho">Switch person</button><button class="btn txt" data-act="signOut">Sign out</button></div></div>'};
+/* Clubs: the clubs you're in, then everything for the one you're looking at */
+D.myclubs=function(){const ct=S.persona==='contrib',ok=v=>!(ct&&CONTRIB_NO.includes(v));
+ const row=(v,t,s,b)=>ok(v)?'<button type="button" class="you-row" data-go="'+v+'"><span><b>'+t+'</b>'+(s?'<span class="cap">'+s+'</span>':'')+'</span>'+(b?'<span class="tb-pill">'+b+' new</span>':'')+tbSvg('chev',18,2)+'</button>':'';
+ const grp=(h,rs)=>{const x=rs.join('');return x?'<h2 class="h2 mt16 mb8">'+h+'</h2><div class="card you-list">'+x+'</div>':''};
+ return hdr('Clubs')+'<div class="pad"><div class="cap mb8">Your clubs</div><div class="row mb8 club-sw" style="justify-content:flex-start;gap:8px;flex-wrap:wrap"><button type="button" class="chip on" aria-pressed="true">AI Club · '+(ct?'Contributor':'Club Lead')+'</button><button type="button" class="chip" data-act="otherClub">MSA · Member</button><button type="button" class="chip" data-go="directory">＋ Find a club</button></div>'+
+  grp('Talk',[row('forums','Club forums','Questions and threads',S.clubsNew),row('messaging','Messaging center','Broadcasts to members'),row('whatsapp','WhatsApp group')])+
+  grp('Make',[row('blog','AI Club Blog'),row('tasks','Project tasks'),row('resources','Club resources')])+
+  grp('People',[row('members','Member directory'),row('team','Team & permissions'),row('requests','Account requests')])+
+  grp('Club',[row('dashboard','Club dashboard'),row('settings','Club settings'),row('directory','Campus directory','All CUNY SPS clubs')])+'</div>'};
+ACT.otherClub=function(){toast('Switching clubs isn’t part of this demo. Staying in AI Club.')};
+const _forums23=D.forums;D.forums=function(){S.clubsNew=0;return _forums23.apply(this,arguments)};
+/* Home and Events keep their extra screens one tap away */
+const _renderOverview23=renderOverview;renderOverview=function(){_renderOverview23.apply(this,arguments);const t=document.getElementById('ov-tiles');if(!t)return;let x=document.getElementById('ov-more');if(!x){x=document.createElement('div');x.id='ov-more';x.className='row more-links';t.parentNode.insertBefore(x,t.nextSibling)}
+ const ct=S.persona==='contrib';x.innerHTML=(ct?[['announcements','Announcements'],['drafts','Drafts']]:[['assistant','✦ AI Assistant'],['analytics','Analytics'],['announcements','Announcements']]).map(([v,t])=>'<button type="button" class="chip" data-go="'+v+'">'+t+'</button>').join('')};
+function evLinks(){const f=document.getElementById('ev-filter');if(!f)return;let x=document.getElementById('ev-more');if(!x){x=document.createElement('div');x.id='ev-more';x.className='row more-links';f.parentNode.insertBefore(x,f.nextSibling)}
+ const ct=S.persona==='contrib';x.innerHTML=(ct?[['eventcal','Event calendar']]:[['eventcal','Event calendar'],['eventstats','Event analytics'],['reminders','Email reminders']]).map(([v,t])=>'<button type="button" class="chip" data-go="'+v+'">'+t+'</button>').join('')}
+/* On an event: a bar for the event at the top of the list (Partiful-style), Club Leads only */
+function renderEvBar(){let b=document.getElementById('evbar');const show=S.view==='events'&&S.persona==='lead'&&!document.getElementById('tabbar').classList.contains('off');
+ const hero=show&&document.querySelector('#ev-list .evhero [data-more]');
+ if(!show||!hero){if(b)b.classList.remove('on');document.getElementById('phone').classList.remove('has-evbar');return}
+ if(!b){b=document.createElement('div');b.id='evbar';b.setAttribute('role','toolbar');document.getElementById('phone').appendChild(b)}
+ const id=hero.dataset.more,e=EVENTS.find(x=>x.id===id),n=e.going+(S.attending[id]?1:0);
+ b.setAttribute('aria-label','Actions for '+e.title);
+ b.innerHTML='<button type="button" class="eb" data-act="evEdit" data-v="'+id+'">'+tbSvg('edit',20)+'<span>Edit</span></button><button type="button" class="eb" data-act="evMsg" data-v="'+id+'">'+tbSvg('msg',20)+'<span>Message</span></button><button type="button" class="eb big" data-act="evGoing" data-v="'+id+'"><b>'+n+'</b><span>Going</span></button><button type="button" class="eb" data-act="shareEv">'+tbSvg('invite',20)+'<span>Invite</span></button><button type="button" class="eb" data-act="evMore" data-v="'+id+'">'+tbSvg('more',20)+'<span>More</span></button>';
+ b.style.bottom=(document.getElementById('tabbar').offsetHeight+10)+'px';b.classList.add('on');document.getElementById('phone').classList.add('has-evbar')}
+ACT.evMore=function(v){const m=document.querySelector('#ev-list [data-more="'+v+'"]');if(m)m.click()};
+ACT.evGoing=function(v){const e=EVENTS.find(x=>x.id===v),n=e.going+(S.attending[v]?1:0),names=['Devon Brooks','Maya Chen','Sofia Patel','Noah Kim','Priya Shah'].slice(0,e.going);if(S.attending[v])names.unshift(ME()+' (you)');
+ openSheet('<h2 class="h2 mb8">'+n+' going</h2><p class="cap mb12">'+esc(e.title)+'</p><div class="card you-list">'+names.map(x=>'<div class="you-row"><span><b>'+esc(x)+'</b></span></div>').join('')+'</div>')};
+const _renderEvents23=renderEvents;renderEvents=function(){_renderEvents23.apply(this,arguments);evLinks();renderEvBar()};
+/* keep the bar in step with every screen change */
+const _renderNav23=renderNav;renderNav=function(){_renderNav23.apply(this,arguments);renderTabs()};
+const _render23=render;render=function(){const r=_render23.apply(this,arguments);renderTabs();return r};
+setTimeout(renderTabs,0);
+/* tab screens are top level: no "‹ previous screen" link (swipe back still works) */
+const TAB_ROOTS=['overview','events','myclubs','you','console','clubsadmin','requests','reports'];
+const _updateBack23=updateBack;updateBack=function(){_updateBack23.apply(this,arguments);if(!TAB_ROOTS.includes(S.view))return;if(S.view==='requests'&&S.persona!=='admin')return;const top=document.querySelector((VIEWS.includes(S.view)?'#v-'+S.view:'#v-dyn')+' .top');const ctx=top&&top.querySelector('.ctx');if(ctx&&ctx.dataset.orig!==undefined)ctx.innerHTML=ctx.dataset.orig};

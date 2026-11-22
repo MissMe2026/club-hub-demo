@@ -537,6 +537,33 @@ button.postrow{background:none;color:inherit;font:inherit}
  .drawer{padding-top:env(safe-area-inset-top);background:var(--white)}
  .splash::before{content:"";position:absolute;left:0;right:0;top:0;height:calc(70px + env(safe-area-inset-top));background:linear-gradient(180deg,rgba(1,29,73,.42),rgba(1,29,73,0));z-index:1;pointer-events:none}
 }
+
+/* v23 bottom tab bar */
+#tabbar{display:flex;flex:none;background:var(--white);border-top:1px solid #E4E7EE;padding:4px 4px max(4px,env(safe-area-inset-bottom));z-index:6;position:relative}
+#tabbar.off,#phone.typing-on #tabbar{display:none}
+.tb{flex:1;min-height:52px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;background:none;border:0;color:#5B6270;font:600 11px/14px 'Libre Franklin',sans-serif;position:relative;padding:4px 0}
+.tb.on{color:var(--blue)}.tb.on .tb-l{font-weight:700}
+.tb-mid{margin-top:-14px;width:46px;height:36px;border-radius:12px;background:var(--taxi);color:var(--indigo);display:grid;place-items:center;box-shadow:0 2px 6px rgba(1,29,73,.18)}
+.tb.on .tb-mid{box-shadow:0 0 0 2px var(--white),0 0 0 4px var(--blue)}
+.tb-bdg{position:absolute;top:2px;left:calc(50% + 4px);min-width:18px;height:18px;padding:0 5px;border-radius:9px;background:#B3261E;color:#fff;font:700 10px/18px 'Libre Franklin';border:2px solid var(--white);box-sizing:content-box}
+.tb-av{border-radius:50%;background:linear-gradient(135deg,var(--blue),var(--indigo));color:#fff;font-weight:700;display:inline-grid;place-items:center;flex:none;letter-spacing:.02em}
+.tb.on .tb-av{box-shadow:0 0 0 2px var(--white),0 0 0 3.5px var(--blue)}
+.cr-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.cr-card{text-align:left;background:var(--white);border:1px solid #E4E7EE;border-radius:14px;padding:12px;display:flex;flex-direction:column;gap:2px;min-height:64px;color:var(--indigo)}
+.cr-card:first-child{background:#E6EEFB;border-color:var(--blue)}
+.you-card{display:flex;align-items:center;gap:14px;margin-bottom:12px}.you-n{color:var(--indigo);font-size:18px}
+.you-list{padding:0;overflow:hidden}
+.you-row{width:100%;display:flex;align-items:center;gap:10px;justify-content:space-between;background:none;border:0;border-bottom:1px solid var(--smoke);padding:12px 14px;min-height:52px;text-align:left;color:var(--indigo)}
+.you-row:last-child{border-bottom:0}.you-row>span:first-child{display:flex;flex-direction:column;flex:1}.you-row svg{color:#8A90A0;flex:none}
+.tb-pill{background:#FDECEA;color:#B3261E;font-size:11px;font-weight:700;border-radius:10px;padding:2px 8px}
+.more-links{justify-content:flex-start;gap:6px;flex-wrap:wrap;margin:10px 0 2px}
+#ev-more{padding:0 16px}
+#evbar{position:absolute;left:12px;right:12px;z-index:7;display:none;align-items:center;background:rgba(255,255,255,.96);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border-radius:30px;box-shadow:0 8px 26px rgba(1,29,73,.18),0 0 0 1px rgba(1,29,73,.06);padding:6px}
+#evbar.on{display:flex}#phone.typing-on #evbar{display:none}
+.eb{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;background:none;border:0;font:600 11px/14px 'Libre Franklin';color:#3A4152;min-height:48px;justify-content:center}
+.eb.big{flex:1.25;background:var(--white);border-radius:22px;box-shadow:0 0 0 1.5px var(--blue);color:var(--blue)}.eb.big b{font-size:19px;line-height:20px}
+#phone.has-evbar #ev-list{padding-bottom:84px}
+[data-menu] .tb-av{pointer-events:none}
 </style>
 </head>
 <body>
@@ -572,7 +599,7 @@ button.postrow{background:none;color:inherit;font:inherit}
           <div class="sp-actions">
             <button class="sp-enter" data-go="signin">Enter demo</button>
             <button class="sp-walk" data-act="obStart"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>Walk through sign-up</button>
-            <p class="sp-ver">Version Nov 22 · 22</p>
+            <p class="sp-ver">Version Nov 22 · 23</p>
           </div>
         </div>
       </section>
@@ -774,7 +801,7 @@ function go(v,push=true){if(S.persona==='contrib'&&CONTRIB_NO.includes(v)){toast
 document.addEventListener('click',e=>{const bk=e.target.closest('[data-back],[aria-label^="Back"],[aria-label="Close"]');S.dir=bk?'back':'fwd';const g=e.target.closest('[data-go]');if(g){if(g.dataset.persona){if(g.dataset.persona!==S.persona){S.persona=g.dataset.persona;resetPost()}recountUnread()}if(g.dataset.go==='create'&&!['create','schedule','result'].includes(S.view)){closeAll();openStudio();return}go(g.dataset.go);return}
  const b=e.target.closest('[data-back]');if(b){goBack(b.dataset.back);return}
  const s=e.target.closest('[data-soon]');if(s){toast('Not part of this demo yet');return}
- if(e.target.closest('[data-menu]'))openDrawer();});
+ if(e.target.closest('[data-menu]')){/* v23: the header photo opens You (the ☰ menu became the tab bar) */S.dir='fwd';if(typeof D!=='undefined'&&D.you&&S.persona)go('you');else openDrawer()}});
 
 /* toast */
 function shake(el){if(!el)return;el.classList.remove('shake');void el.offsetWidth;el.classList.add('shake');el.addEventListener('animationend',()=>el.classList.remove('shake'),{once:true});try{navigator.vibrate&&navigator.vibrate(30)}catch(e){}}
@@ -1168,7 +1195,7 @@ function updateBack(){const top=$('#'+(VIEWS.includes(S.view)?'v-'+S.view:'v-dyn
 /* init */
 setPhoto(PHOTOS[0]);$('#alt').value='Students talking together outside on a CUNY campus';
 </script>
-<script src="js/screens.js?v=20261122-22"></script>
+<script src="js/screens.js?v=20261122-23"></script>
 <script>(function(){const v=resolveV(location.hash.slice(1)||'welcome'),st=history.state;if(st&&st.hub&&typeof st.i==='number')S.hi=st.i;else{S.hi=0;try{history.replaceState(hstate(0,v),'','#'+v)}catch(e){}}S.hist[S.hi]={v};go(v,false)})();</script>
 </body>
 </html>
