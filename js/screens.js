@@ -238,7 +238,17 @@ const ACT={
  evIcs(v){/* v22: phone calendars can't be opened from the home-screen app (iPhone shows a blank page, Google opens without the event), so the demo adds events to the Hub's own calendar. Real phone calendars come with the backend */
   S.inCal=S.inCal||{};closeAll();
   if(v==='all'){const list=upcomingEvents();list.forEach(e=>S.inCal[e.id]=true);toast(list.length?'All '+list.length+' upcoming events are in your calendar':'No upcoming events to add');return}
-  const e=EVENTS.find(x=>x.id===v);if(!e)return;S.inCal[v]=!S.inCal[v];toast(S.inCal[v]?'Added to your calendar':'Removed from your calendar')},
+  const e=EVENTS.find(x=>x.id===v);if(!e)return;
+  if(S.inCal[v]){S.inCal[v]=false;toast('Removed from your calendar');return}
+  /* v29: kickoff feedback, CUNY uses Outlook. Pick Hub calendar or Outlook (CUNY email) */
+  openSheet('<h2 class="h2 mb12">Add to calendar</h2><p class="cap mb12">'+esc(e.title)+'</p>'+
+   '<button class="calopt" data-act="evCalTo" data-v="'+v+':hub"><img class="di" src="img/hub-icon-180.png" alt=""><span><b>Hub calendar</b><span class="hint">In the Club Social Hub</span></span></button>'+
+   '<button class="calopt" data-act="evCalTo" data-v="'+v+':ol"><span class="di" style="background:#0078D4;color:#fff" aria-hidden="true">O</span><span><b>Outlook</b><span class="hint">Your CUNY email calendar</span></span></button>')},
+ evCalTo(x){const [v,to]=x.split(':'),e=EVENTS.find(y=>y.id===v);if(!e)return;S.inCal=S.inCal||{};S.inCal[v]=true;closeAll();
+  if(to==='ol'){const a=evAt(e),b=new Date(a.getTime()+36e5),wh=e.meta.split(' · ').slice(2).join(' · ');
+   const u='https://outlook.office.com/calendar/0/action/compose?subject='+encodeURIComponent(e.title)+'&startdt='+encodeURIComponent(a.toISOString())+'&enddt='+encodeURIComponent(b.toISOString())+'&location='+encodeURIComponent(wh)+'&body='+encodeURIComponent('AI Club event from the CUNY SPS Club Social Hub');
+   S.lastOutlook=u;try{window.open(u,'_blank','noopener')}catch(_){}toast('Opening Outlook');return}
+  toast('Added to your calendar')},
  evMsg(v){const e=EVENTS.find(x=>x.id===v),n=e.going+(S.attending[v]?1:0);
   openSheet('<h2 class="h2 mb8">Message attendees</h2><p class="cap mb12">'+esc(e.title)+' · '+n+' going</p><div class="field"><label class="label" for="em-t">Message</label><textarea id="em-t" style="min-height:96px">Reminder: '+esc(e.title)+' is '+esc(e.meta.split(' · ').slice(0,2).join(' at '))+'. See you there!</textarea></div><button class="btn pri block" id="em-send">Send to '+n+' people</button>');
   $('#em-send').onclick=()=>{if(!$('#em-t').value.trim()){shake($('#em-t'));return}closeAll();audit('Aisha Rahman','Messaging','ATTENDEE_MESSAGE · '+e.title);toast('Message sent to '+n+' attendees')}},
