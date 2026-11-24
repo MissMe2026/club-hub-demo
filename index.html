@@ -585,7 +585,7 @@ button.postrow{background:none;color:inherit;font:inherit}
 <body>
 <div class="stage">
   <aside class="side" aria-label="About this demo">
-    <span class="tag">Version 29 · Nov 23</span>
+    <span class="tag">Version 30 · Nov 24</span>
     <h1>Club Social Hub · mobile demo</h1>
     <p>A clickable demo of the Hub in CUNY 2025 colors. Everything runs on sample data. Nothing connects to real accounts, and nothing is posted anywhere.</p>
     <p><b>Try this path:</b></p>
@@ -615,7 +615,7 @@ button.postrow{background:none;color:inherit;font:inherit}
           <div class="sp-actions">
             <button class="sp-enter" data-go="signin">Enter demo</button>
             <button class="sp-walk" data-act="obStart"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>Walk through sign-up</button>
-            <p class="sp-ver">Version Nov 23 · 29</p>
+            <p class="sp-ver">Version Nov 24 · 30</p>
           </div>
         </div>
       </section>
@@ -798,6 +798,12 @@ const EVENTS=[
  {id:'e5',type:'club',mon:'NOV',day:'30',when:'Mon 7 PM',title:'AI Ethics Reading Group',meta:'Mon Nov 30 · 7:00 PM · Zoom',going:4,seats:25,img:PHOTOS[0].src,tag:'Club meeting'}];
 const NAV_LEAD=[['Workspace',[['Overview','overview'],['Drafts','drafts'],['Club Announcements','announcements'],['Notifications','notifications']]],['Social Publishing',[['Create Post','create'],['Content Calendar','calendar'],['My Social Accounts','accounts'],['AI Assistant','assistant'],['Inbox','inbox'],['Analytics','analytics']]],['Club Community',[['Upcoming Events','events'],['Club Event Calendar','eventcal'],['Event Analytics','eventstats'],['Email Reminders','reminders'],['Club Forums','forums'],['Messaging Center','messaging'],['WhatsApp Group','whatsapp'],['AI Club Blog','blog'],['Project Tasks','tasks']]],['Administration',[['Club Dashboard','dashboard'],['Member Directory','members'],['Team Management','team'],['Account Requests','requests'],['Club Resources','resources'],['Campus Directory','directory'],['Settings','settings']]],['Account',[['Switch identity · Sign out','signin']]]];
 const EVAT={e1:'2026-11-19T18:30',e2:'2026-11-18T17:30',e3:'2026-11-23T18:00',e4:'2026-12-03T12:00',e5:'2026-11-30T19:00'};
+const CAL_ICS=['e1','e2','e3','e4','e5'];
+function isStandalone(){return !!(navigator.standalone||(window.matchMedia&&matchMedia('(display-mode: standalone)').matches))}
+/* v30: calendar exports use Eastern time (club events are ET), whatever time zone the phone is in */
+function evWall(e,addMin){const w=(e.at||EVAT[e.id]),[d,t]=w.split('T'),[Y,M,D]=d.split('-').map(Number),[h,m]=t.split(':').map(Number),x=new Date(Date.UTC(Y,M-1,D,h,m+(addMin||0))),p=n=>String(n).padStart(2,'0');return x.getUTCFullYear()+'-'+p(x.getUTCMonth()+1)+'-'+p(x.getUTCDate())+'T'+p(x.getUTCHours())+':'+p(x.getUTCMinutes())+':00'}
+function etOff(wall){try{const [d,t]=wall.split('T'),[Y,M,D]=d.split('-').map(Number),[h]=t.split(':').map(Number),g=new Intl.DateTimeFormat('en-US',{timeZone:'America/New_York',timeZoneName:'shortOffset'}).formatToParts(new Date(Date.UTC(Y,M-1,D,h+5))).find(x=>x.type==='timeZoneName').value,n=parseInt(g.replace('GMT',''),10)||-5;return (n<0?'-':'+')+String(Math.abs(n)).padStart(2,'0')+':00'}catch(_){return '-05:00'}}
+function openExt(u){try{window.open(u,'_blank','noopener')}catch(_){}}
 function evAt(e){return new Date(e.at||EVAT[e.id])}
 function evPast(e){const d=evAt(e);return !isNaN(d)&&d.getTime()+2*36e5<Date.now()}
 function upcomingEvents(){return EVENTS.filter(e=>!evPast(e)).sort((a,b)=>evAt(a)-evAt(b))}

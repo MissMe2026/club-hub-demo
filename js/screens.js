@@ -243,11 +243,18 @@ const ACT={
   /* v29: kickoff feedback, CUNY uses Outlook. Pick Hub calendar or Outlook (CUNY email) */
   openSheet('<h2 class="h2 mb12">Add to calendar</h2><p class="cap mb12">'+esc(e.title)+'</p>'+
    '<button class="calopt" data-act="evCalTo" data-v="'+v+':hub"><img class="di" src="img/hub-icon-180.png" alt=""><span><b>Hub calendar</b><span class="hint">In the Club Social Hub</span></span></button>'+
-   '<button class="calopt" data-act="evCalTo" data-v="'+v+':ol"><span class="di" style="background:#0078D4;color:#fff" aria-hidden="true">O</span><span><b>Outlook</b><span class="hint">Your CUNY email calendar</span></span></button>')},
+   '<button class="calopt" data-act="evCalTo" data-v="'+v+':ol"><span class="di" style="background:#0078D4;color:#fff" aria-hidden="true">O</span><span><b>Outlook</b><span class="hint">Your CUNY email calendar</span></span></button>'+
+   '<button class="calopt" data-act="evCalTo" data-v="'+v+':gc"><span class="di" style="background:#fff;color:#1A73E8;border:1.5px solid var(--dove)" aria-hidden="true">G</span><span><b>Google Calendar</b><span class="hint">Your Google account</span></span></button>'+
+   (CAL_ICS.includes(v)&&!e.at?'<button class="calopt" data-act="evCalTo" data-v="'+v+':ap"><span class="di" style="background:#fff;color:#E5352B;border:1.5px solid var(--dove);font-size:11px;line-height:1.05;text-align:center" aria-hidden="true">'+e.mon+'<br>'+e.day+'</span><span><b>Apple Calendar</b><span class="hint">iPhone, iPad and Mac</span></span></button>':''))},
  evCalTo(x){const [v,to]=x.split(':'),e=EVENTS.find(y=>y.id===v);if(!e)return;S.inCal=S.inCal||{};S.inCal[v]=true;closeAll();
-  if(to==='ol'){const a=evAt(e),b=new Date(a.getTime()+36e5),wh=e.meta.split(' · ').slice(2).join(' · ');
-   const u='https://outlook.office.com/calendar/0/action/compose?subject='+encodeURIComponent(e.title)+'&startdt='+encodeURIComponent(a.toISOString())+'&enddt='+encodeURIComponent(b.toISOString())+'&location='+encodeURIComponent(wh)+'&body='+encodeURIComponent('AI Club event from the CUNY SPS Club Social Hub');
-   S.lastOutlook=u;try{window.open(u,'_blank','noopener')}catch(_){}toast('Opening Outlook');return}
+  if(to==='ol'){const a0=evWall(e),b0=evWall(e,60),wh=e.meta.split(' · ').slice(2).join(' · ');
+   const u='https://outlook.office.com/calendar/0/action/compose?subject='+encodeURIComponent(e.title)+'&startdt='+encodeURIComponent(a0+etOff(a0))+'&enddt='+encodeURIComponent(b0+etOff(b0))+'&location='+encodeURIComponent(wh)+'&body='+encodeURIComponent('AI Club event from the CUNY SPS Club Social Hub');
+   S.lastOutlook=u;openExt(u);toast('Opening Outlook');return}
+  if(to==='gc'){const z=w=>w.replace(/[-:]/g,''),wh=e.meta.split(' · ').slice(2).join(' · ');
+   openExt('https://calendar.google.com/calendar/render?action=TEMPLATE&text='+encodeURIComponent(e.title)+'&dates='+z(evWall(e))+'/'+z(evWall(e,60))+'&ctz=America/New_York&location='+encodeURIComponent(wh)+'&details='+encodeURIComponent('AI Club event from the CUNY SPS Club Social Hub'));toast('Opening Google Calendar');return}
+  if(to==='ap'){const path=location.pathname.replace(/[^/]*$/,'')+'cal/'+v+'.ics';
+   /* Safari tab: the .ics file shows iPhone's Add to Calendar. Home-screen app can't show it (v21 blank page), so it hands off to Calendar with webcal:// */
+   if(isStandalone())location.href='webcal://'+location.host+path;else openExt(location.origin+path);toast('Opening Apple Calendar');return}
   toast('Added to your calendar')},
  evMsg(v){const e=EVENTS.find(x=>x.id===v),n=e.going+(S.attending[v]?1:0);
   openSheet('<h2 class="h2 mb8">Message attendees</h2><p class="cap mb12">'+esc(e.title)+' · '+n+' going</p><div class="field"><label class="label" for="em-t">Message</label><textarea id="em-t" style="min-height:96px">Reminder: '+esc(e.title)+' is '+esc(e.meta.split(' · ').slice(0,2).join(' at '))+'. See you there!</textarea></div><button class="btn pri block" id="em-send">Send to '+n+' people</button>');
